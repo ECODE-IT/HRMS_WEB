@@ -14,6 +14,9 @@ namespace HRMS_WEB.DbContext
         }
 
         // Entities
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; }      
+        public DbSet<DutyLog> DutyLogs { get; set; }
+        public DbSet<SubLevel> SubLevels { get; set; }
+        public DbSet<Project> Projects { get; set; }
     }
 }

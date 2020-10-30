@@ -28,7 +28,26 @@ namespace HRMS_WEB.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = e.StackTrace});
+                return Json(new { success = false, message = e.StackTrace });
+            }
+        }
+
+        public IActionResult CreateDutyOnOff(String username, String password, bool isDutyOn, String punchdatetime)
+        {
+            try
+            {
+                int reslutcode = windowsServiceRepository.createDutyOnOff(username, password, isDutyOn, punchdatetime).Result;
+
+                if(reslutcode == 0)
+                {
+                    return Json(new { success = false, message = "user not found" });
+                }
+
+                return Json(new { success = true, message = "punch successfull" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "punch unsuccessful because " + ex.Message });
             }
         }
     }

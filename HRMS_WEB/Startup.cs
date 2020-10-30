@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HRMS_WEB.DbContext;
+using HRMS_WEB.DbOperations.ProjectRepository;
+using HRMS_WEB.DbOperations.SubLevelRepository;
+using HRMS_WEB.DbOperations.UserRepository;
+using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.DbOperations.WindowsService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +37,10 @@ namespace HRMS_WEB
 
             // Repository dependancy injection
             services.AddScoped<IWindowsServiceRepository, WindowsServiceRepository>();
+            services.AddScoped<IViewdataRepository, ViewdataRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<ISubLevelRepository, SubLevelRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

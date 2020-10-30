@@ -3,14 +3,16 @@ using System;
 using HRMS_WEB.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HRMS_WEB.Migrations
 {
     [DbContext(typeof(HRMSDbContext))]
-    partial class HRMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201029061339_user fields added")]
+    partial class userfieldsadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,32 +41,6 @@ namespace HRMS_WEB.Migrations
                     b.ToTable("DutyLogs");
                 });
 
-            modelBuilder.Entity("HRMS_WEB.Entities.Project", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("AssignedDateTime")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Customer")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("Deadline")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Remarks")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Projects");
-                });
-
             modelBuilder.Entity("HRMS_WEB.Entities.SubLevel", b =>
                 {
                     b.Property<int>("ID")
@@ -80,9 +56,6 @@ namespace HRMS_WEB.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("ProjectID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Remark")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -93,8 +66,6 @@ namespace HRMS_WEB.Migrations
                         .HasColumnType("double");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("ProjectID");
 
                     b.HasIndex("UserID");
 
@@ -141,12 +112,6 @@ namespace HRMS_WEB.Migrations
 
             modelBuilder.Entity("HRMS_WEB.Entities.SubLevel", b =>
                 {
-                    b.HasOne("HRMS_WEB.Entities.Project", "Project")
-                        .WithMany("SubLevels")
-                        .HasForeignKey("ProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HRMS_WEB.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
