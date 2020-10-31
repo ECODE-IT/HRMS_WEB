@@ -1,4 +1,5 @@
 ﻿using HRMS_WEB.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HRMS_WEB.DbContext
 {
-    public class HRMSDbContext : Microsoft.EntityFrameworkCore.DbContext
+    public class HRMSDbContext : IdentityDbContext
     {
         public HRMSDbContext(DbContextOptions<HRMSDbContext> options) : base(options)
         {
@@ -18,5 +19,7 @@ namespace HRMS_WEB.DbContext
         public DbSet<DutyLog> DutyLogs { get; set; }
         public DbSet<SubLevel> SubLevels { get; set; }
         public DbSet<Project> Projects { get; set; }
+
+
     }
 }

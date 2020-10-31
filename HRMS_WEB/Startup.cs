@@ -10,6 +10,7 @@ using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.DbOperations.WindowsService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,16 @@ namespace HRMS_WEB
             services.AddDbContextPool<HRMSDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
 
+            // EFCore identity and set password validations  
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 6;
+                options.Password.RequireDigit = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<HRMSDbContext>();
+
             // Repository dependancy injection
             services.AddScoped<IWindowsServiceRepository, WindowsServiceRepository>();
             services.AddScoped<IViewdataRepository, ViewdataRepository>();
@@ -55,6 +66,8 @@ namespace HRMS_WEB
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseRouting();
 

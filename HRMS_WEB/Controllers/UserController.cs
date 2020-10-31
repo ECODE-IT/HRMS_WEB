@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using HRMS_WEB.DbOperations.UserRepository;
 using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IViewdataRepository viewdataRepository;

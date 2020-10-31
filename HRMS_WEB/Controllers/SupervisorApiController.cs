@@ -6,6 +6,7 @@ using HRMS_WEB.DbOperations.ProjectRepository;
 using HRMS_WEB.DbOperations.SubLevelRepository;
 using HRMS_WEB.DbOperations.UserRepository;
 using HRMS_WEB.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -13,6 +14,7 @@ namespace HRMS_WEB.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class SupervisorApiController : Controller
     {
         private readonly IUserRepository userRepository;

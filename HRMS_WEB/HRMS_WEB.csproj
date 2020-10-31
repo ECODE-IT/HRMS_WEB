@@ -7,9 +7,13 @@
   <ItemGroup>
     <Compile Remove="Migrations\20201028074739_initial.cs" />
     <Compile Remove="Migrations\20201028074739_initial.Designer.cs" />
+    <Compile Remove="Migrations\20201031082239_add identity user roles.cs" />
+    <Compile Remove="Migrations\20201031082239_add identity user roles.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

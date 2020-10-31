@@ -14,7 +14,7 @@ namespace HRMS_WEB.Entities
         public String Remark { get; set; }
         public DateTime Deadline { get; set; }
         public double ManHours { get; set; }
-        public double ProgressFraction { get; set; }
+        public double progressFraction { get; set; }
 
         // navigation properties
         public User User { get; set; }
