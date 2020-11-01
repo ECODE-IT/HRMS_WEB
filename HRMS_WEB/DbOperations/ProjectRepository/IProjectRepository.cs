@@ -9,5 +9,6 @@ namespace HRMS_WEB.DbOperations.ProjectRepository
     public interface IProjectRepository
     {
         IEnumerable<Project> getUnfinishedProjects(String username);
+        Task finishTheProjectById(int id);
     }
 }

@@ -40,11 +40,15 @@ namespace HRMS_WEB.Controllers
         public async Task<IActionResult> LoginSupervisor(String username, String password)
         {
             var user = await userManager.FindByNameAsync(username);
-            var signinresult = await signInManager.CheckPasswordSignInAsync(user, password, false);
-
-            if(signinresult.Succeeded)
+            if (user != null)
             {
-                return Json(new { success = true, message = "login successfull" });
+                var signinresult = await signInManager.CheckPasswordSignInAsync(user, password, false);
+
+                if (signinresult.Succeeded)
+                {
+                    return Json(new { success = true, message = "login successfull" });
+                }
+                return Json(new { success = false, message = "signin failed" });
             }
 
             return Json(new { success = false, message = "signin failed" });
@@ -78,8 +82,8 @@ namespace HRMS_WEB.Controllers
             }
         }
 
-        // 
-
+        // supervisor submit sub level 
+        // POST
         [HttpPost]
         public IActionResult SubmitSubLevel(SubLevel subLevel)
         {
@@ -95,6 +99,21 @@ namespace HRMS_WEB.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "error occured becasue " + ex.Message });
+            }
+        }
+
+        // finish the project by the supervisor
+        // GET
+        public async Task<IActionResult> FinishProject(int projectId)
+        {
+            try
+            {
+                await projectRepository.finishTheProjectById(projectId);
+                return Json(new { success = true, message = "project finished successfully"});
+            } 
+            catch(Exception ex)
+            {
+                return Json(new { success = false, message = "project is not finished" });
             }
         }
     }
