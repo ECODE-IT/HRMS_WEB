@@ -20,18 +20,19 @@ namespace HRMS_WEB.Controllers
             this.signInManager = signInManager;
         }
 
-
+        [Authorize]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = registerViewModel.Email, Email = registerViewModel.Email };
+                var user = new IdentityUser { UserName = registerViewModel.Email, Email = registerViewModel.Email, PhoneNumber = registerViewModel.PhoneNumber };
                 var result = await userManager.CreateAsync(user, registerViewModel.Password);
 
                 if (result.Succeeded)

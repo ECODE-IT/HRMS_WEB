@@ -21,5 +21,12 @@ namespace HRMS_WEB.Viewmodels
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Password and confirmation password do not match.")]
         public String ConfirmPassword { get; set; }
+
+        [Required]
+        public String PhoneNumber { get; set; }
+
+        [Required]
+        public bool AgreedToTerms { get; set; }
+
     }
 }

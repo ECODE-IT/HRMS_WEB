@@ -30,7 +30,6 @@ namespace HRMS_WEB.Controllers
             subLevelViewmodel.SubLevelList = subLevels;
             subLevelViewmodel.LastpageNumber = (int)Math.Ceiling((double.Parse(itemcount.ToString()) / 20)) == 0 ? 1 : (int)Math.Ceiling((double.Parse(itemcount.ToString()) / 20));
 
-
             return View(subLevelViewmodel);
         }
 
