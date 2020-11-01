@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMS_WEB.Migrations
 {
     [DbContext(typeof(HRMSDbContext))]
-    [Migration("20201031082511_add identity")]
-    partial class addidentity
+    [Migration("20201101155544_user fr prje")]
+    partial class userfrprje
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,13 +56,24 @@ namespace HRMS_WEB.Migrations
                     b.Property<DateTime>("Deadline")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IsFinished")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<double>("Progress")
+                        .HasColumnType("double");
 
                     b.Property<string>("Remarks")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<string>("UserID")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Projects");
                 });
@@ -88,8 +99,8 @@ namespace HRMS_WEB.Migrations
                     b.Property<string>("Remark")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<double>("progressFraction")
                         .HasColumnType("double");
@@ -333,19 +344,24 @@ namespace HRMS_WEB.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("HRMS_WEB.Entities.Project", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+                });
+
             modelBuilder.Entity("HRMS_WEB.Entities.SubLevel", b =>
                 {
-                    b.HasOne("HRMS_WEB.Entities.Project", "Project")
+                    b.HasOne("HRMS_WEB.Entities.Project", null)
                         .WithMany("SubLevels")
                         .HasForeignKey("ProjectID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HRMS_WEB.Entities.User", "User")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace HRMS_WEB.Entities
     public class SubLevel
     {
         public int ID { get; set; }
-        public int UserID { get; set; }
+        public String UserID { get; set; }
         public int ProjectID { get; set; }
         public String Name { get; set; }
         public String Remark { get; set; }
@@ -17,7 +18,6 @@ namespace HRMS_WEB.Entities
         public double progressFraction { get; set; }
 
         // navigation properties
-        public User User { get; set; }
-        public Project Project { get; set; }
+        public IdentityUser User { get; set; }
     }
 }

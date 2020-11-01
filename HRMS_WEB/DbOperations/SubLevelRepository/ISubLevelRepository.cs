@@ -8,7 +8,7 @@ namespace HRMS_WEB.DbOperations.SubLevelRepository
 {
     public interface ISubLevelRepository
     {
-        IEnumerable<SubLevel> getSubLevelsForProjectName(int projectid);
+        IEnumerable<SubLevel> getSubLevelsForProjectId(int projectid);
         void submitSubLevel(SubLevel subLevel);
     }
 }

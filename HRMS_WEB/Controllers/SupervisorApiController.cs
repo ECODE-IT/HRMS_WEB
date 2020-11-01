@@ -7,6 +7,7 @@ using HRMS_WEB.DbOperations.SubLevelRepository;
 using HRMS_WEB.DbOperations.UserRepository;
 using HRMS_WEB.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -14,60 +15,70 @@ namespace HRMS_WEB.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [Authorize]
+    [AllowAnonymous]
     public class SupervisorApiController : Controller
     {
-        private readonly IUserRepository userRepository;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly SignInManager<IdentityUser> signInManager;
         private readonly IProjectRepository projectRepository;
         private readonly ISubLevelRepository subLevelRepository;
 
-        public SupervisorApiController(IUserRepository userRepository, IProjectRepository projectRepository, ISubLevelRepository subLevelRepository)
+        public SupervisorApiController(UserManager<IdentityUser> userManager, 
+                                       SignInManager<IdentityUser> signInManager, 
+                                       IProjectRepository projectRepository,
+                                       ISubLevelRepository subLevelRepository
+                                       )
         {
-            this.userRepository = userRepository;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
             this.projectRepository = projectRepository;
             this.subLevelRepository = subLevelRepository;
         }
 
-        public IActionResult GetAssignedSubLevelsForTheUser(String username)
+        // supervisor authentication api
+        // GET
+        public async Task<IActionResult> LoginSupervisor(String username, String password)
         {
-            if (username != null)
+            var user = await userManager.FindByNameAsync(username);
+            var signinresult = await signInManager.CheckPasswordSignInAsync(user, password, false);
+
+            if(signinresult.Succeeded)
             {
-                try
-                {
-                    return Ok(new { success = true, sublevels = userRepository.getSubLevelListForTheUser(username).Result });
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { success = false, message = "transaction failed because " + ex.Message });
-                }
+                return Json(new { success = true, message = "login successfull" });
             }
-            return Json(new { success = false, message = "user name not found" });
+
+            return Json(new { success = false, message = "signin failed" });
         }
 
-        public IActionResult GetProjects()
-        {
-            try
-            {
-                return Json(new { success = true, projectList = projectRepository.getProjectList() });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, messaage = "error occured because " + ex.Message });
-            }
-        }
-
-        public IActionResult GetSubProjectsForProjectName(int projectid)
+        // supervisor get all projects api
+        // GET
+        public IActionResult GetAllUnfinishedProjects(String username)
         {
             try
             {
-                return Json(new { success = true, subLevels = subLevelRepository.getSubLevelsForProjectName(projectid) });
+                return Json(new { success = true, projects = projectRepository.getUnfinishedProjects(username) });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "error becasue of " + ex.Message });
+                return Json(new { success = false, message = ex.Message });
             }
-
         }
+
+        // supervisor get all sublevels for the project by id
+        // GET
+        public IActionResult GetAllSubLevelsForProjectId(int projectId)
+        {
+            try
+            {
+                return Json(new {success = true, sublevels = subLevelRepository.getSubLevelsForProjectId(projectId) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message});
+            }
+        }
+
+        // 
 
         [HttpPost]
         public IActionResult SubmitSubLevel(SubLevel subLevel)
@@ -86,6 +97,5 @@ namespace HRMS_WEB.Controllers
                 return Json(new { success = false, message = "error occured becasue " + ex.Message });
             }
         }
-
     }
 }

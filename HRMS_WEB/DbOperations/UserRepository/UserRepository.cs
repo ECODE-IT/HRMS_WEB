@@ -17,16 +17,9 @@ namespace HRMS_WEB.DbOperations.UserRepository
             this.db = db;
         }
 
-        public async Task<IEnumerable<SubLevel>> getSubLevelListForTheUser(string username)
+        public Task<IEnumerable<SubLevel>> getSubLevelListForTheUser(string username)
         {
-            var user = await db.Users.AsNoTracking().FirstOrDefaultAsync(u => u.UserName.ToLower().Equals(username.ToLower()));
-            if (user != null)
-            {
-                var userid = user.ID;
-                var projectList = db.SubLevels.AsNoTracking().Where(sl => sl.UserID == userid);
-                return projectList;
-            }
-            return null;
+            throw new NotImplementedException();
         }
 
         public async Task<int> insertUser(User user)

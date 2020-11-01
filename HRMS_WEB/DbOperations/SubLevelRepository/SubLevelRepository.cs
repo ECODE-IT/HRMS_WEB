@@ -17,9 +17,9 @@ namespace HRMS_WEB.DbOperations.SubLevelRepository
             this.db = db;
         }
 
-        public IEnumerable<SubLevel> getSubLevelsForProjectName(int projectId)
+        public IEnumerable<SubLevel> getSubLevelsForProjectId(int projectId)
         {
-            return db.SubLevels.Where(sl => sl.ProjectID == projectId);
+            return db.SubLevels.AsNoTracking().Where(sl => sl.ProjectID == projectId).Include(sl => sl.User);
         }
 
         public async void submitSubLevel(SubLevel subLevel)

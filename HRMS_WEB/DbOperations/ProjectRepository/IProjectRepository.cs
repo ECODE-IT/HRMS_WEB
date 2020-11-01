@@ -8,6 +8,6 @@ namespace HRMS_WEB.DbOperations.ProjectRepository
 {
     public interface IProjectRepository
     {
-        IEnumerable<Project> getProjectList();
+        IEnumerable<Project> getUnfinishedProjects(String username);
     }
 }

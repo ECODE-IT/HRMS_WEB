@@ -17,9 +17,9 @@ namespace HRMS_WEB.DbOperations.ProjectRepository
             this.db = db;
         }
 
-        public IEnumerable<Project> getProjectList()
+        public IEnumerable<Project> getUnfinishedProjects(String username)
         {
-            return db.Projects.AsNoTracking();
+            return db.Projects.Include(p => p.User).Where(p => p.Progress < 100 && p.User.UserName.Equals(username));
         }
     }
 }

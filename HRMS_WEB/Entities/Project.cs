@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,11 +12,15 @@ namespace HRMS_WEB.Entities
         public int ID { get; set; }
         public String Name { get; set; }
         public DateTime AssignedDateTime { get; set; }
+        public String UserID { get; set; }
         public String Customer { get; set; }
         public DateTime Deadline { get; set; }
         public String Remarks { get; set; }
+        public double Progress { get; set; }
+        public bool IsFinished { get; set; }
 
         // naviagation properties
         public ICollection<SubLevel> SubLevels { get; set; }
+        public IdentityUser User { get; set; }
     }
 }

@@ -20,14 +20,13 @@ namespace HRMS_WEB.Controllers
             this.signInManager = signInManager;
         }
 
-        [Authorize]
+
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
             if (ModelState.IsValid)
