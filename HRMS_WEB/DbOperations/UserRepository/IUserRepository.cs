@@ -1,4 +1,5 @@
 ﻿using HRMS_WEB.Entities;
+using HRMS_WEB.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,6 @@ namespace HRMS_WEB.DbOperations.UserRepository
     {
         Task<int> insertUser(User user);
         Task<IEnumerable<SubLevel>> getSubLevelListForTheUser(String username);
+        IEnumerable<UsersDTO> getUsersWithData();
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using HRMS_WEB.DbContext;
 using HRMS_WEB.DbOperations.ProjectRepository;
 using HRMS_WEB.DbOperations.SubLevelRepository;
@@ -45,6 +46,9 @@ namespace HRMS_WEB
                 options.Password.RequiredUniqueChars = 0;
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<HRMSDbContext>();
+
+            // Automapper service for DTO's
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // Repository dependancy injection
             services.AddScoped<IWindowsServiceRepository, WindowsServiceRepository>();

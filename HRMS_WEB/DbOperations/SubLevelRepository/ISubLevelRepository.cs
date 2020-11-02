@@ -1,4 +1,5 @@
 ﻿using HRMS_WEB.Entities;
+using HRMS_WEB.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace HRMS_WEB.DbOperations.SubLevelRepository
     {
         IEnumerable<SubLevel> getSubLevelsForProjectId(int projectid);
         void submitSubLevel(SubLevel subLevel);
+        Task assignedSubLevel(SubLevelDTO subLevel);
+
     }
 }

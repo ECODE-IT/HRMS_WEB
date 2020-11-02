@@ -16,6 +16,7 @@ namespace HRMS_WEB.Entities
         public DateTime Deadline { get; set; }
         public double ManHours { get; set; }
         public double progressFraction { get; set; }
+        public int PriorityLevel { get; set; }
 
         // navigation properties
         public IdentityUser User { get; set; }
