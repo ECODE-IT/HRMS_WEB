@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HRMS_WEB.DbOperations.WindowsService;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
 {
-
+    [ApiController]
+    [Route("api/[controller]/[action]")]
     public class WindowsServiceController : Controller
     {
         private readonly IWindowsServiceRepository windowsServiceRepository;
+        private readonly IHostingEnvironment hostingEnvironment;
 
-        public WindowsServiceController(IWindowsServiceRepository windowsServiceRepository)
+        public WindowsServiceController(IWindowsServiceRepository windowsServiceRepository, IHostingEnvironment hostingEnvironment)
         {
             this.windowsServiceRepository = windowsServiceRepository;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult ValidateUserByUsernamePassword(String username, String password)
@@ -50,6 +56,19 @@ namespace HRMS_WEB.Controllers
             {
                 return Json(new { success = false, message = "punch unsuccessful because " + ex.Message });
             }
+        }
+
+        [HttpPost]
+        public IActionResult getimage(IFormFile file)
+        {
+            if (file != null)
+            {
+                var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_screenshots");
+                var filepath = Path.Combine(folderpath, file.FileName);
+                file.CopyTo(new FileStream(filepath, FileMode.Create));
+                return Ok();
+            }
+            return NotFound();
         }
     }
 }

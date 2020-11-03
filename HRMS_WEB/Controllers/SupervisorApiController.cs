@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HRMS_WEB.DbOperations.ProjectRepository;
@@ -8,6 +9,8 @@ using HRMS_WEB.DbOperations.UserRepository;
 using HRMS_WEB.Entities;
 using HRMS_WEB.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,13 +27,15 @@ namespace HRMS_WEB.Controllers
         private readonly IProjectRepository projectRepository;
         private readonly ISubLevelRepository subLevelRepository;
         private readonly IUserRepository userRepository;
+        private readonly IHostingEnvironment hostingEnvironment;
 
         public SupervisorApiController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IProjectRepository projectRepository,
             ISubLevelRepository subLevelRepository,
-            IUserRepository userRepository
+            IUserRepository userRepository,
+            IHostingEnvironment hostingEnvironment
                                        )
         {
             this.userManager = userManager;
@@ -38,6 +43,7 @@ namespace HRMS_WEB.Controllers
             this.projectRepository = projectRepository;
             this.subLevelRepository = subLevelRepository;
             this.userRepository = userRepository;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         // supervisor authentication api

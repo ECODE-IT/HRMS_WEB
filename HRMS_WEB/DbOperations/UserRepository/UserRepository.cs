@@ -21,6 +21,11 @@ namespace HRMS_WEB.DbOperations.UserRepository
             this.userManager = userManager;
         }
 
+        public IEnumerable<UsersDTO> getBasicUserList()
+        {
+            return userManager.Users.Select(u => new UsersDTO { Username = u.Email});
+        }
+
         public Task<IEnumerable<SubLevel>> getSubLevelListForTheUser(string username)
         {
             throw new NotImplementedException();
