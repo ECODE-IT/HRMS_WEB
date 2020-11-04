@@ -238,12 +238,26 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Screenshot" asp-action="Index" class="nav-link">
+                            <a asp-controller="Screenshot" asp-action="Index" class="nav-link has-treeview">
                                 <i class="nav-icon far fa-image"></i>
                                 <p>
-                                    Gallery
+                                    iTrack
                                 </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="Register" asp-controller="Account" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Users</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-action="ListRoles" asp-controller="Administration" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>User roles</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-header">MISCELLANEOUS</li>
                         <li class="nav-item">

@@ -22,8 +22,8 @@ namespace HRMS_WEB.DbOperations.WindowsService
 
         public async Task<double> createDutyOnOff(string username, bool isDutyOn, String sdatetime)
         {
-
-            DateTime datetime = Convert.ToDateTime(sdatetime);
+            int timestamp = int.Parse(sdatetime);
+            DateTime datetime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
 
             //var user = await db.Users.FirstOrDefaultAsync(u => u.UserName.Equals(username) && u.UserPassword.Equals(password));
             var user = await userManager.FindByNameAsync(username);
