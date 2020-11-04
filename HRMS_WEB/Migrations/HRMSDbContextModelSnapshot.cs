@@ -29,12 +29,15 @@ namespace HRMS_WEB.Migrations
                     b.Property<DateTime>("LogDateTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("UserID")
+                    b.Property<string>("UserID")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int?>("UserID1")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserID1");
 
                     b.ToTable("DutyLogs");
                 });
@@ -340,9 +343,7 @@ namespace HRMS_WEB.Migrations
                 {
                     b.HasOne("HRMS_WEB.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID1");
                 });
 
             modelBuilder.Entity("HRMS_WEB.Entities.Project", b =>

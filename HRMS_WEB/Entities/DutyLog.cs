@@ -8,7 +8,7 @@ namespace HRMS_WEB.Entities
     public class DutyLog
     {
         public int ID { get; set; }
-        public int UserID { get; set; }
+        public String UserID { get; set; }
         public bool IsDutyOn { get; set; }
         public DateTime LogDateTime { get; set; }
 

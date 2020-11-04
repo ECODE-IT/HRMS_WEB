@@ -1,5 +1,6 @@
 ﻿using HRMS_WEB.DbContext;
 using HRMS_WEB.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,22 +12,25 @@ namespace HRMS_WEB.DbOperations.WindowsService
     public class WindowsServiceRepository : IWindowsServiceRepository
     {
         private readonly HRMSDbContext db;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public WindowsServiceRepository(HRMSDbContext db)
+        public WindowsServiceRepository(HRMSDbContext db, UserManager<IdentityUser> userManager)
         {
             this.db = db;
+            this.userManager = userManager;
         }
 
-        public async Task<int> createDutyOnOff(string username, string password, bool isDutyOn, String sdatetime)
+        public async Task<int> createDutyOnOff(string username, bool isDutyOn, String sdatetime)
         {
 
             DateTime datetime = Convert.ToDateTime(sdatetime);
 
-            var user = await db.Users.FirstOrDefaultAsync(u => u.UserName.Equals(username) && u.UserPassword.Equals(password));
+            //var user = await db.Users.FirstOrDefaultAsync(u => u.UserName.Equals(username) && u.UserPassword.Equals(password));
+            var user = await userManager.FindByNameAsync(username);
 
             if (user != null)
             {
-                DutyLog dutyLog = new DutyLog { UserID = user.ID, IsDutyOn = isDutyOn, LogDateTime = datetime };
+                DutyLog dutyLog = new DutyLog { UserID = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime };
 
                     await db.DutyLogs.AddAsync(dutyLog);
                     var i = await db.SaveChangesAsync();

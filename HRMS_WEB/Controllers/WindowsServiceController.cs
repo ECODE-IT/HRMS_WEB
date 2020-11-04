@@ -43,7 +43,7 @@ namespace HRMS_WEB.Controllers
         {
             try
             {
-                int reslutcode = windowsServiceRepository.createDutyOnOff(username, password, isDutyOn, punchdatetime).Result;
+                int reslutcode = windowsServiceRepository.createDutyOnOff(username, isDutyOn, punchdatetime).Result;
 
                 if(reslutcode == 0)
                 {
