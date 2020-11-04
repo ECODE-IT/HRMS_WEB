@@ -50,19 +50,26 @@ namespace HRMS_WEB.Controllers
         // GET
         public async Task<IActionResult> LoginSupervisor(String username, String password)
         {
-            var user = await userManager.FindByNameAsync(username);
-            if (user != null)
+            try
             {
-                var signinresult = await signInManager.CheckPasswordSignInAsync(user, password, false);
-
-                if (signinresult.Succeeded)
+                var user = await userManager.FindByNameAsync(username);
+                if (user != null)
                 {
-                    return Json(new { success = true, message = "login successfull" });
+                    var signinresult = await signInManager.CheckPasswordSignInAsync(user, password, false);
+
+                    if (signinresult.Succeeded)
+                    {
+                        return Json(new { success = true, message = "login successfull" });
+                    }
+                    return Json(new { success = false, message = "signin failed" });
                 }
+
                 return Json(new { success = false, message = "signin failed" });
             }
-
-            return Json(new { success = false, message = "signin failed" });
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "signin failed because " + ex.Message });
+            }
         }
 
         // supervisor get all projects api
