@@ -20,7 +20,7 @@ namespace HRMS_WEB.DbOperations.WindowsService
             this.userManager = userManager;
         }
 
-        public async Task<int> createDutyOnOff(string username, bool isDutyOn, String sdatetime)
+        public async Task<double> createDutyOnOff(string username, bool isDutyOn, String sdatetime)
         {
 
             DateTime datetime = Convert.ToDateTime(sdatetime);
@@ -30,13 +30,26 @@ namespace HRMS_WEB.DbOperations.WindowsService
 
             if (user != null)
             {
-                DutyLog dutyLog = new DutyLog { UserID = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime };
-
+                DutyLog dutyLog = new DutyLog { UserId = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime };
+                if (!isDutyOn)
+                {
+                    var durationleft = 0.0;
+                    var firstdutyonlog = await db.DutyLogs.FirstOrDefaultAsync(dl => DateTime.Equals(dl.LogDateTime.Date, datetime.Date) && dl.IsDutyOn == true && dl.UserId.Equals(user.Id));
+                    if (firstdutyonlog != null)
+                    {
+                        var dutyondate = firstdutyonlog.LogDateTime;
+                         durationleft = datetime.Subtract(dutyondate).TotalHours;
+                    }
                     await db.DutyLogs.AddAsync(dutyLog);
-                    var i = await db.SaveChangesAsync();
-                return i;
-            } 
-            return 0;
+                    var r = await db.SaveChangesAsync();
+                    return durationleft;
+                }
+
+                await db.DutyLogs.AddAsync(dutyLog);
+                int i = await db.SaveChangesAsync();
+                return 999;
+            }
+            return 1999;
         }
 
         // returns true if a user entry is exists for the username and password

@@ -43,18 +43,18 @@ namespace HRMS_WEB.Controllers
         {
             try
             {
-                int reslutcode = windowsServiceRepository.createDutyOnOff(username, isDutyOn, punchdatetime).Result;
+                double reslutcode = windowsServiceRepository.createDutyOnOff(username, isDutyOn, punchdatetime).Result;
 
-                if(reslutcode == 0)
+                if(reslutcode == 1999)
                 {
-                    return Json(new { success = false, message = "user not found" });
+                    return Json(new { success = false, message = "user not found", workedhours = reslutcode });
                 }
 
-                return Json(new { success = true, message = "punch successfull" });
+                return Json(new { success = true, message = "punch successfull", workedhours = reslutcode });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "punch unsuccessful because " + ex.Message });
+                return Json(new { success = false, message = "punch unsuccessful because " + ex.Message , workedhours = -1 });
             }
         }
 
