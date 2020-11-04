@@ -59,11 +59,50 @@ namespace HRMS_WEB.Controllers
         }
 
         [HttpPost]
-        public IActionResult getimage(IFormFile file)
+        public IActionResult UploadImage(IFormFile file)
         {
             if (file != null)
             {
                 var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_screenshots");
+                var filepath = Path.Combine(folderpath, file.FileName);
+                file.CopyTo(new FileStream(filepath, FileMode.Create));
+                return Ok();
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult UploadLog(IFormFile file)
+        {
+            if (file != null)
+            {
+                var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_errorlogs");
+                var filepath = Path.Combine(folderpath, file.FileName);
+                file.CopyTo(new FileStream(filepath, FileMode.Create));
+                return Ok();
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult UploadMouseLog(IFormFile file)
+        {
+            if (file != null)
+            {
+                var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_mouselogs");
+                var filepath = Path.Combine(folderpath, file.FileName);
+                file.CopyTo(new FileStream(filepath, FileMode.Create));
+                return Ok();
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult UploadAppLog(IFormFile file)
+        {
+            if (file != null)
+            {
+                var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_applogs");
                 var filepath = Path.Combine(folderpath, file.FileName);
                 file.CopyTo(new FileStream(filepath, FileMode.Create));
                 return Ok();

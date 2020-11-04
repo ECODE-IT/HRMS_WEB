@@ -21,4 +21,11 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\windows_applogs\" />
+    <Folder Include="wwwroot\windows_mouselogs\" />
+    <Folder Include="wwwroot\windows_errorlogs\" />
+    <Folder Include="wwwroot\windows_screenshots\" />
+  </ItemGroup>
+
 </Project>

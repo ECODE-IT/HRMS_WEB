@@ -36,13 +36,25 @@ namespace HRMS_WEB.Controllers
         {
             model.usersList = usersList;
 
-            if(model.selectedUser != null)
+            
+            if (model.selectedUser != null)
             {
                 var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_screenshots");
                 foreach(String filename in Directory.EnumerateFiles(folderpath, "*", SearchOption.TopDirectoryOnly))
                 {
-                    var s = filename.Substring(filename.LastIndexOf("\\") + 1);
-                    model.imagePathList.Add("windows_screenshots/"  + s);
+                    var file = filename.Substring(filename.LastIndexOf("\\") + 1);
+                    String timestampstring = file.Substring(file.LastIndexOf("_") + 1, (file.Length - 1) - (file.LastIndexOf("_") + 1) - 3);
+                    double timestamp = Double.Parse(timestampstring);
+                    // First make a System.DateTime equivalent to the UNIX Epoch.
+                    DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
+
+                    // Add the number of seconds in UNIX timestamp to be converted.
+                    dateTime = dateTime.AddSeconds(timestamp);
+
+                    if (filename.Contains(model.selectedUser.Substring(0, model.selectedUser.LastIndexOf("@") - 1)) && model.selectedDate.Date == dateTime.Date)
+                    {
+                        model.imagePathList.Add("windows_screenshots/" + file);
+                    }
                 }
             }
 
