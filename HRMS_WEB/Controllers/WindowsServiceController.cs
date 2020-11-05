@@ -65,14 +65,18 @@ namespace HRMS_WEB.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadImage(IFormFile file)
+        public async Task<IActionResult> UploadImage(IFormFile file)
         {
             if (file != null)
             {
                 
                 var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_screenshots");
                 var filepath = Path.Combine(folderpath, file.FileName);
-                file.CopyTo(new FileStream(filepath, FileMode.Create));
+                using (Stream fileStream = new FileStream(filepath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
                 return Ok();
             }
             return NotFound();
@@ -105,13 +109,16 @@ namespace HRMS_WEB.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadAppLog(IFormFile file)
+        public async Task<IActionResult> UploadAppLog(IFormFile file)
         {
             if (file != null)
             {
                 var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_applogs");
                 var filepath = Path.Combine(folderpath, file.FileName);
-                file.CopyTo(new FileStream(filepath, FileMode.Create));
+                using (Stream fileStream = new FileStream(filepath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
                 return Ok();
             }
             return NotFound();
