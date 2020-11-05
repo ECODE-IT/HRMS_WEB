@@ -31,7 +31,6 @@ namespace HRMS_WEB.DbOperations.WindowsService
             if (user != null)
             {
                 DutyLog dutyLog = new DutyLog { UserId = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime };
-                
 
                 if (!isDutyOn)
                 {

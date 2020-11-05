@@ -14,5 +14,6 @@ namespace HRMS_WEB.DbOperations.UserRepository
         Task<IEnumerable<SubLevel>> getSubLevelListForTheUser(String username);
         IEnumerable<UsersDTO> getUsersWithData();
         IEnumerable<UsersDTO> getBasicUserList();
+        IEnumerable<UsersDTO> getBasicUserListContainsId();
     }
 }

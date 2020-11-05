@@ -17,6 +17,11 @@ namespace HRMS_WEB.DbOperations.ViewdataService
             this.db = db;
         }
 
+        public async Task<List<DutyLog>> getDutyLogsForTheUser(string id, DateTime selectedDate)
+        {
+            return await db.DutyLogs.AsNoTracking().Where(dl => DateTime.Equals(dl.LogDateTime.Date, selectedDate.Date) && dl.UserId.Equals(id)).ToListAsync();
+        }
+
         public async Task<int> GetSubLevelCount()
         {
             int count = await db.SubLevels.CountAsync();

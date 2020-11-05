@@ -11,5 +11,6 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         Task<IEnumerable<User>> getUserList();
         Task<int> GetSubLevelCount();
         Task<IEnumerable<SubLevel>> GetSubLevelsForPage(int indexfrom, int indexto);
+        Task<List<DutyLog>> getDutyLogsForTheUser(String id, DateTime selectedDate);
     }
 }

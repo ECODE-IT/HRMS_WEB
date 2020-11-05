@@ -45,7 +45,7 @@ namespace HRMS_WEB.Controllers
             }
         }
 
-        public IActionResult CreateDutyOnOff(String username, String password, bool isDutyOn, String punchdatetime)
+        public IActionResult CreateDutyOnOff(String username, bool isDutyOn, String punchdatetime)
         {
             try
             {

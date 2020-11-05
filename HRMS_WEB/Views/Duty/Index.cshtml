@@ -1,5 +1,152 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model HRMS_WEB.Viewmodels.DutyLogViewModel
+
 @{
+    ViewData["Title"] = "Duty Logs";
 }
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard v2</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-info">
+                        <div class="card-body">
+                            <form asp-action="Index" asp-controller="Duty">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="selectedUser" class="control-label"></label>
+                                            <select class="form-control select2" asp-for="selectedUser" asp-items="@(new SelectList(Model.usersList,"ID","Username"))" id="usertype_dropdown"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="selectedDate" class="control-label"></label>
+                                            <input class="form-control" asp-for="selectedDate" type="date" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" href="#">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-primary">
+                <div class="card-header">
+                    <div class="card-title">
+                        @Model.selectedUser sanapshots on @Model.selectedDate
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="p-0 row d-flex align-items-stretch">
+                        @foreach (var dutylog in Model.dutyLogList)
+                        {
+                            if (dutylog.IsDutyOn)
+                            {
+                                <div class="col-md-6 col-sm-6 col-12">
+                                    <div class="info-box bg-info">
+                                        <span class="info-box-icon"><i class="far fa-thumbs-up"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Duty ON</span>
+                                            <span class="info-box-number">@dutylog.LogDateTime</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-6 col-sm-6 col-12">
+                                    <div class="info-box bg-gradient-danger">
+                                        <span class="info-box-icon"><i class="far fa-thumbs-down"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text">Duty OFF</span>
+                                            <span class="info-box-number">@dutylog.LogDateTime</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                    <!-- /.info-box -->
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                @if (Model.selectedUser != null && Model.selectedUser != "")
+                {
+                    if (Model.workedHours > 0)
+                    {
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4>Worked @Model.workedHours Hours</h4>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4>Couldn't calculate the worked hours</h4>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                }
+                else
+                {
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4>No user detected</h4>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<!-- Select2 -->
+<script src="~/plugins/select2/js/select2.full.min.js"></script>
+<!-- Select2 -->
+<!-- Select2 -->
+<link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<!-- Page specific script -->
+<script>
+    $(function () {
+
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+    })
+</script>

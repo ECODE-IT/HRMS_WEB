@@ -26,6 +26,11 @@ namespace HRMS_WEB.DbOperations.UserRepository
             return userManager.Users.Select(u => new UsersDTO { Username = u.Email});
         }
 
+        public IEnumerable<UsersDTO> getBasicUserListContainsId()
+        {
+            return userManager.Users.Select(u => new UsersDTO { Username = u.Email, ID = u.Id });
+        }
+
         public Task<IEnumerable<SubLevel>> getSubLevelListForTheUser(string username)
         {
             throw new NotImplementedException();
