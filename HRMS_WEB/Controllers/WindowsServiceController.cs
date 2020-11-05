@@ -27,9 +27,15 @@ namespace HRMS_WEB.Controllers
         {
             try
             {
-                if (windowsServiceRepository.validateUserByUsernamePassword(username, password).Result)
+                var result = windowsServiceRepository.validateUserByUsernamePassword(username, password).Result;
+
+                if (result != -1)
                 {
-                    return Json(new { success = true, message = "user found successfully" });
+                    if(result == 0)
+                    {
+                        return Json(new { success = true, message = "user found successfully", islogedin = false });
+                    }
+                    return Json(new { success = true, message = "user found successfully", islogedin = true });
                 }
                 return Json(new { success = false, message = "no user found" });
             }
@@ -63,6 +69,7 @@ namespace HRMS_WEB.Controllers
         {
             if (file != null)
             {
+                
                 var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_screenshots");
                 var filepath = Path.Combine(folderpath, file.FileName);
                 file.CopyTo(new FileStream(filepath, FileMode.Create));

@@ -31,17 +31,22 @@ namespace HRMS_WEB.DbOperations.WindowsService
             if (user != null)
             {
                 DutyLog dutyLog = new DutyLog { UserId = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime };
+                
+
                 if (!isDutyOn)
                 {
-                    var durationleft = 0.0;
-                    var firstdutyonlog = await db.DutyLogs.FirstOrDefaultAsync(dl => DateTime.Equals(dl.LogDateTime.Date, datetime.Date) && dl.IsDutyOn == true && dl.UserId.Equals(user.Id));
-                    if (firstdutyonlog != null)
-                    {
-                        var dutyondate = firstdutyonlog.LogDateTime;
-                         durationleft = datetime.Subtract(dutyondate).TotalHours;
-                    }
                     await db.DutyLogs.AddAsync(dutyLog);
                     var r = await db.SaveChangesAsync();
+                    var durationleft = 0.0;
+                    var logs = await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, datetime.Date) && dl.UserId.Equals(user.Id)).ToListAsync();
+                    if (logs != null)
+                    {
+                        var dutyonhoursum = logs.Where(l => l.IsDutyOn == true).Sum(l => l.LogDateTime.TimeOfDay.TotalHours);
+                        var dutyoffhoursum = logs.Where(l => l.IsDutyOn == false).Sum(l => l.LogDateTime.TimeOfDay.TotalHours);
+
+                         durationleft = dutyoffhoursum - dutyonhoursum;
+                    }
+                    
                     return durationleft;
                 }
 
@@ -53,15 +58,23 @@ namespace HRMS_WEB.DbOperations.WindowsService
         }
 
         // returns true if a user entry is exists for the username and password
-        public async Task<bool> validateUserByUsernamePassword(string username, string password)
+        public async Task<int> validateUserByUsernamePassword(string username, string password)
         {
-            var user = await db.Users.FirstOrDefaultAsync(u => u.UserName.Equals(username) && u.UserPassword.Equals(password));
+            var user = await userManager.FindByNameAsync(username);
+            var lastlog = await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, DateTime.Now.Date) && dl.UserId.Equals(user.Id)).OrderByDescending(dl => dl.LogDateTime).FirstOrDefaultAsync();
             // return true if user does not exists
             if (user == null)
             {
-                return false;
+                return -1;
             }
-            return true;
+            if(lastlog != null && lastlog.IsDutyOn)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
