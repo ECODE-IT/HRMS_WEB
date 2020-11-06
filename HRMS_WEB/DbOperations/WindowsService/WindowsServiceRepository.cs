@@ -20,7 +20,7 @@ namespace HRMS_WEB.DbOperations.WindowsService
             this.userManager = userManager;
         }
 
-        public async Task<double> createDutyOnOff(string username, bool isDutyOn, String sdatetime)
+        public async Task<double> createDutyOnOff(string username, bool isDutyOn, String sdatetime, int powereOffTime)
         {
             int timestamp = int.Parse(sdatetime);
             DateTime datetime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
@@ -30,7 +30,7 @@ namespace HRMS_WEB.DbOperations.WindowsService
 
             if (user != null)
             {
-                DutyLog dutyLog = new DutyLog { UserId = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime };
+                DutyLog dutyLog = new DutyLog { UserId = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime, PowerOffMinutes = powereOffTime };
 
                 if (!isDutyOn)
                 {
@@ -43,7 +43,9 @@ namespace HRMS_WEB.DbOperations.WindowsService
                         var dutyonhoursum = logs.Where(l => l.IsDutyOn == true).Sum(l => l.LogDateTime.TimeOfDay.TotalHours);
                         var dutyoffhoursum = logs.Where(l => l.IsDutyOn == false).Sum(l => l.LogDateTime.TimeOfDay.TotalHours);
 
-                         durationleft = dutyoffhoursum - dutyonhoursum;
+                        var poweroffsum = logs.Sum(l => l.PowerOffMinutes);
+
+                         durationleft = dutyoffhoursum - dutyonhoursum - powereOffTime;
                     }
                     
                     return durationleft;

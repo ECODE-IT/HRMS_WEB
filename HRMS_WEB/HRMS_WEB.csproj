@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201106064054_power of cal.cs" />
+    <Compile Remove="Migrations\20201106064054_power of cal.Designer.cs" />
+    <Compile Remove="Migrations\20201106064211_minute power off.cs" />
+    <Compile Remove="Migrations\20201106064211_minute power off.Designer.cs" />
+    <Compile Remove="Migrations\20201106064436_s.cs" />
+    <Compile Remove="Migrations\20201106064436_s.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
@@ -22,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\windows_applogs\" />
     <Folder Include="wwwroot\windows_mouselogs\" />
     <Folder Include="wwwroot\windows_errorlogs\" />

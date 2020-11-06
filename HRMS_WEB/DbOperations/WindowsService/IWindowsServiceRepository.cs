@@ -9,6 +9,6 @@ namespace HRMS_WEB.DbOperations.WindowsService
     public interface IWindowsServiceRepository
     {
         Task<int> validateUserByUsernamePassword(String username, String password);
-        Task<double> createDutyOnOff(String username, bool isDutyOn, String datetime);
+        Task<double> createDutyOnOff(String username, bool isDutyOn, String datetime, int powereOffTime);
     }
 }

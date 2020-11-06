@@ -11,5 +11,6 @@ namespace HRMS_WEB.Entities
         public String UserId { get; set; }
         public bool IsDutyOn { get; set; }
         public DateTime LogDateTime { get; set; }
+        public int PowerOffMinutes { get; set; }
     }
 }
