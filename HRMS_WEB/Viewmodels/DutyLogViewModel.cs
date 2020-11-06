@@ -19,5 +19,6 @@ namespace HRMS_WEB.Viewmodels
         public String selectedUser { get; set; }
         public DateTime selectedDate { get; set; } = DateTime.Now;
         public double workedHours { get; set; }
+        public double poweroffTime { get; set; }
     }
 }

@@ -54,6 +54,9 @@ namespace HRMS_WEB.Controllers
                     {
                         model.workedHours = RoundUp(dutyoffhoursum - dutyonhoursum + DateTime.Now.TimeOfDay.TotalHours, 2); 
                     }
+
+                    model.poweroffTime = model.dutyLogList.Sum(dl => dl.PowerOffMinutes);
+
                 }
 
             }
