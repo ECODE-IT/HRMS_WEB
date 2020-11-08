@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HRMS_WEB.DbOperations.WindowsService;
+using HRMS_WEB.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
@@ -16,40 +18,59 @@ namespace HRMS_WEB.Controllers
     {
         private readonly IWindowsServiceRepository windowsServiceRepository;
         private readonly IHostingEnvironment hostingEnvironment;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public WindowsServiceController(IWindowsServiceRepository windowsServiceRepository, IHostingEnvironment hostingEnvironment)
+        public WindowsServiceController(IWindowsServiceRepository windowsServiceRepository, IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager)
         {
             this.windowsServiceRepository = windowsServiceRepository;
             this.hostingEnvironment = hostingEnvironment;
+            this.userManager = userManager;
         }
 
-        public IActionResult ValidateUserByUsernamePassword(String username, String password)
+        public async Task<IActionResult> ValidateUserByUsernamePassword(String username, String password)
         {
             try
             {
-                var result = windowsServiceRepository.validateUserByUsernamePassword(username, password).Result;
 
-                if (result != -1)
+                var user = await userManager.FindByNameAsync(username);
+
+                var result = await windowsServiceRepository.validateUserByUsernamePassword(user, username, password);
+
+                if(result == -1)
                 {
-                    if(result == 0)
-                    {
-                        return Json(new { success = true, message = "user found successfully", islogedin = false });
-                    }
-                    return Json(new { success = true, message = "user found successfully", islogedin = true });
+                    return Json(new { success = false, message = "no user found", workingHours = 0 });
                 }
-                return Json(new { success = false, message = "no user found" });
+
+                if(result == -2)
+                {
+                    return Json(new { success = false, message = "incorrect password", workingHours = 0 });
+                }
+
+                if(result == 0)
+                {
+                    var workedHours = await windowsServiceRepository.getworkedHours(user.Id);
+                    return Json(new { success = true, message = "user found successfully", islogedin = false, username = user.Name, workingHours = workedHours });
+                }
+
+                if (result == 1)
+                {
+                    var workedHours = await windowsServiceRepository.getworkedHours(user.Id);
+                    return Json(new { success = true, message = "user found successfully", islogedin = true, username = user.Name, workingHours = workedHours });
+                }
+
+                return Json(new { success = false, message = "error occured", islogedin = false, username = "", workingHours = 0 });
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = e.StackTrace });
+                return Json(new { success = false, message = e.StackTrace, workingHours = 0, username = "" });
             }
         }
 
-        public IActionResult CreateDutyOnOff(String username, bool isDutyOn, String punchdatetime, int powereOffTime)
+        public IActionResult CreateDutyOnOff(String username, bool isDutyOn, String punchdatetime, int powerOffTime, int idletime, int autocadtime)
         {
             try
             {
-                double reslutcode = windowsServiceRepository.createDutyOnOff(username, isDutyOn, punchdatetime, powereOffTime).Result;
+                double reslutcode = windowsServiceRepository.createDutyOnOff(username, isDutyOn, punchdatetime, powerOffTime, idletime, autocadtime).Result;
 
                 if(reslutcode == 1999)
                 {

@@ -1,5 +1,6 @@
 ﻿using HRMS_WEB.DbContext;
 using HRMS_WEB.Entities;
+using HRMS_WEB.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,15 +13,17 @@ namespace HRMS_WEB.DbOperations.WindowsService
     public class WindowsServiceRepository : IWindowsServiceRepository
     {
         private readonly HRMSDbContext db;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public WindowsServiceRepository(HRMSDbContext db, UserManager<IdentityUser> userManager)
+        public WindowsServiceRepository(HRMSDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this.db = db;
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
-        public async Task<double> createDutyOnOff(string username, bool isDutyOn, String sdatetime, int powereOffTime)
+        public async Task<double> createDutyOnOff(string username, bool isDutyOn, String sdatetime, int powereOffTime, int idletime, int autocadtime)
         {
             int timestamp = int.Parse(sdatetime);
             DateTime datetime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
@@ -30,7 +33,7 @@ namespace HRMS_WEB.DbOperations.WindowsService
 
             if (user != null)
             {
-                DutyLog dutyLog = new DutyLog { UserId = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime, PowerOffMinutes = powereOffTime };
+                DutyLog dutyLog = new DutyLog { UserId = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime, PowerOffMinutes = powereOffTime, idletime = idletime, autocadtime = autocadtime };
 
                 if (!isDutyOn)
                 {
@@ -45,9 +48,9 @@ namespace HRMS_WEB.DbOperations.WindowsService
 
                         var poweroffsum = logs.Sum(l => l.PowerOffMinutes);
 
-                         durationleft = dutyoffhoursum - dutyonhoursum - powereOffTime;
+                        durationleft = dutyoffhoursum - dutyonhoursum - ((poweroffsum + 0.001) / 60);
                     }
-                    
+
                     return durationleft;
                 }
 
@@ -58,24 +61,74 @@ namespace HRMS_WEB.DbOperations.WindowsService
             return 1999;
         }
 
-        // returns true if a user entry is exists for the username and password
-        public async Task<int> validateUserByUsernamePassword(string username, string password)
+        public async Task<double> getAutocadHours(string userId, DateTime date)
         {
-            var user = await userManager.FindByNameAsync(username);
-            var lastlog = await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, DateTime.Now.Date) && dl.UserId.Equals(user.Id)).OrderByDescending(dl => dl.LogDateTime).FirstOrDefaultAsync();
-            // return true if user does not exists
-            if (user == null)
+            var totalAutoCadTime = await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, date.Date) && dl.UserId.Equals(userId)).SumAsync(dl => dl.autocadtime);
+            return (totalAutoCadTime) / 60.0;
+        }
+
+        public async Task<double> getidleHours(string userId, DateTime date)
+        {
+            var totalIdelTime = await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, date.Date) && dl.UserId.Equals(userId)).SumAsync(dl => dl.idletime);
+            return (totalIdelTime) / 60.0;
+        }
+
+        public async Task<double> getworkedHours(string userId)
+        {
+            var dutylogs = await db.DutyLogs.Where(dl => DateTime.Equals(DateTime.Now.Date, dl.LogDateTime.Date) && dl.UserId.Equals(userId)).ToListAsync();
+
+            var workedhours = dutylogs.Sum(dl => (dl.LogDateTime.TimeOfDay.TotalHours - dl.PowerOffMinutes));
+
+            var dutyonlogs = dutylogs.Where(dl => dl.IsDutyOn == true).ToArray();
+            var dutyofflogs = dutylogs.Where(dl => dl.IsDutyOn == false).ToArray();
+
+            var dutyonsum = dutyonlogs.Sum(dl => dl.LogDateTime.TimeOfDay.TotalHours);
+            var dutyoffsum = dutyofflogs.Sum(dl => dl.LogDateTime.TimeOfDay.TotalHours);
+
+            var poweroffsum = dutylogs.Sum(dl => dl.PowerOffMinutes);
+
+            if (dutyonlogs.Length == dutyofflogs.Length)
             {
-                return -1;
-            }
-            if(lastlog != null && lastlog.IsDutyOn)
-            {
-                return 1;
+                return dutyoffsum - dutyonsum - ((poweroffsum) / 60.0);
             }
             else
             {
-                return 0;
+                return dutyoffsum - dutyonsum + DateTime.Now.TimeOfDay.TotalHours - ((poweroffsum) / 60.0);
             }
+
+        }
+
+        // returns true if a user entry is exists for the username and password
+        public async Task<int> validateUserByUsernamePassword(ApplicationUser user, string username, string password)
+        {
+
+            if (user != null)
+            {
+                var signinresult = await signInManager.CheckPasswordSignInAsync(user, password, false);
+
+                if (signinresult.Succeeded)
+                {
+                    var lastlog = await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, DateTime.Now.Date) && dl.UserId.Equals(user.Id)).OrderByDescending(dl => dl.LogDateTime).FirstOrDefaultAsync();
+
+                    if (lastlog != null && lastlog.IsDutyOn)
+                    {
+                        return 1;
+                    }
+
+                    return 0;
+
+                }
+                else
+                {
+                    return -2;
+                }
+
+            }
+            else
+            {
+                return -1;
+            }
+
         }
     }
 }

@@ -9,6 +9,7 @@ using HRMS_WEB.DbOperations.SubLevelRepository;
 using HRMS_WEB.DbOperations.UserRepository;
 using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.DbOperations.WindowsService;
+using HRMS_WEB.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -38,7 +39,7 @@ namespace HRMS_WEB
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
 
             // EFCore identity and set password validations  
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequireDigit = false;

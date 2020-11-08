@@ -1,0 +1,109 @@
+﻿@model HRMS_WEB.Viewmodels.FileViewModel
+
+@{
+    ViewData["Title"] = "User Logs";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard v2</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-info">
+                        <div class="card-body">
+                            <form asp-action="Index" asp-controller="File">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="selectedUser" class="control-label"></label>
+                                            <select class="form-control select2" asp-for="selectedUser" asp-items="@(new SelectList(Model.usersList,"Username","Username"))" id="usertype_dropdown"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label asp-for="selectedDate" class="control-label"></label>
+                                            <input class="form-control" asp-for="selectedDate" type="date" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" href="#">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <div class="card-title">
+                                @Model.selectedUser sanapshots on @Model.selectedDate
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <div class="p-0 row d-flex align-items-stretch">
+                                    @if (Model.AppLogList.Any())
+                                    {
+                                        int i = 0;
+                                        foreach (String name in Model.AppLogList)
+                                        {
+                                            i++;
+                                            <div class="filtr-item col" data-category="@i" data-sort="white sample">
+                                                <a href=@name data-toggle="lightbox" data-title="sample 1 - white">
+                                                    @name
+                                                </a>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <h5 class="card-title">No logs filtered</h5>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<!-- Select2 -->
+<script src="~/plugins/select2/js/select2.full.min.js"></script>
+<!-- Select2 -->
+<!-- Select2 -->
+<link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<!-- Page specific script -->
+<script>
+    $(function () {
+
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+    })
+</script>

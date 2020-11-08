@@ -17,6 +17,15 @@
             <form method="post">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="input-group mb-3">
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Username">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <span asp-validation-for="Name" class="text-danger"></span>
+                <div class="input-group mb-3">
                     <input asp-for="Email" type="email" class="form-control" placeholder="Email">
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -68,18 +77,6 @@
                     <!-- /.col -->
                 </div>
             </form>
-
-            <div class="social-auth-links text-center">
-                <p>- OR -</p>
-                <a href="#" class="btn btn-block btn-primary">
-                    <i class="fab fa-facebook mr-2"></i>
-                    Sign up using Facebook
-                </a>
-                <a href="#" class="btn btn-block btn-danger">
-                    <i class="fab fa-google-plus mr-2"></i>
-                    Sign up using Google+
-                </a>
-            </div>
 
             <a asp-action="Login" asp-controller="Account" class="text-center">I already have a membership</a>
         </div>

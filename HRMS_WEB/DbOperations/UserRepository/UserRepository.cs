@@ -13,9 +13,9 @@ namespace HRMS_WEB.DbOperations.UserRepository
     public class UserRepository : IUserRepository
     {
         private readonly HRMSDbContext db;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public UserRepository(HRMSDbContext db, UserManager<IdentityUser> userManager)
+        public UserRepository(HRMSDbContext db, UserManager<ApplicationUser> userManager)
         {
             this.db = db;
             this.userManager = userManager;

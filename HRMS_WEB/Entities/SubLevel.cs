@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using HRMS_WEB.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,6 @@ namespace HRMS_WEB.Entities
         public int PriorityLevel { get; set; }
 
         // navigation properties
-        public IdentityUser User { get; set; }
+        public ApplicationUser User { get; set; }
     }
 }

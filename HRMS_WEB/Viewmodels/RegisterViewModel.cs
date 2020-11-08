@@ -28,5 +28,8 @@ namespace HRMS_WEB.Viewmodels
         [Required]
         public bool AgreedToTerms { get; set; }
 
+        [Required]
+        public String Name { get; set; }
+
     }
 }

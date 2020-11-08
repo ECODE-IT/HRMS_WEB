@@ -1,0 +1,150 @@
+﻿@model HRMS_WEB.Viewmodels.ActivityChartViewModel
+
+@{
+    ViewData["Title"] = "Daily activity report";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">@ViewData["Title"]</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard v2</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="col">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Select fields and filter your results</h3>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="ActivityChart" asp-controller="Duty">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label" asp-for="selectedUser"></label>
+                                        <select class="form-control select2" id="usertype_dropdown" asp-for="selectedUser" asp-items="@(new SelectList(Model.usersList,"ID","Username"))"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label" asp-for="selectedDate"></label>
+                                        <input class="form-control" asp-for="selectedDate" type="date" />
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary" href="#">Submit</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Daily user report for user</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <canvas id="donutChart" style="min-height: 350px; height: 350px; max-height: 350px; max-width: 100%;"></canvas>
+                            </div>
+                            <div class="col-sm-6">
+                                <canvas id="softwareChart" style="min-height: 350px; height: 350px; max-height: 350px; max-width: 100%;"></canvas>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="card-footer">
+                        Values are computed until @DateTime.Now
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- Select2 -->
+<script src="~/plugins/select2/js/select2.full.min.js"></script>
+<!-- Select2 -->
+<!-- Select2 -->
+<link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<!-- ChartJS -->
+<script src="~/plugins/chart.js/Chart.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        var idlehours = @Html.Raw(Json.Serialize(Model.idleHours));
+        var workinghours = @Html.Raw(Json.Serialize(Model.workedHours));
+        var autocadHours = @Html.Raw(Json.Serialize(Model.autocadHours));
+
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        //-------------
+        //- DONUT CHART -
+        //-------------
+        // Get context with jQuery - using jQuery's .get() method.
+        var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+        var donutData = {
+            labels: [
+                'Working Time (Hours)',
+                'Idle Time (Hours)',
+            ],
+            datasets: [
+                {
+                    data: [workinghours - idlehours, idlehours],
+                    backgroundColor: ['#33ccc7', '#a6b3a4'],
+                }
+            ]
+        }
+        var donutOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        var donutChart = new Chart(donutChartCanvas, {
+            type: 'doughnut',
+            data: donutData,
+            options: donutOptions
+        })
+
+        // software chart
+        var donutChartCanvas1 = $('#softwareChart').get(0).getContext('2d')
+        var donutData1 = {
+            labels: [
+                'Autocad Time (Hours)',
+                'Other software Time (Hours)',
+            ],
+            datasets: [
+                {
+                    data: [autocadHours, workinghours - autocadHours],
+                    backgroundColor: ['#33ccc7', '#a6b3a4'],
+                }
+            ]
+        }
+        var donutOptions1 = {
+            maintainAspectRatio: false,
+            responsive: true,
+        }
+        //Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        var donutChart1 = new Chart(donutChartCanvas1, {
+            type: 'doughnut',
+            data: donutData1,
+            options: donutOptions1
+        })
+    });
+</script>

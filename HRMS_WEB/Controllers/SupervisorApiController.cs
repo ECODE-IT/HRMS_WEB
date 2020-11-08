@@ -22,16 +22,16 @@ namespace HRMS_WEB.Controllers
     [AllowAnonymous]
     public class SupervisorApiController : Controller
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IProjectRepository projectRepository;
         private readonly ISubLevelRepository subLevelRepository;
         private readonly IUserRepository userRepository;
         private readonly IHostingEnvironment hostingEnvironment;
 
         public SupervisorApiController(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             IProjectRepository projectRepository,
             ISubLevelRepository subLevelRepository,
             IUserRepository userRepository,

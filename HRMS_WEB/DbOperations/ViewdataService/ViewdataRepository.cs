@@ -1,5 +1,7 @@
 ﻿using HRMS_WEB.DbContext;
 using HRMS_WEB.Entities;
+using HRMS_WEB.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,10 +13,12 @@ namespace HRMS_WEB.DbOperations.ViewdataService
     public class ViewdataRepository : IViewdataRepository
     {
         private readonly HRMSDbContext db;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ViewdataRepository(HRMSDbContext db)
+        public ViewdataRepository(HRMSDbContext db, UserManager<ApplicationUser> userManager)
         {
             this.db = db;
+            this.userManager = userManager;
         }
 
         public async Task<List<DutyLog>> getDutyLogsForTheUser(string id, DateTime selectedDate)
@@ -37,6 +41,12 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         public async Task<IEnumerable<User>> getUserList()
         {
             return await db.Users.ToListAsync();
+        }
+
+        public async Task<List<IGrouping<String, DutyLog>>> GetUserRegistariesForDate(DateTime date)
+        {
+            var result =  await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, date.Date)).ToListAsync();
+            return result.GroupBy(dl => dl.UserId).ToList(); 
         }
     }
 }
