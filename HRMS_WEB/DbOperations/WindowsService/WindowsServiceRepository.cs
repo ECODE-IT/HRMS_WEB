@@ -73,9 +73,9 @@ namespace HRMS_WEB.DbOperations.WindowsService
             return (totalIdelTime) / 60.0;
         }
 
-        public async Task<double> getworkedHours(string userId)
+        public async Task<double> getworkedHours(string userId, DateTime date)
         {
-            var dutylogs = await db.DutyLogs.Where(dl => DateTime.Equals(DateTime.Now.Date, dl.LogDateTime.Date) && dl.UserId.Equals(userId)).ToListAsync();
+            var dutylogs = await db.DutyLogs.Where(dl => DateTime.Equals(date.Date, dl.LogDateTime.Date) && dl.UserId.Equals(userId)).ToListAsync();
 
             var workedhours = dutylogs.Sum(dl => (dl.LogDateTime.TimeOfDay.TotalHours - dl.PowerOffMinutes));
 

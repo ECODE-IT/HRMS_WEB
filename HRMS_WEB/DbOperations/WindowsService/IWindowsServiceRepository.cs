@@ -11,7 +11,7 @@ namespace HRMS_WEB.DbOperations.WindowsService
     {
         Task<int> validateUserByUsernamePassword(ApplicationUser user, String username, String password);
         Task<double> createDutyOnOff(String username, bool isDutyOn, String datetime, int powereOffTime, int idletime, int autocadtime);
-        Task<double> getworkedHours(String userId);
+        Task<double> getworkedHours(String userId, DateTime date);
         Task<double> getidleHours(String userId, DateTime date);
         Task<double> getAutocadHours(String userId, DateTime date);
     }

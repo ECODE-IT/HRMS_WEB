@@ -43,7 +43,7 @@ namespace HRMS_WEB.Controllers
                 model.dutyLogList = await viewdataRepository.getDutyLogsForTheUser(model.selectedUser, model.selectedDate);
                 if (model.dutyLogList != null)
                 {
-                    model.workedHours = RoundUp(await windowsServiceRepository.getworkedHours(model.selectedUser), 3);
+                    model.workedHours = RoundUp(await windowsServiceRepository.getworkedHours(model.selectedUser, model.selectedDate), 3);
 
                     model.poweroffTime = RoundUp(model.dutyLogList.Sum(dl => dl.PowerOffMinutes), 3);
 
@@ -72,7 +72,7 @@ namespace HRMS_WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> ActivityChart(ActivityChartViewModel model)
         {
-            var workedhours = await windowsServiceRepository.getworkedHours(model.selectedUser);
+            var workedhours = await windowsServiceRepository.getworkedHours(model.selectedUser, model.selectedDate);
             var idlehours = await windowsServiceRepository.getidleHours(model.selectedUser, model.selectedDate);
             var autocadHours = await windowsServiceRepository.getAutocadHours(model.selectedUser, model.selectedDate);
 

@@ -48,13 +48,13 @@ namespace HRMS_WEB.Controllers
 
                 if(result == 0)
                 {
-                    var workedHours = await windowsServiceRepository.getworkedHours(user.Id);
+                    var workedHours = await windowsServiceRepository.getworkedHours(user.Id, DateTime.Now);
                     return Json(new { success = true, message = "user found successfully", islogedin = false, username = user.Name, workingHours = workedHours });
                 }
 
                 if (result == 1)
                 {
-                    var workedHours = await windowsServiceRepository.getworkedHours(user.Id);
+                    var workedHours = await windowsServiceRepository.getworkedHours(user.Id, DateTime.Now);
                     return Json(new { success = true, message = "user found successfully", islogedin = true, username = user.Name, workingHours = workedHours });
                 }
 
