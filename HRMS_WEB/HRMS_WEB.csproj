@@ -2,7 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>1ea7995a-ccb3-4bdf-9926-350fae3d9e70</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20201111061827_forieg.cs" />
+    <Compile Remove="Migrations\20201111061827_forieg.Designer.cs" />
+    <Compile Remove="Migrations\20201111062414_re.cs" />
+    <Compile Remove="Migrations\20201111062414_re.Designer.cs" />
+    <Compile Remove="Migrations\20201111062505_fsdfsdf.cs" />
+    <Compile Remove="Migrations\20201111062505_fsdfsdf.Designer.cs" />
+    <Compile Remove="Migrations\20201112071326_isactive.cs" />
+    <Compile Remove="Migrations\20201112071326_isactive.Designer.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
@@ -18,10 +30,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\windows_mouselogs\" />
     <Folder Include="wwwroot\windows_errorlogs\" />
     <Folder Include="wwwroot\windows_screenshots\" />

@@ -1,0 +1,116 @@
+﻿@model HRMS_WEB.Entities.UpcomingProjects
+
+@{
+    ViewData["Title"] = "UpcomingProjectEdit";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<section class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Edit Upcoming Project</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Projects</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content p-5">
+        <div class="card card-info">
+            <div class="card-header">
+                Edit Upcoming Project
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form asp-action="UpcomingProjectEdit">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <input type="hidden" asp-for="ID" />
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="AssigedUserId" class="control-label"></label>
+                                        <select asp-for="AssigedUserId" class="form-control select2" asp-items="@(new SelectList(ViewBag.userList,"ID","Username"))"></select>
+                                        <span asp-validation-for="AssigedUserId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Deadline" class="control-label"></label>
+                                        <input asp-for="Deadline" class="form-control" asp-items="ViewBag.AssigedUserId" />
+                                        <span asp-validation-for="Deadline" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Remark" class="control-label"></label>
+                                        <input asp-for="Remark" class="form-control" asp-items="ViewBag.AssigedUserId" />
+                                        <span asp-validation-for="Remark" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Customer" class="control-label"></label>
+                                        <input asp-for="Customer" class="form-control" />
+                                        <span asp-validation-for="Customer" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label asp-for="Code" class="control-label"></label>
+                                        <input asp-for="Code" class="form-control" />
+                                        <span asp-validation-for="Code" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Edit upcoming project" class="btn btn-primary" />
+                                <a href="/Project/OpenProjects" class="btn btn-outline-primary">Cancle</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+<!-- Select2 -->
+<script src="~/plugins/select2/js/select2.full.min.js"></script>
+<!-- Select2 -->
+<!-- Select2 -->
+<link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+        $(document).ready(function () {
+
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
+
+        });
+    </script>
+
+}
+

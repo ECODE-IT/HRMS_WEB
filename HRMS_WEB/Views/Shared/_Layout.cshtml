@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>HRMS</title>
+    <title>@ViewData["Title"]</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
@@ -33,7 +33,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
+                    <a href="#" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link">Contact</a>
@@ -59,7 +59,7 @@
             <a href="index3.html" class="brand-link">
                 <img src="~/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                      style="opacity: .8">
-                <span class="brand-text font-weight-light">AdminLTE 3</span>
+                <span class="brand-text font-weight-light">ECODE</span>
             </a>
 
             <!-- Sidebar -->
@@ -92,55 +92,78 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="User" asp-action="Index">
+                        <li class="nav-item has-treeview">
+                            <a class="nav-link" href="#">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
                                     Employees
-                                    <span class="right badge badge-danger">New</span>
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-copy"></i>
-                                <p>
-                                    Tasks
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/sublevel/index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Sub levels</p>
+                                    <a asp-controller="User" asp-action="Engineers" class="nav-link">
+                                        <i class="fas fa-hard-hat nav-icon"></i>
+                                        <p>Engineers</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="User" asp-action="Draughtmen" class="nav-link">
+                                        <i class="fas fa-briefcase nav-icon"></i>
+                                        <p>Draughtmen</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fa fa-cogs"></i>
+                                <i class="nav-icon fas fa-lock-open"></i>
                                 <p>
-                                    Administration
+                                    Master data
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a asp-action="Register" asp-controller="Account" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Registration</p>
+                                    <a asp-controller="Project" asp-action="ProjectCriteria" class="nav-link">
+                                        <i class="fas fa-project-diagram nav-icon"></i>
+                                        <p>Projects</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-action="ListRoles" asp-controller="Administration" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>User roles</p>
+                                    <a asp-controller="User" asp-action="CreateSpecialTask" class="nav-link">
+                                        <i class="fas fa-bell nav-icon"></i>
+                                        <p>Special Task</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fa fa-cogs"></i>
+                                    <p>
+                                        Administration
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a asp-action="Register" asp-controller="Account" class="nav-link">
+                                            <i class="far fa-registered nav-icon"></i>
+                                            <p>Registration</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-action="ListRoles" asp-controller="Administration" class="nav-link">
+                                            <i class="fas fa-users nav-icon"></i>
+                                            <p>User roles</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-chart-line"></i>
@@ -191,8 +214,15 @@
                                         <p>User activity report</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a asp-action="WorkedHoursSummaryReport" asp-controller="DraughtmanApi" class="nav-link">
+                                        <i class="fas fa-chart-bar nav-icon"></i>
+                                        <p>Working hours report</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
+                        }
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -206,7 +236,7 @@
 
         <!-- Main Footer -->
         <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
+            <strong>Copyright &copy; 2014-2019 <a href="#">ECODE</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b>Version</b> 3.0.5

@@ -49,13 +49,13 @@ namespace HRMS_WEB.Controllers
                 if(result == 0)
                 {
                     var workedHours = await windowsServiceRepository.getworkedHours(user.Id, DateTime.Now);
-                    return Json(new { success = true, message = "user found successfully", islogedin = false, username = user.Name, workingHours = workedHours });
+                    return Json(new { success = true, message = "user found successfully", islogedin = false, username = user.Name, workingHours = workedHours, userid = user.Id });
                 }
 
                 if (result == 1)
                 {
                     var workedHours = await windowsServiceRepository.getworkedHours(user.Id, DateTime.Now);
-                    return Json(new { success = true, message = "user found successfully", islogedin = true, username = user.Name, workingHours = workedHours });
+                    return Json(new { success = true, message = "user found successfully", islogedin = true, username = user.Name, workingHours = workedHours, userid = user.Id });
                 }
 
                 return Json(new { success = false, message = "error occured", islogedin = false, username = "", workingHours = 0 });
@@ -66,11 +66,11 @@ namespace HRMS_WEB.Controllers
             }
         }
 
-        public IActionResult CreateDutyOnOff(String username, bool isDutyOn, String punchdatetime, int powerOffTime, int idletime, int autocadtime)
+        public IActionResult CreateDutyOnOff(String username, bool isDutyOn, String punchdatetime, int powerOffTime, int idletime, int autocadtime, int exceltime, int wordtime)
         {
             try
             {
-                double reslutcode = windowsServiceRepository.createDutyOnOff(username, isDutyOn, punchdatetime, powerOffTime, idletime, autocadtime).Result;
+                double reslutcode = windowsServiceRepository.createDutyOnOff(username, isDutyOn, punchdatetime, powerOffTime, idletime, autocadtime, exceltime, wordtime).Result;
 
                 if(reslutcode == 1999)
                 {

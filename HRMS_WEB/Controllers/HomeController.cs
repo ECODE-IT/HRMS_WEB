@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HRMS_WEB.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, Supervisor")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

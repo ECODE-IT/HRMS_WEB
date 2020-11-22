@@ -1,0 +1,142 @@
+﻿@model IEnumerable<HRMS_WEB.Entities.UpcomingProjects>
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>New projects</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">New projects</li>
+                    </ol>
+                </div>
+            </div>
+        @if (User.IsInRole("Admin")) { 
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <a asp-controller="Project" asp-action="CreateUpcomingProject" class="btn btn-outline-secondary">Create new Upcoming project</a>
+            </div>
+        </div>
+        }
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="col">
+            <!-- Default box -->
+            <div class="card card-solid">
+                <div class="card-body">
+                    <div class="row d-flex align-items-stretch">
+                        @if (Model.Any())
+                        {
+                            @foreach (var project in Model)
+                            {
+                                <div class="col-12 col-sm-6 col-md-4">
+                                    <div class="card bg-light">
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            @if (project.IsNotified)
+                                            {
+                                                <div class="ribbon-wrapper ribbon-lg">
+                                                    <div class="ribbon bg-success">
+                                                        Notified
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="ribbon-wrapper ribbon">
+                                                    <div class="ribbon bg-danger">
+                                                        New
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (project.IsNotified)
+                                            {
+                                                <div class="ribbon-wrapper ribbon-lg">
+                                                    <div class="ribbon bg-success">
+                                                        Newly Notified
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="ribbon-wrapper ribbon-lg">
+                                                    <div class="ribbon bg-danger">
+                                                        error
+                                                    </div>
+                                                </div>
+                                            }
+
+                                        }
+                                        <div class="card-header text-muted border-bottom-0">
+                                            @project.Deadline
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h2 class="lead"><b>@project.Name</b></h2>
+                                                    <p class="text-muted text-sm"><b>Remark: </b> @project.Remark </p>
+                                                    <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Assigned to: @project.AssigedUser?.Email</li>
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @project.AssigedUser?.PhoneNumber</li>
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-stopwatch"></i></span> Assigned user name : @project.AssigedUser?.Name</li>
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-layer-group"></i></span> Priority Level : <span class="right badge badge-danger"><div style="font-size: 15px">new</div></span></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="text-right">
+                                                <a asp-controller="Project" asp-action="UpcomingProjectEdit" asp-route-projectId=@project.ID class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-edit mr-2"></i> Edit
+                                                </a>
+                                                @if (User.IsInRole("Admin") && !project.IsNotified)
+                                                {
+                                                    <a asp-action="NotifyDependent" asp-controller="Project" asp-route-projectId=@project.ID class="btn btn-sm btn-success">
+                                                        Notify dependent
+                                                    </a>
+                                                }
+                                                @if (User.IsInRole("Supervisor") && project.IsNotified)
+                                                {
+                                                    <a asp-action="MergeToOngoingProjects" asp-controller="Project" asp-route-projectId=@project.ID class="btn btn-sm btn-success">
+                                                        Merge to ongoing scheme
+                                                    </a>
+                                                }
+                                                <a asp-action="DeleteUpcomingProject" asp-controller="Project" asp-route-projectId=@project.ID class="btn btn-sm btn-danger">
+                                                    Delete
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>} }
+                        else
+                        {
+                            <h3 class="card-title">No sub levels found</h3>}
+
+
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <h3 class="card-title">@Model.Count() Upcoming projects</h3>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>

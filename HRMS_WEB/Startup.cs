@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using HRMS_WEB.DbContext;
+using HRMS_WEB.DbOperations.EmailRepository;
 using HRMS_WEB.DbOperations.ProjectRepository;
 using HRMS_WEB.DbOperations.SubLevelRepository;
 using HRMS_WEB.DbOperations.UserRepository;
@@ -34,6 +35,12 @@ namespace HRMS_WEB
         {
             services.AddControllersWithViews();
 
+            var emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+
+            services.AddSingleton(emailConfig);
+
             // MySQL DB connection service
             services.AddDbContextPool<HRMSDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
@@ -57,6 +64,8 @@ namespace HRMS_WEB
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<ISubLevelRepository, SubLevelRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IEmailSender, EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

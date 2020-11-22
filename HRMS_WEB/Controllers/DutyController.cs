@@ -7,10 +7,12 @@ using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.DbOperations.WindowsService;
 using HRMS_WEB.Models;
 using HRMS_WEB.Viewmodels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
 {
+    [Authorize(Roles = "Admin, Supervisor")]
     public class DutyController : Controller
     {
         private readonly IUserRepository userRepository;

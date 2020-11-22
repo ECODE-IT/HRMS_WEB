@@ -14,5 +14,7 @@ namespace HRMS_WEB.Entities
         public int PowerOffMinutes { get; set; }
         public int idletime { get; set; }
         public int autocadtime { get; set; }
+        public int exceltime { get; set; }
+        public int wordtime { get; set; }
     }
 }

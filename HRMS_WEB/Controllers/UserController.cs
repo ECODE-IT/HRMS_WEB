@@ -2,41 +2,64 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HRMS_WEB.DbOperations.EmailRepository;
+using HRMS_WEB.DbOperations.ProjectRepository;
 using HRMS_WEB.DbOperations.UserRepository;
 using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.Entities;
+using HRMS_WEB.Models;
+using HRMS_WEB.Viewmodels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
 {
-    [Authorize]
+   [Authorize]
     public class UserController : Controller
     {
         private readonly IViewdataRepository viewdataRepository;
         private readonly IUserRepository userRepository;
+        private readonly IEmailSender emailSender;
+        private readonly IProjectRepository projectRepository;
 
-        public UserController(IViewdataRepository viewdataRepository, IUserRepository userRepository)
+        public UserController(IViewdataRepository viewdataRepository, IUserRepository userRepository, IEmailSender emailSender, IProjectRepository projectRepository)
         {
             this.viewdataRepository = viewdataRepository;
             this.userRepository = userRepository;
-        }
-        public async Task<IActionResult> Index()
-        {
-            var userlist = await viewdataRepository.getUserList();
-            return View(userlist);
+            this.emailSender = emailSender;
+            this.projectRepository = projectRepository;
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Engineers()
         {
+            return View(await userRepository.getengineerDetailsWithProjectProgress());
+        }
+
+        public async Task<IActionResult> Draughtmen()
+        {
+            return View(await userRepository.getDraughtmenDetailsWithProjectProgress());
+        }
+
+        public IActionResult CreateSpecialtask()
+        {
+            if(ViewBag.usersList == null && ViewBag.projectList == null)
+            {
+                ViewBag.projectList = projectRepository.getUnfinishedProjectListWithId();
+                ViewBag.usersList = userRepository.getBasicUserListContainsId();
+            }
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> CreateSpecialtask(SpecialTask specialTask)
         {
-                await userRepository.insertUser(user);
-                return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                await projectRepository.submitSpecialTask(specialTask);
+                return RedirectToAction("Index", "Home");
+            }
+            return View(specialTask);
         }
+
     }
 }

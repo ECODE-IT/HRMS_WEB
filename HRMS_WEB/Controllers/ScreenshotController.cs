@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, Supervisor")]
     public class ScreenshotController : Controller
     {
         private readonly IUserRepository userRepository;
@@ -47,7 +47,7 @@ namespace HRMS_WEB.Controllers
                     int timestamp = int.Parse(timestampstring);
                     DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
 
-                    if (filename.Contains(model.selectedUser.Substring(0, model.selectedUser.LastIndexOf("@") - 1)) && model.selectedDate.Date == dateTime.Date)
+                    if (file.Contains(model.selectedUser.Substring(0, model.selectedUser.LastIndexOf("@") - 1)) && model.selectedDate.Date == dateTime.Date)
                     {
                         model.imagePathList.Add("windows_screenshots/" + file);
                     }

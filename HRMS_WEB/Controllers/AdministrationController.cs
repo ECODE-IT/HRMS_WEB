@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HRMS_WEB.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;

@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Project Criterias";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Project Criterias</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>New projects</h3>
+
+                        <p>You can create and add sublevels for an new project here</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <a asp-controller="Project" asp-action="OpenProjects" class="small-box-footer">
+                        Proceed <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="small-box bg-secondary">
+                    <div class="inner">
+                        <h3>Ongoing projects</h3>
+
+                        <p>You can edit and view projects and sub levels etc</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <a asp-controller="Project" asp-action="Index" class="small-box-footer">
+                        Proceed <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>

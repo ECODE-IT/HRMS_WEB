@@ -1,5 +1,6 @@
 ﻿using HRMS_WEB.Entities;
 using HRMS_WEB.Models;
+using HRMS_WEB.Viewmodels;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,10 @@ namespace HRMS_WEB.DbOperations.UserRepository
         IEnumerable<UsersDTO> getUsersWithData();
         IEnumerable<UsersDTO> getBasicUserList();
         IEnumerable<UsersDTO> getBasicUserListContainsId();
+        Task<IEnumerable<DraughtmanDTO>> getDraughtmans();
+        Task<IEnumerable<DraughtmanDTO>> GetDraughtmenWithOnlyIDName();
+        Task<IEnumerable<EngineerDTO>> getengineerDetailsWithProjectProgress();
+        Task<IEnumerable<DraughtmenViewModel>> getDraughtmenDetailsWithProjectProgress();
+
     }
 }

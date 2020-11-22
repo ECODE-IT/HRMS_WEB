@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using HRMS_WEB.DbOperations.UserRepository;
 using HRMS_WEB.Models;
 using HRMS_WEB.Viewmodels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
 {
+    [Authorize(Roles = "Admin, Supervisor")]
     public class FileController : Controller
     {
         private readonly IUserRepository userRepository;

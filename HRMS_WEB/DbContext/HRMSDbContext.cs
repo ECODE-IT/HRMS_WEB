@@ -20,7 +20,8 @@ namespace HRMS_WEB.DbContext
         public DbSet<DutyLog> DutyLogs { get; set; }
         public DbSet<SubLevel> SubLevels { get; set; }
         public DbSet<Project> Projects { get; set; }
-
+        public DbSet<UpcomingProjects> UpcomingProjects { get; set; }
+        public DbSet<SpecialTask> specialTasks { get; set; }
 
     }
 }

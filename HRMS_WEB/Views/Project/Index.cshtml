@@ -1,0 +1,117 @@
+﻿@model IEnumerable<HRMS_WEB.Entities.Project>
+
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Projects</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Projects</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="col">
+            <!-- Default box -->
+            <div class="card card-solid">
+                <div class="card-body">
+                    <div class="row d-flex align-items-stretch">
+                        @if (Model.Any())
+                        {
+                            @foreach (var project in Model)
+                            {
+                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                                    <div class="card bg-light">
+                                        @if (project.Progress == 0)
+                                        {
+                                            <div class="ribbon-wrapper ribbon-lg">
+                                                <div class="ribbon bg-danger">
+                                                    New Project
+                                                </div>
+                                            </div>}
+                                        <div class="card-header text-muted border-bottom-0">
+                                            @project.Deadline
+                                        </div>
+                                        <div class="card-body pt-0">
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <h2 class="lead"><b>@project.Name</b></h2>
+                                                    <p class="text-muted text-sm"><b>Remark: </b> @project.Remarks </p>
+                                                    <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Assigned to: @project.User.Email</li>
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @project.User.PhoneNumber</li>
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-stopwatch"></i></span> Assigned user name : @project.User.Name</li>
+                                                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-layer-group"></i></span> Priority Level : <span class="right badge badge-danger"><div style="font-size: 15px">*</div></span></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <div class="round" data-value=@project.Progress data-size="200" data-thickness="12">
+                                                        <strong style="position: absolute; top: 50%; left: 50%; margin-top: -50px; transform: translate(-50%); font-size: 20px; color: #212121; font-weight: 500;"></strong>
+                                                        <span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <div class="text-right">
+                                                <a asp-controller="SubLevel" asp-action="GetSublevelsForProject" asp-route-projectId=@project.ID class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-layer-group"></i> View sub levels
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>} }
+                        else
+                        {
+                            <h3 class="card-title">No sub levels found</h3>}
+
+
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <h3 class="card-title">@Model.Count() Projects</h3>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('.proceedbtn').click(function () {
+            var pageindex = $('.pageinput').val();
+            if (pageindex.toString() != "")
+                location.href = "/SubLevel/Index/" + pageindex;
+        });
+
+        $('.round').circleProgress({
+            fill: {
+                gradient: ['#ffe600', '#ff5500']
+            },
+            size: 100,
+            thickness: 10,
+        }).on('circle-animation-progress', function (event, progress, stepvalue) {
+            $(this).find('strong').text(String(stepvalue.toFixed(2)).substr(2) + '%')
+        });
+
+    });</script>

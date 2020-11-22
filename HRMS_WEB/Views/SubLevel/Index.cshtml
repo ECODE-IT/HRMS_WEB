@@ -20,98 +20,112 @@
 
     <!-- Main content -->
     <section class="content">
-
-        <!-- Default box -->
-        <div class="card card-solid">
-            <div class="card-body pb-0">
-                <div class="row d-flex align-items-stretch">
-                    @for (int i = 0; i < 25; i++)
-                    {
-                        <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                            <div class="card bg-light">
-                                <div class="ribbon-wrapper ribbon-lg">
-                                    <div class="ribbon bg-info">
-                                        New sub level
-                                    </div>
-                                </div>
-                                <div class="card-header text-muted border-bottom-0">
-                                    Digital Strategist
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="row">
-                                        <div class="col-8">
-                                            <h2 class="lead"><b>Nicole Pearson</b></h2>
-                                            <p class="text-muted text-sm"><b>About: </b> Web Designer / UX / Graphic Artist / Coffee Lover </p>
-                                            <ul class="ml-4 mb-0 fa-ul text-muted">
-                                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Address: Demo Street 123, Demo City 04312, NJ</li>
-                                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: + 800 - 12 12 23 52</li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-4 text-center">
-                                            <div class="round" data-value="0.5455" data-size="200" data-thickness="12">
-                                                <strong style="position: absolute; top: 50%; left: 50%; margin-top: -40px; transform: translate(-50%); font-size: 20px; color: #212121; font-weight: 500;"></strong>
-                                                <span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-3 text-center">
-                                            <div style="height: 25px">
-
-                                            </div>
-                                            <img src="~/dist/img/user2-160x160.jpg" alt="" class="img-circle img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="text-right">
-                                        <a href="#" class="btn btn-sm bg-teal">
-                                            <i class="fas fa-comments"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-user"></i> View Profile
-                                        </a>
-                                    </div>
+        <div class="col">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Select fields and filter your results</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Index" asp-controller="SubLevel">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="control-label" asp-for="selectedProjectId"></label>
+                                    <select class="form-control select2" id="usertype_dropdown" asp-for="selectedProjectId" asp-items="@(new SelectList(Model.ProjectList,"ID","Name"))"></select>
                                 </div>
                             </div>
                         </div>
-                    }
-
+                        <button type="submit" class="btn btn-primary" href="#">Submit</button>
+                    </form>
                 </div>
             </div>
-            <!-- /.card-body -->
-            <div class="card-footer">
-                <nav aria-label="Contacts Page Navigation">
-                    <div class="justify-content-end row d-flex">
-                        @*<div>
-                            Go to page
-                        </div>
-                        <div>
-                            <input class="form-control pageinput" style="width: 50px; margin-left: 10px; margin-right: 10px" inputmode="numeric" value="1" />
-                        </div>
-                        <div style="padding:10px">
-                            of
-                        </div>
-                        <div style="padding:10px">
-                            @Html.DisplayFor(m => m.LastpageNumber)
-                        </div>
-                        <div>
-                            <a class="proceedbtn btn btn-outline-primary">Proceed</a>
-                        </div>*@
-                    </div>
-                </nav>
-            </div>
-            <!-- /.card-footer -->
-        </div>
-        <!-- /.card -->
 
+            <!-- Default box -->
+            <div class="card card-solid">
+                <div class="card-body">
+                    <div class="row d-flex align-items-stretch">
+                        @if (Model.SubLevelList.Any())
+                        {
+            @foreach (var sublevel in Model.SubLevelList)
+            {
+<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+    <div class="card bg-light">
+        @if (sublevel.progressFraction == 0)
+        {
+<div class="ribbon-wrapper ribbon-lg">
+    <div class="ribbon bg-info">
+        New sub level
+    </div>
+</div>
+        }
+        <div class="card-header text-muted border-bottom-0">
+            @sublevel.Deadline
+        </div>
+        <div class="card-body pt-0">
+            <div class="row">
+                <div class="col-8">
+                    <h2 class="lead"><b>@sublevel.Name</b></h2>
+                    <p class="text-muted text-sm"><b>Remark: </b> @sublevel.Remark </p>
+                    <ul class="ml-4 mb-0 fa-ul text-muted">
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Assigned to: @sublevel.User.Email</li>
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: @sublevel.User.PhoneNumber</li>
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-stopwatch"></i></span> Man hours (Hours) : @sublevel.ManHours</li>
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-layer-group"></i></span> Priority Level : <span class="right badge badge-danger"><div style="font-size: 15px">@sublevel.PriorityLevel</div></span></li>
+                    </ul>
+                </div>
+                <div class="col-4 text-center">
+                    <div class="round" data-value=@sublevel.progressFraction data-size="200" data-thickness="12">
+                        <strong style="position: absolute; top: 50%; left: 50%; margin-top: -50px; transform: translate(-50%); font-size: 20px; color: #212121; font-weight: 500;"></strong>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="text-right">
+                <a href="#" class="btn btn-sm btn-primary">
+                    <i class="fas fa-user"></i> View Profile 
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+                        } 
+                        }
+                        else
+                        {
+            <h3 class="card-title">No sub levels found</h3>
+            }
+
+
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <h3 class="card-title">@Model.SubLevelList.Count() Sub levels</h3>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+        </div>
     </section>
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
+<!-- Select2 -->
+<script src="~/plugins/select2/js/select2.full.min.js"></script>
+<!-- Select2 -->
+<!-- Select2 -->
+<link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 <script>
     $(document).ready(function () {
+
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+
         $('.proceedbtn').click(function () {
             var pageindex = $('.pageinput').val();
             if (pageindex.toString() != "")

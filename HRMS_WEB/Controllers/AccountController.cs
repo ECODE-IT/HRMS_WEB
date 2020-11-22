@@ -86,5 +86,10 @@ namespace HRMS_WEB.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }
+
+        public IActionResult AccessDenied(String ReturnUrl)
+        {
+            return View();
+        }
     }
 }

@@ -59,26 +59,26 @@ namespace HRMS_WEB.Controllers
 
                     if (signinresult.Succeeded)
                     {
-                        return Json(new { success = true, message = "login successfull" });
+                        return Json(new { success = true, message = "login successfull", Id = user.Id, Username = user.Name });
                     }
-                    return Json(new { success = false, message = "signin failed" });
+                    return Json(new { success = false, message = "signin failed", Id = "", Username ="" });
                 }
 
-                return Json(new { success = false, message = "signin failed" });
+                return Json(new { success = false, message = "signin failed", Id = "", Username = "" });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "signin failed because " + ex.Message });
+                return Json(new { success = false, message = "signin failed because " + ex.Message, Id = "", Username = "" });
             }
         }
 
         // supervisor get all projects api
         // GET
-        public IActionResult GetAllUnfinishedProjects(String username)
+        public IActionResult GetAllUnfinishedProjects(String userId)
         {
             try
             {
-                return Json(new { success = true, projects = projectRepository.getUnfinishedProjects(username) });
+                return Json(new { success = true, projects = projectRepository.getUnfinishedProjects(userId) });
             }
             catch (Exception ex)
             {
@@ -103,13 +103,13 @@ namespace HRMS_WEB.Controllers
         // supervisor submit sub level 
         // POST
         [HttpPost]
-        public IActionResult SubmitSubLevel(SubLevel subLevel)
+        public async Task<IActionResult> SubmitSubLevel(SubLevelSubmissionDTO subLevel)
         {
             try
             {
                 if (subLevel != null)
                 {
-                    subLevelRepository.submitSubLevel(subLevel);
+                    await subLevelRepository.submitSublevelByMobile(subLevel);
                     return Json(new { success = true, message = "creation or update is successfull" });
                 }
                 return Json(new { success = false, message = "object is null" });
@@ -154,11 +154,11 @@ namespace HRMS_WEB.Controllers
         // get all of the users
         // GET
         [HttpGet]
-        public IActionResult GetUsersList()
+        public async Task<IActionResult> GetDraughtmans()
         {
             try
             {
-                return Ok(userRepository.getUsersWithData());
+                return Ok(await userRepository.getDraughtmans());
             }
             catch (Exception ex)
             {
@@ -201,6 +201,31 @@ namespace HRMS_WEB.Controllers
             catch(Exception ex)
             {
                 return Json(new { success = false, message = "error occured because " + ex });
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetUpComingProjects(String userid)
+        {
+            try
+            {
+                return Json(new { success = true, upcomingProjects = projectRepository.GetUpcomingProjects(userid), message = "transaction successfull" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = "error occured because of " + ex.Message });
+            }
+        }
+
+        public IActionResult GetSpecialTasks(String userid)
+        {
+            try
+            {
+                return Json(new { success = true, SpecialTasks = projectRepository.GetSpecialTasks(userid) });
+            }
+            catch(Exception ex)
+            {
+                return Json(new { success = false, message = "error because " + ex.Message});
             }
         }
     }
