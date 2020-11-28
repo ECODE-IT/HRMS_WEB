@@ -10,6 +10,7 @@ using HRMS_WEB.Entities;
 using HRMS_WEB.Models;
 using HRMS_WEB.Viewmodels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
@@ -21,13 +22,15 @@ namespace HRMS_WEB.Controllers
         private readonly IUserRepository userRepository;
         private readonly IEmailSender emailSender;
         private readonly IProjectRepository projectRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public UserController(IViewdataRepository viewdataRepository, IUserRepository userRepository, IEmailSender emailSender, IProjectRepository projectRepository)
+        public UserController(IViewdataRepository viewdataRepository, IUserRepository userRepository, IEmailSender emailSender, IProjectRepository projectRepository, UserManager<ApplicationUser> userManager)
         {
             this.viewdataRepository = viewdataRepository;
             this.userRepository = userRepository;
             this.emailSender = emailSender;
             this.projectRepository = projectRepository;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Engineers()
@@ -59,6 +62,12 @@ namespace HRMS_WEB.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View(specialTask);
+        }
+
+        public async Task<IActionResult> SpecialTasks()
+        {
+            var currentuser = await userManager.GetUserAsync(HttpContext.User);
+            return View(projectRepository.GetSpecialTasks(currentuser.Id));
         }
 
     }

@@ -10,14 +10,14 @@ namespace HRMS_WEB.Entities
     public class SubLevel
     {
         public int ID { get; set; }
-        public String UserID { get; set; } //*************
-        public int ProjectID { get; set; } //*************
+        public String UserID { get; set; } 
+        public int ProjectID { get; set; } 
         public String Name { get; set; } 
         public String Remark { get; set; }
         public DateTime Deadline { get; set; }
         public double ManHours { get; set; }
         public double progressFraction { get; set; }
-        public int PriorityLevel { get; set; }//*************
+        public int PriorityLevel { get; set; }
         public bool IsActive { get; set; }
 
         // navigation properties

@@ -61,6 +61,20 @@ namespace HRMS_WEB.DbOperations.WindowsService
             return 1999;
         }
 
+        public async Task createLeave(Leave leave)
+        {
+            if(leave.ID == 0)
+            {
+                await db.Leaves.AddAsync(leave);
+                await db.SaveChangesAsync();
+            } else
+            {
+                throw new Exception("Already have an id for the submitted value");
+            }
+
+           
+        }
+
         public async Task<double> getAutocadHours(string userId, DateTime date)
         {
             var totalAutoCadTime = await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, date.Date) && dl.UserId.Equals(userId)).SumAsync(dl => dl.autocadtime);
@@ -71,6 +85,11 @@ namespace HRMS_WEB.DbOperations.WindowsService
         {
             var totalIdelTime = await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, date.Date) && dl.UserId.Equals(userId)).SumAsync(dl => dl.idletime);
             return (totalIdelTime) / 60.0;
+        }
+
+        public IEnumerable<Leave> GetLastLeaves(string userId)
+        {
+            return db.Leaves.Where(l => l.UserId.Equals(userId)).Include(l => l.Approved).Take(30);
         }
 
         public async Task<double> getworkedHours(string userId, DateTime date)

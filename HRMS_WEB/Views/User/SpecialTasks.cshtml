@@ -1,0 +1,106 @@
+﻿@model IEnumerable<HRMS_WEB.Entities.SpecialTask>
+
+@{
+    ViewData["Title"] = "Sub levels";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Special tasks</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Special tasks</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="col">
+            <div class="card-secondary card">
+                <div class="card-header">
+                    Special tasks assigned for this project
+                </div>
+                <div class="card-body">
+                    <div class="row d-flex align-items-stretch">
+                        @foreach (var specialtask in Model)
+                        {
+                            if (!specialtask.IsFinished)
+                            {
+                                <div class="col-sm-6">
+                                    <div class="info-box bg-maroon">
+                                        <span class="info-box-icon"><i class="fas fa-clipboard-list"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-number">Assigned user : @specialtask.User.Name</span>
+                                            <span class="info-box-number">Status : Not Finished</span>
+                                            <span class="info-box-more">Notified email : @specialtask.Email</span>
+                                            <span class="info-box-more">Deadline : @specialtask.Deadline</span>
+                                            <a asp-action="FinishSpecialTask" asp-controller="SubLevel" asp-route-id=@specialtask.ID asp-route-projectId=@ViewBag.projectId class="btn-sm bg-gradient-white mt-2 mb-2 mr-4" style="width: 150px"><b>Finish special task</b></a>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-6">
+                                    <div class="info-box bg-gradient-success">
+                                        <span class="info-box-icon"><i class="fas fa-check-circle"></i></span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-number">Assigned user : @specialtask.User.Name</span>
+                                            <span class="info-box-number">Status : Completed</span>
+                                            <span class="info-box-more">Notified email : @specialtask.Email</span>
+                                            <span class="info-box-more">Deadline : @specialtask.Deadline</span>
+                                        </div>
+                                        <!-- /.info-box-content -->
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
+<!-- Select2 -->
+<script src="~/plugins/select2/js/select2.full.min.js"></script>
+<!-- Select2 -->
+<!-- Select2 -->
+<link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<script>
+    $(document).ready(function () {
+
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+
+        $('.proceedbtn').click(function () {
+            var pageindex = $('.pageinput').val();
+            if (pageindex.toString() != "")
+                location.href = "/SubLevel/Index/" + pageindex;
+        });
+
+        $('.round').circleProgress({
+            fill: {
+                gradient: ['#3aeabb', '#fdd250']
+            },
+            size: 100,
+            thickness: 10,
+        }).on('circle-animation-progress', function (event, progress, stepvalue) {
+            $(this).find('strong').text(String(stepvalue.toFixed(2)).substr(2) + '%')
+        });
+
+    });</script>

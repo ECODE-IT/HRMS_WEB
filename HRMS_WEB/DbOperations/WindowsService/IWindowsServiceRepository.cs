@@ -14,5 +14,7 @@ namespace HRMS_WEB.DbOperations.WindowsService
         Task<double> getworkedHours(String userId, DateTime date);
         Task<double> getidleHours(String userId, DateTime date);
         Task<double> getAutocadHours(String userId, DateTime date);
+        Task createLeave(Leave leave);
+        IEnumerable<Leave> GetLastLeaves(String userId);
     }
 }

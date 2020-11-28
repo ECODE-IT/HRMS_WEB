@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HRMS_WEB.DbOperations.WindowsService;
+using HRMS_WEB.Entities;
 using HRMS_WEB.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -143,6 +144,35 @@ namespace HRMS_WEB.Controllers
                 return Ok();
             }
             return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateLeave(LeaveDTO leave)
+        {
+            try
+            {
+                int timestamp = int.Parse(leave.Date);
+                DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
+
+                await windowsServiceRepository.createLeave(new Leave { IsApproved = leave.IsApproved, Reason = leave.Reason, UserId = leave.UserId, Date = dateTime });
+                return Json(new { success = true, message = "successfully requested your leave"});
+            }
+            catch(Exception ex)
+            {
+                return Json(new { success = false, message = "an error occured because of " + ex.Message });
+            }
+        }
+
+        public IActionResult GetAllLeaveRequests(String userId)
+        {
+            try
+            {
+                return Json(new { success = true, leaves = windowsServiceRepository.GetLastLeaves(userId) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "an error occured because of " + ex.Message });
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ namespace HRMS_WEB.DbContext
         public DbSet<Project> Projects { get; set; }
         public DbSet<UpcomingProjects> UpcomingProjects { get; set; }
         public DbSet<SpecialTask> specialTasks { get; set; }
+        public DbSet<Leave> Leaves { get; set; }
 
     }
 }
