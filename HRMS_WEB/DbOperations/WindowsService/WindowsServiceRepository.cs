@@ -89,14 +89,14 @@ namespace HRMS_WEB.DbOperations.WindowsService
 
         public IEnumerable<Leave> GetLastLeaves(string userId)
         {
-            return db.Leaves.Where(l => l.UserId.Equals(userId)).Include(l => l.Approved).Take(30);
+            return db.Leaves.Where(l => l.UserId.Equals(userId)).Include(l => l.Approved);
         }
 
         public async Task<double> getworkedHours(string userId, DateTime date)
         {
             var dutylogs = await db.DutyLogs.Where(dl => DateTime.Equals(date.Date, dl.LogDateTime.Date) && dl.UserId.Equals(userId)).ToListAsync();
 
-            var workedhours = dutylogs.Sum(dl => (dl.LogDateTime.TimeOfDay.TotalHours - dl.PowerOffMinutes));
+            //var /*workedhours*/ = dutylogs.Sum(dl => (dl.LogDateTime.TimeOfDay.TotalHours - dl.PowerOffMinutes));
 
             var dutyonlogs = dutylogs.Where(dl => dl.IsDutyOn == true).ToArray();
             var dutyofflogs = dutylogs.Where(dl => dl.IsDutyOn == false).ToArray();

@@ -1,7 +1,9 @@
 ﻿using HRMS_WEB.DbContext;
+using HRMS_WEB.DbOperations.EmailRepository;
 using HRMS_WEB.Entities;
 using HRMS_WEB.Models;
 using HRMS_WEB.Viewmodels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,11 +17,51 @@ namespace HRMS_WEB.DbOperations.UserRepository
     {
         private readonly HRMSDbContext db;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IEmailSender emailsender;
 
-        public UserRepository(HRMSDbContext db, UserManager<ApplicationUser> userManager)
+        public UserRepository(HRMSDbContext db, UserManager<ApplicationUser> userManager, IEmailSender emailsender)
         {
             this.db = db;
             this.userManager = userManager;
+            this.emailsender = emailsender;
+        }
+
+        public async Task approveLeave(int id, ApplicationUser user)
+        {
+            var leave = await db.Leaves.Include(l => l.User).Include(l => l.Approved).FirstOrDefaultAsync(l => l.ID == id);
+            if(leave != null)
+            {
+                
+                leave.IsApproved = 1;
+                leave.ApprovedId = user.Id;
+                db.Leaves.Update(leave);
+                await db.SaveChangesAsync();
+
+                emailsender.SendEmail(new Message(new String[] { "nikini@haritha.lk" }, "Leave respond created by ADMIN PANEL AI", $"The leave request for the user : {leave.User.Email} |{leave.User.Name}\nIS Approved by : {leave.Approved.Name} | {leave.Approved.Email}\nLeave date : {leave.Date}\n\n\n***Please don't share this email and consider this as an official and confidencial message sent on {DateTime.Now}***", null));
+
+            } else
+            {
+                throw new Exception($"No leave found for the id of {id}");
+            }
+            
+        }
+
+        public async Task declineLeave(int id, ApplicationUser user)
+        {
+            var leave = await db.Leaves.Include(l => l.User).Include(l => l.Approved).FirstOrDefaultAsync(l => l.ID == id);
+            if (leave != null)
+            {
+                leave.IsApproved = 2;
+                leave.ApprovedId = user.Id;
+                db.Leaves.Update(leave);
+                await db.SaveChangesAsync();
+
+                emailsender.SendEmail(new Message(new String[] { "nikini@haritha.lk" }, "Leave respond created by ADMIN PANEL AI", $"The leave request for the user : {leave.User.Email} |{leave.User.Name}\nIS Rejected by : {leave.Approved.Name} | {leave.Approved.Email}\nLeave date : {leave.Date}\n\n\n***Please don't share this email and consider this as an official and confidencial message sent on {DateTime.Now}***", null));
+            }
+            else
+            {
+                throw new Exception($"No leave found for the id of {id}");
+            }
         }
 
         public IEnumerable<UsersDTO> getBasicUserList()
@@ -70,6 +112,7 @@ namespace HRMS_WEB.DbOperations.UserRepository
             var projectGroupting = await db.Projects
                 .Include(p => p.SubLevels)
                 .Include(p => p.User)
+                .Include(p => p.SpecialTasks)
                 .ToListAsync();
 
             return projectGroupting
@@ -84,9 +127,10 @@ namespace HRMS_WEB.DbOperations.UserRepository
                     .Select(
                         p => new ProjectDTO {
                             Name = p.Name, 
-                            Progress = p.SubLevels.Count > 0 ? p.SubLevels.Average(sl => sl.progressFraction * 100) : 0
+                            Progress = p.SubLevels.Count > 0 ? p.SubLevels.Average(sl => sl.progressFraction * 100) : 0,
                         })
-                    .ToList()
+                    .ToList(),
+                    SpecialTasks = groupentry.Select(p => p.SpecialTasks).Aggregate((i, j) => i.Concat(j).ToList()).ToList()
                 });
         }
 

@@ -66,7 +66,19 @@
                                                         <div class="progress-bar-striped bg-gradient-maroon" style="width: @project.Progress%"></div>
                                                     </div>
                                                 </div>
-                                                                        }
+                                            }
+
+                                            @foreach (var specialTask in item.SpecialTasks)
+                                            {
+                                                if (specialTask.IsFinished)
+                                                {
+                                                    <div class="badge badge-success badge-pill" style="margin: 1px; padding: 10px;">@specialTask.Name</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="badge badge-danger bg-gradient-maroon badge-pill" style="margin: 1px; padding: 10px;">@specialTask.Name</div>
+                                                }
+                                            }
                                         </div>
                                     </td>
                                     <td>

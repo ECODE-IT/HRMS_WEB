@@ -21,6 +21,7 @@
     <script src="~/plugins/jquery/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <link href="~/css/globlestyle.css" rel="stylesheet" />
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
@@ -136,19 +137,26 @@
                                         <p>Special Task</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a asp-controller="User" asp-action="Leaves" class="nav-link">
+                                        <i class="fas fa-plane-departure nav-icon"></i>
+                                        <p>Leaves</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fa fa-cogs"></i>
-                                    <p>
-                                        Administration
-                                        <i class="fas fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa fa-cogs"></i>
+                                <p>
+                                    Administration
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            
+                            <ul class="nav nav-treeview">
+                                @if (User.IsInRole("Admin"))
+                                {
                                     <li class="nav-item">
                                         <a asp-action="Register" asp-controller="Account" class="nav-link">
                                             <i class="far fa-registered nav-icon"></i>
@@ -161,7 +169,14 @@
                                             <p>User roles</p>
                                         </a>
                                     </li>
-                                </ul>
+                                }
+                                <li class="nav-item">
+                                    <a asp-action="GetSystemConfigurations" asp-controller="SystemConfigurations" class="nav-link">
+                                        <i class="fas fa-tools nav-icon"></i>
+                                        <p>System configurations</p>
+                                    </a>
+                                </li>
+                            </ul>
                             </li>
 
                             <li class="nav-item has-treeview">
@@ -215,8 +230,8 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a asp-action="WorkedHoursSummaryReport" asp-controller="DraughtmanApi" class="nav-link">
-                                            <i class="fas fa-chart-bar nav-icon"></i>
+                                        <a asp-action="MonthDraughtmenSummary" asp-controller="Home" class="nav-link">
+                                            <i class="far fa-file-alt nav-icon"></i>
                                             <p>Working hours report</p>
                                         </a>
                                     </li>

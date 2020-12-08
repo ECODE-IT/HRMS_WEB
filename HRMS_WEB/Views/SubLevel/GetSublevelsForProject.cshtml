@@ -35,7 +35,7 @@
             <!-- Default box -->
             <div class="card card-solid">
                 <div class="card-body">
-                    <div class="row d-flex align-items-stretch">
+                    <div class="row d-flex align-items-stretch card-deck">
                         @if (Model.Any())
                         {
                             @foreach (var sublevel in Model)
@@ -60,7 +60,7 @@
                                                     <ul class="ml-4 mb-0 fa-ul text-muted">
                                                         @if (sublevel.User == null)
                                                         {
-                                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Assigned to:<br/> N/A</li>
+                                                            <li class="small"><span class="fa-li"><i class="fas fa-lg fa-building"></i></span> Assigned to:<br /> N/A</li>
                                                             <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: N/A</li>
                                                             <li class="small"><span class="fa-li"><i class="fas fa-lg fa-stopwatch"></i></span> Assigned user name : N/A</li>
                                                             <li class="small"><span class="fa-li"><i class="fas fa-lg fa-layer-group"></i></span> Priority Level : <span class="right badge badge-danger"><div style="font-size: 15px">@sublevel.PriorityLevel</div></span></li>
@@ -87,6 +87,11 @@
                                                 <a asp-controller="SubLevel" asp-action="Edit" asp-route-sublevelId=@sublevel.ID class="btn btn-sm btn-primary">
                                                     <i class="fas fa-edit mr-2"></i> Edit
                                                 </a>
+                                                @if (User.IsInRole("Admin")) { 
+                                                    <a asp-action="DeleteSubLevel" asp-controller="SubLevel" asp-route-projectId=@ViewBag.projectId asp-route-id=@sublevel.ID class="btn btn-sm btn-danger">
+                                                        Delete
+                                                    </a>
+                                                    }
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +152,7 @@
                         }
                     </div>
                 </div>
-        </div>
+            </div>
     </section>
     <!-- /.content -->
 </div>

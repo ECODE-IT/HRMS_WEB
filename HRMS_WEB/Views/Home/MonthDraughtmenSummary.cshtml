@@ -1,0 +1,134 @@
+﻿@model IEnumerable<HRMS_WEB.Viewmodels.LeaveViewModel>
+@{
+    ViewData["Title"] = "Monthly achievement report";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Monthly Achievements of the draughtmen</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Monthly achievements</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-secondary">
+                <div class="card-header">
+                    Achievements as at @DateTime.Now
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Username)
+                                </th>
+                                <th>
+                                    <b>Working hours</b>
+                                </th>
+                                <th style="width: 40px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var dailyTarget = ViewBag.dailyTarget;
+                                var monthlyTarget = ViewBag.monthlyTarget;
+                            }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Username)
+                                    </td>
+                                    <td>
+                                        <div class="col">
+                                            <div class="progress-group">
+                                                <small><b>Today worked hours</b></small>
+                                                <span class="float-right">@String.Format("{0:0.00}", item.TodayWorkedHoursProgress * 100 / (dailyTarget)) Hours /<b> @dailyTarget Hours</b></span>
+                                                <div class="progress progress-xs">
+                                                    <div class="progress-bar-striped bg-gradient-maroon" style="width: @item.TodayWorkedHoursProgress%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="col">
+                                            <div class="progress-group">
+                                                <small><b>This week worked hours</b></small>
+                                                <span class="float-right">@String.Format("{0:0.00}", item.WeekWorkedHoursProgress)%</span>
+                                                <div class="progress progress-xs">
+                                                    <div class="progress-bar-striped bg-gradient-maroon" style="width: @item.WeekWorkedHoursProgress%"></div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                        <div class="col">
+                                            <div class="progress-group">
+                                                <small><b>This month worked hours</b></small>
+                                                <span class="float-right">@String.Format("{0:0.00}", item.MonthWorkedHoursProgress * 100 / (monthlyTarget)) Hours / <b>@monthlyTarget Hours</b></span>
+                                                <div class="progress progress-xs">
+                                                    <div class="progress-bar-striped bg-gradient-maroon" style="width: @item.MonthWorkedHoursProgress%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="#" >Actions</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+@*modal view insert*@
+@Html.Partial("_defaultModal");
+
+<!-- /.content-wrapper -->
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" />
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+<script>
+
+    var i = 0;
+
+    $(document).ready(function () {
+        $('.table').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+
+        $('.addressclick').click(function () {
+            i = $(this).data("leaveid");
+        });
+
+        $('.approve').click(function () {
+            window.location.href = "/User/ApproveLeave?id=" + i;
+        });
+
+        $('.decline').click(function () {
+            window.location.href = "/User/DeclineLeave?id=" + i;
+        });
+
+    });
+</script>

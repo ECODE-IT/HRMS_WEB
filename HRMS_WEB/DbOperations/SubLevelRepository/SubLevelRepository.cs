@@ -48,6 +48,16 @@ namespace HRMS_WEB.DbOperations.SubLevelRepository
             }
         }
 
+        public async Task deleteSubLevel(int id)
+        {
+            var sublevel = await db.SubLevels.FirstOrDefaultAsync(sl => sl.ID == id);
+            if(sublevel != null)
+            {
+                db.SubLevels.Remove(sublevel);
+                await db.SaveChangesAsync();
+            }
+        }
+
         public async Task finishSpecialTask(int id)
         {
             var specialtask = await db.specialTasks.AsNoTracking().FirstOrDefaultAsync(st => st.ID == id);

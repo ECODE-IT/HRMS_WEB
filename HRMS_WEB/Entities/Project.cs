@@ -24,6 +24,7 @@ namespace HRMS_WEB.Entities
 
         // naviagation properties
         public ICollection<SubLevel> SubLevels { get; set; }
+        public ICollection<SpecialTask> SpecialTasks { get; set; }
         public ApplicationUser User { get; set; }
     }
 }

@@ -136,5 +136,11 @@ namespace HRMS_WEB.Controllers
             await projectRepository.createProject(new ProjectDTO { ID = projectId, SubLevelNameList = new List<string>() });
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> DeleteProject(int projectId)
+        {
+            await projectRepository.deleteProject(projectId);
+            return RedirectToAction("Index");
+        }
     }
 }

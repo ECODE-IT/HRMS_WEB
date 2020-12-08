@@ -70,5 +70,21 @@ namespace HRMS_WEB.Controllers
             return View(projectRepository.GetSpecialTasks(currentuser.Id));
         }
 
+        public IActionResult Leaves()
+        {
+            return View(viewdataRepository.getleavesforthisMonth(DateTime.Now));
+        }
+
+        public async Task<IActionResult> ApproveLeave(int id)
+        { 
+            await userRepository.approveLeave(id,  await userManager.GetUserAsync(HttpContext.User));
+            return RedirectToAction("Leaves");
+        }
+
+        public async Task<IActionResult> DeclineLeave(int id)
+        {
+            await userRepository.declineLeave(id, await userManager.GetUserAsync(HttpContext.User));
+            return RedirectToAction("Leaves");
+        }
     }
 }

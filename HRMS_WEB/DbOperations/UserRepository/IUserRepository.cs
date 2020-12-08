@@ -20,6 +20,7 @@ namespace HRMS_WEB.DbOperations.UserRepository
         Task<IEnumerable<DraughtmanDTO>> GetDraughtmenWithOnlyIDName();
         Task<IEnumerable<EngineerDTO>> getengineerDetailsWithProjectProgress();
         Task<IEnumerable<DraughtmenViewModel>> getDraughtmenDetailsWithProjectProgress();
-
+        Task approveLeave(int id, ApplicationUser user);
+        Task declineLeave(int id, ApplicationUser user);
     }
 }

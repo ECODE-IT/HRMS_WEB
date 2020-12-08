@@ -27,6 +27,10 @@ namespace HRMS_WEB.DbOperations.EmailRepository
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress(emailConfig.From));
             emailMessage.To.AddRange(message.To);
+            if(message.Cc.Count > 0)
+            {
+                emailMessage.Cc.AddRange(message.Cc);
+            }
             emailMessage.Subject = message.Subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = message.Content };
 

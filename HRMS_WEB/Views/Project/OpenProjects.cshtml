@@ -115,10 +115,13 @@
                                                         Merge to ongoing scheme
                                                     </a>
                                                 }
-                                                <a asp-action="DeleteUpcomingProject" asp-controller="Project" asp-route-projectId=@project.ID class="btn btn-sm btn-danger">
-                                                    Delete
-                                                </a>
-                                            </div>
+                                                @if (User.IsInRole("Admin") && project.IsNotified)
+                                                {
+                                                    <a asp-action="DeleteUpcomingProject" asp-controller="Project" asp-route-projectId=@project.ID class="btn btn-sm btn-danger">
+                                                        Delete
+                                                    </a>
+                                                }
+                                                </div>
                                         </div>
                                     </div>
                                 </div>} }

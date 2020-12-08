@@ -92,9 +92,15 @@ namespace HRMS_WEB.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> FinishSpecialTask(int id, int projectId)
+        public async Task<IActionResult> FinishSpecialTask(int id)
         {
             await subLevelRepository.finishSpecialTask(id);
+            return RedirectToAction("SpecialTasks", "User");
+        }
+
+        public async Task<IActionResult> DeleteSubLevel(int id, int projectId)
+        {
+            await subLevelRepository.deleteSubLevel(id);
             return RedirectToAction("GetSublevelsForProject", new { projectId = projectId });
         }
     }

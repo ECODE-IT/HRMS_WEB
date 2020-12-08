@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HRMS_WEB.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,5 +19,6 @@ namespace HRMS_WEB.Models
         public bool IsFinished { get; set; }
 
         public List<String> SubLevelNameList { get; set; }
+        public IEnumerable<SpecialTask> specialTasks { get; set; }
     }
 }

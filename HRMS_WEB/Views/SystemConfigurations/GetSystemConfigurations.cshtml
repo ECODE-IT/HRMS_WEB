@@ -1,0 +1,129 @@
+﻿@model HRMS_WEB.Entities.SystemSettings
+@inject UserManager<ApplicationUser> usermanager;
+
+@{
+    ViewData["Title"] = "Settings";
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-1">
+                <div class="col-sm-6">
+                    <h1></h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Settings</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content p-1">
+        <div class="card card-default ml-2 mr-2">
+            <div class="card-header">
+                <h3 class="card-title">Create or edit system configurations</h3>
+            </div>
+            <div class="card-body p-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form asp-action="UpdateSystemConfigurations" asp-controller="SystemConfigurations">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    @{
+                                        var isAdmin = User.IsInRole("Admin");
+                                    }
+                                    <input class="form-control" asp-for="ID" hidden />
+                                    @if (isAdmin)
+                                    {
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-outline-primary text-left" style="width: 150px">Daily Target</button>
+                                            </div>
+                                            <!-- /btn-group -->
+                                            <input asp-for="DailyTargetHours" placeholder="Hours..." class="form-control" />
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-info text-right">Hours</button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-outline-primary text-left" style="width: 150px">Monthly Target</button>
+                                            </div>
+                                            <!-- /btn-group -->
+                                            <input asp-for="MonthlyTargetHours" class="form-control" type="number" placeholder="Hours..." />
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-info text-right">Hours</button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-outline-primary text-left" style="width: 150px">Domain Name</button>
+                                            </div>
+                                            <!-- /btn-group -->
+                                            <input class="form-control" value="www.admin.haritha.lk" disabled />
+                                        </div>
+                                    }
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <button type="button" class="btn btn-outline-primary text-left" style="width: 150px">Curr. Email</button>
+                                        </div>
+                                        <!-- /btn-group -->
+                                        <input class="form-control" value=@User.Identity.Name disabled />
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <button type="button" class="btn btn-outline-primary text-left" style="width: 150px">Curr. Roles</button>
+                                        </div>
+                                        <!-- /btn-group -->
+                                        <input class="form-control" value=@usermanager.GetRolesAsync(usermanager.FindByEmailAsync(User.Identity.Name).Result).Result.Aggregate((i, j) => i + "|" + j) disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            @if (isAdmin)
+                            {
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-6">
+                                            <input type="submit" value="Update system settings" class="btn btn-default btn-block" />
+                                        </div>
+                                        <div class="col-sm-3"></div>
+                                    </div>
+                                </div>
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Select2 -->
+<script src="~/plugins/select2/js/select2.full.min.js"></script>
+<!-- Select2 -->
+<!-- Select2 -->
+<link rel="stylesheet" href="~/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+        $(document).ready(function () {
+
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
+
+        });
+    </script>
+
+}

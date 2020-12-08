@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using HRMS_WEB.Models;
 using Microsoft.AspNetCore.Authorization;
+using HRMS_WEB.DbOperations.ViewdataService;
+using HRMS_WEB.DbContext;
 
 namespace HRMS_WEB.Controllers
 {
@@ -14,10 +16,14 @@ namespace HRMS_WEB.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IViewdataRepository viewdataRepository;
+        private readonly HRMSDbContext db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IViewdataRepository viewdataRepository, HRMSDbContext db)
         {
             _logger = logger;
+            this.viewdataRepository = viewdataRepository;
+            this.db = db;
         }
 
         public IActionResult Index()
@@ -34,6 +40,14 @@ namespace HRMS_WEB.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> MonthDraughtmenSummary()
+        {
+            var sysconfig = db.SystemSettings.FirstOrDefault();
+            ViewBag.dailyTarget = sysconfig.DailyTargetHours;
+            ViewBag.monthlyTarget = sysconfig.MonthlyTargetHours;
+            return View(await viewdataRepository.getMonthDraughtmenReport());
         }
     }
 }

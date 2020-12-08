@@ -1,0 +1,127 @@
+﻿@model IEnumerable<HRMS_WEB.Entities.Leave>
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Leaves</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Leaves</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-secondary">
+                <div class="card-header">
+                    Leaves for this month as at @DateTime.Now
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.User)
+                                </th>
+                                <th>
+                                    <b>Leave Date</b>
+                                </th>
+                                <th>
+                                    Reason
+                                </th>
+                                <th style="width: 70px">
+                                    Status
+                                </th>
+                                <th style="width: 40px"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.User.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Reason)
+                                    </td>
+                                    <td>
+                                        @if (item.IsApproved == 0)
+                                        {
+                                            <span class="badge bg-secondary p-2">Pending</span>
+                                        }
+                                        else if (item.IsApproved == 1)
+                                        {
+                                            <span class="badge bg-success p-2">Approved</span>
+                                        }
+                                        else if (item.IsApproved == 2)
+                                        {
+                                            <span class="badge bg-danger p-2">Declined</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="#" data-toggle="modal" data-target="#modal-default" data-leaveid="@item.ID" class="addressclick">Actions</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+@*modal view insert*@
+@Html.Partial("_defaultModal");
+
+<!-- /.content-wrapper -->
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" />
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+<script>
+
+    var i = 0;
+
+    $(document).ready(function () {
+        $('.table').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+
+        $('.addressclick').click(function () {
+            i = $(this).data("leaveid");
+        });
+
+        $('.approve').click(function () {
+            window.location.href = "/User/ApproveLeave?id=" + i;
+        });
+
+        $('.decline').click(function () {
+            window.location.href = "/User/DeclineLeave?id=" + i;
+        });
+
+     });
+</script>

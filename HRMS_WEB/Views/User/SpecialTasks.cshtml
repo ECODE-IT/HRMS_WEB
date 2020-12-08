@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<HRMS_WEB.Entities.SpecialTask>
 
 @{
-    ViewData["Title"] = "Sub levels";
+    ViewData["Title"] = "Specilal task list";
 }
 
 <!-- Content Wrapper. Contains page content -->
@@ -44,7 +44,7 @@
                                             <span class="info-box-number">Status : Not Finished</span>
                                             <span class="info-box-more">Notified email : @specialtask.Email</span>
                                             <span class="info-box-more">Deadline : @specialtask.Deadline</span>
-                                            <a asp-action="FinishSpecialTask" asp-controller="SubLevel" asp-route-id=@specialtask.ID asp-route-projectId=@ViewBag.projectId class="btn-sm bg-gradient-white mt-2 mb-2 mr-4" style="width: 150px"><b>Finish special task</b></a>
+                                            <a asp-action="FinishSpecialTask" asp-controller="SubLevel" asp-route-id=@specialtask.ID class="btn-sm bg-gradient-white mt-2 mb-2 mr-4" style="width: 150px"><b>Finish special task</b></a>
                                         </div>
                                         <!-- /.info-box-content -->
                                     </div>

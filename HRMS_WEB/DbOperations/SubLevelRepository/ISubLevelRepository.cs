@@ -19,5 +19,6 @@ namespace HRMS_WEB.DbOperations.SubLevelRepository
         Task incrementSublevel(int sublevelId, bool isActive, double progressFraction);
         IEnumerable<SubLevel> getFinishedSublevelsForuserId(String userid);
         Task finishSpecialTask(int id);
+        Task deleteSubLevel(int id);
     }
 }

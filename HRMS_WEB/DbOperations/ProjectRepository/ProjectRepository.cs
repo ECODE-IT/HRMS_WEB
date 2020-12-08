@@ -62,6 +62,21 @@ namespace HRMS_WEB.DbOperations.ProjectRepository
             }
         }
 
+        public async Task deleteProject(int projectId)
+        {
+            var project = await db.Projects.FirstOrDefaultAsync(p => p.ID == projectId);
+            
+            if(project != null)
+            {
+                db.Projects.Remove(project);
+                await db.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("no project found");
+            }
+        }
+
         public async Task deleteUpcomingProject(int projectId)
         {
             var project = await db.UpcomingProjects.AsNoTracking().FirstOrDefaultAsync(up => up.ID == projectId);
@@ -189,7 +204,7 @@ namespace HRMS_WEB.DbOperations.ProjectRepository
         {
             await db.specialTasks.AddAsync(specialTask);
             await db.SaveChangesAsync();
-            var message = new Message(new String[] { specialTask.Email }, "Special task created by ADMIN PANEL AI", $"To user : {specialTask.UserID}\nSpecial task : {specialTask.Name}\nDeadline at : {specialTask.Deadline}\n\n\n***Please don't share this email and consider this as an official and confidencial message sent on {DateTime.Now}***");
+            var message = new Message(new String[] { specialTask.Email}, "Special task created by ADMIN PANEL AI", $"To user : {specialTask.UserID}\nSpecial task : {specialTask.Name}\nDeadline at : {specialTask.Deadline}\n\n\n***Please don't share this email and consider this as an official and confidencial message sent on {DateTime.Now}***", null);
             emailSender.SendEmail(message);
         }
 

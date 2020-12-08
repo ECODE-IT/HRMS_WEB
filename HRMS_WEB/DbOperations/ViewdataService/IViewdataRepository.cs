@@ -1,5 +1,6 @@
 ﻿using HRMS_WEB.Entities;
 using HRMS_WEB.Models;
+using HRMS_WEB.Viewmodels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         Task<IEnumerable<SubLevel>> GetSubLevelsForPage(int indexfrom, int indexto);
         Task<List<DutyLog>> getDutyLogsForTheUser(String id, DateTime selectedDate);
         Task<List<IGrouping<String, DutyLog>>> GetUserRegistariesForDate(DateTime date);
+        IEnumerable<Leave> getleavesforthisMonth(DateTime currentdatetime);
+        Task<IEnumerable<LeaveViewModel>> getMonthDraughtmenReport();
     }
 }

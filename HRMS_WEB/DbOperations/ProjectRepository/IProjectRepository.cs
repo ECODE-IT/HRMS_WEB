@@ -26,5 +26,6 @@ namespace HRMS_WEB.DbOperations.ProjectRepository
         IEnumerable<SpecialTask> GetSpecialTasks(String userid);
         IEnumerable<SpecialTask> GetSpecialTasksForProject(int projectId);
         IEnumerable<Project> getUnfinishedProjectsForUserIDPrject(String userId);
+        Task deleteProject(int projectId);
     }
 }
