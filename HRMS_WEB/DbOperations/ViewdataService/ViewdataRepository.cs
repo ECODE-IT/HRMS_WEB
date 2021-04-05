@@ -35,18 +35,19 @@ namespace HRMS_WEB.DbOperations.ViewdataService
             return db.Leaves.Where(l => l.Date.Month == currentdatetime.Month || l.Date.Month == currentdatetime.Month - 1 || l.Date.Month == currentdatetime.Month + 1).Include(l => l.User);
         }
 
-        public async Task<IEnumerable<LeaveViewModel>> getMonthDraughtmenReport()
+        public async Task<IEnumerable<LeaveViewModel>> getMonthDraughtmenReport(DateTime selectedDate)
         {
-            var dutylogs = await db.DutyLogs.Where(dl => dl.LogDateTime.Month == DateTime.Now.Month).Include(dl => dl.User).ToListAsync();
+            var dutylogs = await db.DutyLogs.Where(dl => Convert.ToInt32(dl.LogDateTime.Month) == Convert.ToInt32(selectedDate.Month)).Include(dl => dl.User).ToListAsync();
             var sysconfig = await db.SystemSettings.FirstOrDefaultAsync();
 
             return dutylogs
                 .GroupBy(dl => dl.User.Name)
                 .Select(dlg => new LeaveViewModel { 
                     Username = dlg.Key,
-                    TodayWorkedHoursProgress = getTodayWorkingHours(dutylogs, dlg.FirstOrDefault().User.Id) * sysconfig.DailyTargetHours / 100,
-                    MonthWorkedHoursProgress = getMonthWorkingHours(dutylogs, dlg.FirstOrDefault().User.Id) * sysconfig.MonthlyTargetHours / 100,
-                    WeekWorkedHoursProgress = 60
+                    TodayWorkedHoursProgress = getTodayWorkingHours(dutylogs, dlg.FirstOrDefault().User.Id, selectedDate) * 100 / sysconfig.DailyTargetHours,
+                    MonthWorkedHoursProgress = getMonthWorkingHours(dutylogs, dlg.FirstOrDefault().User.Id) * 100 / sysconfig.MonthlyTargetHours,
+                    DailyIdleHours = getDailyIdleHours(dutylogs, dlg.FirstOrDefault().User.Id, selectedDate),
+                    MonthIdleHours = getMonthlyIdleHours(dutylogs, dlg.FirstOrDefault().User.Id)
                 });
         }
 
@@ -74,16 +75,16 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         }
 
         //get weekly working hours
-        public double getTodayWorkingHours(List<DutyLog> dutylogs, String userid)
+        public double getTodayWorkingHours(List<DutyLog> dutylogs, String userid, DateTime selectedDate)
         {
 
-            var dutyonlogs = dutylogs.Where(dl => dl.IsDutyOn == true && DateTime.Equals(DateTime.Now.Date, dl.LogDateTime.Date) && dl.User.Id.Equals(userid)).ToArray();
-            var dutyofflogs = dutylogs.Where(dl => dl.IsDutyOn == false && DateTime.Equals(DateTime.Now.Date, dl.LogDateTime.Date) && dl.User.Id.Equals(userid)).ToArray();
+            var dutyonlogs = dutylogs.Where(dl => dl.IsDutyOn == true && DateTime.Equals(selectedDate.Date, dl.LogDateTime.Date) && dl.User.Id.Equals(userid)).ToArray();
+            var dutyofflogs = dutylogs.Where(dl => dl.IsDutyOn == false && DateTime.Equals(selectedDate.Date, dl.LogDateTime.Date) && dl.User.Id.Equals(userid)).ToArray();
 
             var dutyonsum = dutyonlogs.Sum(dl => dl.LogDateTime.TimeOfDay.TotalHours);
             var dutyoffsum = dutyofflogs.Sum(dl => dl.LogDateTime.TimeOfDay.TotalHours);
 
-            var poweroffsum = dutylogs.Where(dl => DateTime.Equals(DateTime.Now.Date, dl.LogDateTime.Date) && dl.User.Id.Equals(userid)).Sum(dl => dl.PowerOffMinutes);
+            var poweroffsum = dutylogs.Where(dl => DateTime.Equals(selectedDate.Date, dl.LogDateTime.Date) && dl.User.Id.Equals(userid)).Sum(dl => dl.PowerOffMinutes);
 
             if (dutyonlogs.Length == dutyofflogs.Length)
             {
@@ -91,9 +92,23 @@ namespace HRMS_WEB.DbOperations.ViewdataService
             }
             else
             {
-                return dutyoffsum - dutyonsum + DateTime.Now.TimeOfDay.TotalHours - ((poweroffsum) / 60.0);
+                if(DateTime.Equals(selectedDate.Date, DateTime.Now.Date))
+                {
+                    return dutyoffsum - dutyonsum + DateTime.Now.TimeOfDay.TotalHours - ((poweroffsum) / 60.0);
+                }
+                throw new Exception("Selected Date has odd count of duty log for the user : " + userid);
             }
 
+        }
+
+        public double getMonthlyIdleHours(List<DutyLog> dutylogs, String userid)
+        {
+            return dutylogs.Where(dl => dl.UserId.Equals(userid)).Sum(dl => dl.idletime) / 60.0;
+        }
+
+        public double getDailyIdleHours(List<DutyLog> dutylogs, String userid, DateTime selectedDate)
+        {
+            return dutylogs.Where(dl => dl.UserId.Equals(userid) && DateTime.Equals(dl.LogDateTime.Date, selectedDate.Date)).Sum(dl => dl.idletime) / 60.0;
         }
 
         public async Task<int> GetSubLevelCount()
@@ -117,6 +132,23 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         {
             var result =  await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, date.Date)).ToListAsync();
             return result.GroupBy(dl => dl.UserId).ToList(); 
+        }
+
+        public async Task insertTempData(double temp, double humidity, double temp2, double humidity2)
+        {
+            await db.HumidityDatas.AddAsync(new Humidity { Time = DateTime.Now, RH = humidity, Temp = temp, Temp2 = temp2, RH2 = humidity2 });
+            await db.SaveChangesAsync();
+        }
+
+        public async Task<Object> GetHumidities()
+        {
+            var result = await db.HumidityDatas.OrderByDescending(hd => hd.ID).Take(100).ToListAsync();
+            return new { lane1 = result.Select(r => r.RH), lane2 = result.Select(r => r.RH2), labels = result.Select(r => r.Time.ToString("HH:mm:ss")) };
+        }
+
+        public async Task<Humidity> getlastHumidityData()
+        {
+            return await db.HumidityDatas.OrderByDescending(hd => hd.ID).FirstOrDefaultAsync();
         }
     }
 }

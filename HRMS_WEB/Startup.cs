@@ -10,10 +10,12 @@ using HRMS_WEB.DbOperations.SubLevelRepository;
 using HRMS_WEB.DbOperations.UserRepository;
 using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.DbOperations.WindowsService;
+using HRMS_WEB.Hubs;
 using HRMS_WEB.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +35,12 @@ namespace HRMS_WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromDays(100);//You can set Time   
+            });
+
             services.AddControllersWithViews();
 
             var emailConfig = Configuration
@@ -81,16 +89,34 @@ namespace HRMS_WEB
             }
             app.UseStaticFiles();
 
+            app.UseSession();
+
             app.UseAuthentication();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
+            app.UseSignalR(route => {
+                route.MapHub<ChatHub>("/Home/Index"); 
+            });
+
+            app.Use(async (context, next) =>
+            {
+                var hubContext = context.RequestServices
+                                        .GetRequiredService<IHubContext<UserHub>>();
+                //...
+
+                if (next != null)
+                {
+                    await next.Invoke();
+                }
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
+                    name: "default", 
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }

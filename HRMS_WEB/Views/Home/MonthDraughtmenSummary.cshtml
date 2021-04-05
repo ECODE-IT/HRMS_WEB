@@ -1,16 +1,16 @@
-﻿@model IEnumerable<HRMS_WEB.Viewmodels.LeaveViewModel>
+﻿@model HRMS_WEB.Viewmodels.WorkHourReportViewModel
 @{
     ViewData["Title"] = "Monthly achievement report";
 }
 
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+<div class="content-wrapper" style="overflow-x: scroll; min-width: 750px">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Monthly Achievements of the draughtmen</h1>
+                    <h1>Monthly Achievements of the draughtmen </h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -26,16 +26,32 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="card card-secondary">
+            <div class="card card-default">
                 <div class="card-header">
-                    Achievements as at @DateTime.Now
+                    <div class="row">
+                        <div class="col-sm-8">
+                            @Model.date.ToString("dddd, dd MMMM yyyy")
+                        </div>
+                        <div class="col-sm-4">
+                            <form action="MonthDraughtmenSummary" method="post">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control" asp-for="date" />
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="submit" class="btn btn-success btn-block" value="Submit">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Username)
+                                    Username
                                 </th>
                                 <th>
                                     <b>Working hours</b>
@@ -48,7 +64,7 @@
                                 var dailyTarget = ViewBag.dailyTarget;
                                 var monthlyTarget = ViewBag.monthlyTarget;
                             }
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.LeaveViewModels)
                             {
                                 <tr>
                                     <td>
@@ -57,26 +73,17 @@
                                     <td>
                                         <div class="col">
                                             <div class="progress-group">
-                                                <small><b>Today worked hours</b></small>
-                                                <span class="float-right">@String.Format("{0:0.00}", item.TodayWorkedHoursProgress * 100 / (dailyTarget)) Hours /<b> @dailyTarget Hours</b></span>
+                                                <small><b>Today worked hours</b> (Today Idle Hours : @String.Format("{0:0.00}", item.DailyIdleHours) Hours)</small>
+                                                <span class="float-right">@String.Format("{0:0.00}", item.TodayWorkedHoursProgress * (dailyTarget) / 100) Hours /<b> @dailyTarget Hours</b></span>
                                                 <div class="progress progress-xs">
                                                     <div class="progress-bar-striped bg-gradient-maroon" style="width: @item.TodayWorkedHoursProgress%"></div>
                                                 </div>
                                             </div>
                                         </div>
-                                        @*<div class="col">
-                                            <div class="progress-group">
-                                                <small><b>This week worked hours</b></small>
-                                                <span class="float-right">@String.Format("{0:0.00}", item.WeekWorkedHoursProgress)%</span>
-                                                <div class="progress progress-xs">
-                                                    <div class="progress-bar-striped bg-gradient-maroon" style="width: @item.WeekWorkedHoursProgress%"></div>
-                                                </div>
-                                            </div>
-                                        </div>*@
                                         <div class="col">
                                             <div class="progress-group">
-                                                <small><b>This month worked hours</b></small>
-                                                <span class="float-right">@String.Format("{0:0.00}", item.MonthWorkedHoursProgress * 100 / (monthlyTarget)) Hours / <b>@monthlyTarget Hours</b></span>
+                                                <small><b>This month worked hours</b> (Monthly Idle Hours : @String.Format("{0:0.00}", item.MonthIdleHours) Hours)</small>
+                                                <span class="float-right">@String.Format("{0:0.00}", item.MonthWorkedHoursProgress * (monthlyTarget) / 100) Hours / <b>@monthlyTarget Hours</b></span>
                                                 <div class="progress progress-xs">
                                                     <div class="progress-bar-striped bg-gradient-maroon" style="width: @item.MonthWorkedHoursProgress%"></div>
                                                 </div>
@@ -84,21 +91,21 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="#" >Actions</a>
+                                        <a href="#">Actions</a>
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
+                <div class="card-footer">
+                    <a asp-controller="Home" asp-action="MonthDraughmentSummaryExcelExport" asp-route-date=@Model.date>Export view as csv</a>
+                </div>
             </div>
         </div>
     </section>
     <!-- /.content -->
 </div>
-
-@*modal view insert*@
-@Html.Partial("_defaultModal");
 
 <!-- /.content-wrapper -->
 <!-- DataTables -->
@@ -114,20 +121,6 @@
             "paging": true,
             "ordering": true,
             "info": true,
-            "autoWidth": true,
-            "responsive": true,
-        });
-
-        $('.addressclick').click(function () {
-            i = $(this).data("leaveid");
-        });
-
-        $('.approve').click(function () {
-            window.location.href = "/User/ApproveLeave?id=" + i;
-        });
-
-        $('.decline').click(function () {
-            window.location.href = "/User/DeclineLeave?id=" + i;
         });
 
     });

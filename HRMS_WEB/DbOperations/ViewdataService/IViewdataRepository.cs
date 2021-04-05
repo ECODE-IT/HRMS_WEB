@@ -16,6 +16,9 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         Task<List<DutyLog>> getDutyLogsForTheUser(String id, DateTime selectedDate);
         Task<List<IGrouping<String, DutyLog>>> GetUserRegistariesForDate(DateTime date);
         IEnumerable<Leave> getleavesforthisMonth(DateTime currentdatetime);
-        Task<IEnumerable<LeaveViewModel>> getMonthDraughtmenReport();
+        Task<IEnumerable<LeaveViewModel>> getMonthDraughtmenReport(DateTime selectedDate);
+        Task insertTempData(double temp, double humidity, double temp2, double humidity2);
+        Task<Object> GetHumidities();
+        Task<Humidity> getlastHumidityData();
     }
 }
