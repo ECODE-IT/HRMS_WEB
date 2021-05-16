@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using HRMS_WEB.DbContext;
+using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.DbOperations.WindowsService;
 using HRMS_WEB.Entities;
 using HRMS_WEB.Models;
+using HRMS_WEB.Viewmodels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,12 +23,16 @@ namespace HRMS_WEB.Controllers
         private readonly IWindowsServiceRepository windowsServiceRepository;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IViewdataRepository viewdataRepository;
+        private readonly HRMSDbContext db;
 
-        public WindowsServiceController(IWindowsServiceRepository windowsServiceRepository, IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager)
+        public WindowsServiceController(IWindowsServiceRepository windowsServiceRepository, IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IViewdataRepository viewdataRepository, HRMSDbContext db)
         {
             this.windowsServiceRepository = windowsServiceRepository;
             this.hostingEnvironment = hostingEnvironment;
             this.userManager = userManager;
+            this.viewdataRepository = viewdataRepository;
+            this.db = db;
         }
 
         public async Task<IActionResult> ValidateUserByUsernamePassword(String username, String password)
@@ -33,7 +40,10 @@ namespace HRMS_WEB.Controllers
             try
             {
 
-                var user = await userManager.FindByNameAsync(username);
+                var sysconfig = db.SystemSettings.FirstOrDefault();
+                ViewBag.dailyTarget = sysconfig.DailyTargetHours;
+                ViewBag.monthlyTarget = sysconfig.MonthlyTargetHours;
+                var reportviewmodel = new WorkHourReportViewModel { date = DateTime.Now, LeaveViewModels = await viewdataRepository.getMonthDraughtmenReport(DateTime.Now) };                var user = await userManager.FindByNameAsync(username);
 
                 var result = await windowsServiceRepository.validateUserByUsernamePassword(user, username, password);
 
@@ -50,13 +60,13 @@ namespace HRMS_WEB.Controllers
                 if(result == 0)
                 {
                     var workedHours = await windowsServiceRepository.getworkedHours(user.Id, DateTime.Now);
-                    return Json(new { success = true, message = "user found successfully", islogedin = false, username = user.Name, workingHours = workedHours, userid = user.Id });
+                    return Json(new { success = true, message = "user found successfully", islogedin = false, username = user.Name, workingHours = workedHours, userid = user.Id, userreport = reportviewmodel });
                 }
 
                 if (result == 1)
                 {
                     var workedHours = await windowsServiceRepository.getworkedHours(user.Id, DateTime.Now);
-                    return Json(new { success = true, message = "user found successfully", islogedin = true, username = user.Name, workingHours = workedHours, userid = user.Id });
+                    return Json(new { success = true, message = "user found successfully", islogedin = true, username = user.Name, workingHours = workedHours, userid = user.Id, userreport = reportviewmodel });
                 }
 
                 return Json(new { success = false, message = "error occured", islogedin = false, username = "", workingHours = 0 });
