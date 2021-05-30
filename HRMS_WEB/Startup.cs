@@ -1,25 +1,24 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using HRMS_WEB.DbContext;
-using HRMS_WEB.DbOperations.EmailRepository;
-using HRMS_WEB.DbOperations.ProjectRepository;
-using HRMS_WEB.DbOperations.SubLevelRepository;
-using HRMS_WEB.DbOperations.UserRepository;
-using HRMS_WEB.DbOperations.ViewdataService;
-using HRMS_WEB.DbOperations.WindowsService;
-using HRMS_WEB.Hubs;
-using HRMS_WEB.Models;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
+using HRMS_WEB.Models;
+using HRMS_WEB.DbContext;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using HRMS_WEB.DbOperations.WindowsService;
+using HRMS_WEB.DbOperations.ViewdataService;
+using HRMS_WEB.DbOperations.UserRepository;
+using HRMS_WEB.DbOperations.ProjectRepository;
+using HRMS_WEB.DbOperations.SubLevelRepository;
+using HRMS_WEB.DbOperations.EmailRepository;
+using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Identity;
 
 namespace HRMS_WEB
 {
@@ -74,6 +73,13 @@ namespace HRMS_WEB
             services.AddScoped<ISubLevelRepository, SubLevelRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEmailSender, EmailSender>();
+
+            // https://docs.devexpress.com/XtraReports/401730/create-end-user-reporting-applications/web-reporting/asp-net-core-reporting/use-the-devexpress-cross-platform-drawing-engine
+            //if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            //{
+            //    DevExpress.Printing.CrossPlatform.CustomEngineHelper.RegisterCustomDrawingEngine(
+            //        typeof(DevExpress.CrossPlatform.Printing.DrawingEngine.PangoCrossPlatformEngine));
+            //}
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

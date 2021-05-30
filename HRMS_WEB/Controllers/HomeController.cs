@@ -123,10 +123,10 @@ namespace HRMS_WEB.Controllers
             return Ok();
         }
 
-        public async Task<IActionResult> HumidityData()
-        {
-            return View(db.HumidityDatas.OrderByDescending(hd => hd.ID).FirstOrDefault()); 
-        }
+        //public async Task<IActionResult> HumidityData()
+        //{
+        //    return View(db.HumidityDatas.OrderByDescending(hd => hd.ID).FirstOrDefault()); 
+        //}
 
         public async Task<Humidity> GetLastHumidityEntry()
         {
