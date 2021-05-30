@@ -81,7 +81,7 @@ namespace HRMS_WEB.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> MonthDraughtmenSummary()
         {
             var sysconfig = db.SystemSettings.FirstOrDefault();
@@ -90,6 +90,7 @@ namespace HRMS_WEB.Controllers
             return View(new WorkHourReportViewModel { date = DateTime.Now, LeaveViewModels = await viewdataRepository.getMonthDraughtmenReport(DateTime.Now) });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> MonthDraughtmenSummary(DateTime date)
         {

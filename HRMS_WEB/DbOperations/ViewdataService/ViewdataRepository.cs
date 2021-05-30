@@ -37,7 +37,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
 
         public async Task<IEnumerable<LeaveViewModel>> getMonthDraughtmenReport(DateTime selectedDate)
         {
-            var dutylogs = await db.DutyLogs.Where(dl => Convert.ToInt32(dl.LogDateTime.Month) == Convert.ToInt32(selectedDate.Month)).Include(dl => dl.User).ToListAsync();
+            var dutylogs = await db.DutyLogs.Where(dl => Convert.ToInt32(dl.LogDateTime.Month) == Convert.ToInt32(selectedDate.Month) && Convert.ToInt32(dl.LogDateTime.Year) == Convert.ToInt32(selectedDate.Year)).Include(dl => dl.User).ToListAsync();
             var sysconfig = await db.SystemSettings.FirstOrDefaultAsync();
 
             return dutylogs

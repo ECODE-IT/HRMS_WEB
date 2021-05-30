@@ -63,12 +63,22 @@
                             @{
                                 var dailyTarget = ViewBag.dailyTarget;
                                 var monthlyTarget = ViewBag.monthlyTarget;
+                            int index = 0;
                             }
                             @foreach (var item in Model.LeaveViewModels)
                             {
+                            index++;
                                 <tr>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Username)
+                                        @if(index == 1) {
+                                        <span class="badge" style=" background: #FFCC00; margin: 2px; padding: 5px">Rank 1</span>
+                                        } else if ( index == 2) {
+                                        <span class="badge" style=" background: #A9A9A9; margin: 2px; padding: 5px">Rank 2</span>
+                                        } else if (index == 3) {
+                                        <span class="badge " style=" background: #cd7f32; margin: 2px; padding: 5px">Rank 3</span>
+                                        }
+
                                     </td>
                                     <td>
                                         <div class="col">
