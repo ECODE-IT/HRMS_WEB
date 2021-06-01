@@ -17,7 +17,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Reports\Samplereport.vsrepx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Samplereport.vsrepx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="DevExpress.AspNetCore.Reporting" Version="20.2.6" />
     <PackageReference Include="DevExpress.CrossPlatform.Printing.DrawingEngine" Version="1.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
@@ -42,6 +51,15 @@
     <Folder Include="wwwroot\windows_mouselogs\" />
     <Folder Include="wwwroot\windows_errorlogs\" />
     <Folder Include="wwwroot\windows_screenshots\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Reports\Samplereport.cs">
+      <DependentUpon>Samplereport.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\Samplereport.Designer.cs">
+      <DependentUpon>Samplereport.vsrepx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

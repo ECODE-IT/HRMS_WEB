@@ -16,6 +16,10 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using HRMS_WEB.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using System.IO;
+using DevExpress.XtraReports.UI;
+using HRMS_WEB.Reports;
+using DevExpress.XtraPrinting;
 
 namespace HRMS_WEB.Controllers
 {
@@ -25,48 +29,16 @@ namespace HRMS_WEB.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IViewdataRepository viewdataRepository;
         private readonly HRMSDbContext db;
-        private readonly IHubContext<UserHub> userhub;
 
-        public HomeController(ILogger<HomeController> logger, IViewdataRepository viewdataRepository, HRMSDbContext db, IHubContext<UserHub> userhub)
+        public HomeController(ILogger<HomeController> logger, IViewdataRepository viewdataRepository, HRMSDbContext db)
         {
             _logger = logger;
             this.viewdataRepository = viewdataRepository;
             this.db = db;
-            this.userhub = userhub;
         }
 
         public IActionResult Index()
         {
-            var userliststring = HttpContext.Session.GetString("current_userlist");
-            var username = HttpContext.User.Identity.Name;
-
-            if (userliststring != null)
-            {
-                var userlist = JsonConvert.DeserializeObject<List<String>>(userliststring);
-                var filteruser = userlist.FirstOrDefault(name => name.Equals(username));
-
-                if(filteruser == null)
-                {
-                    userlist.Add(username);
-                    var userjson = JsonConvert.SerializeObject(userlist);
-                    HttpContext.Session.SetString("current_userlist", userjson);
-                }
-
-                ViewBag.count = userlist.Count();
-                userhub.Clients.All.SendAsync("RecieveUsercount", userlist.Count());
-            } 
-            else
-            {
-                var userlist = new List<String>();
-                userlist.Add(username);
-                var userjson = JsonConvert.SerializeObject(userlist);
-                HttpContext.Session.SetString("current_userlist", userjson);
-
-                ViewBag.count = userlist.Count();
-                userhub.Clients.All.SendAsync("RecieveUsercount", userlist.Count());
-            }
-
-            
 
             return View();
         }
@@ -132,5 +104,6 @@ namespace HRMS_WEB.Controllers
         {
             return await viewdataRepository.getlastHumidityData();
         }
+
     }
 }

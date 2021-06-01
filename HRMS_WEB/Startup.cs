@@ -1,4 +1,4 @@
-using System;
+    using System;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +19,9 @@ using HRMS_WEB.DbOperations.SubLevelRepository;
 using HRMS_WEB.DbOperations.EmailRepository;
 using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
+using HRMS_WEB.Hubs;
+using DevExpress.AspNetCore;
 
 namespace HRMS_WEB
 {
@@ -34,12 +37,8 @@ namespace HRMS_WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
 
-            services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromDays(100);//You can set Time   
-            });
-
+            services.AddDevExpressControls();
             services.AddControllersWithViews();
 
             var emailConfig = Configuration
@@ -73,18 +72,19 @@ namespace HRMS_WEB
             services.AddScoped<ISubLevelRepository, SubLevelRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEmailSender, EmailSender>();
-
-            // https://docs.devexpress.com/XtraReports/401730/create-end-user-reporting-applications/web-reporting/asp-net-core-reporting/use-the-devexpress-cross-platform-drawing-engine
-            //if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            //{
-            //    DevExpress.Printing.CrossPlatform.CustomEngineHelper.RegisterCustomDrawingEngine(
-            //        typeof(DevExpress.CrossPlatform.Printing.DrawingEngine.PangoCrossPlatformEngine));
-            //}
+       
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                DevExpress.Printing.CrossPlatform.CustomEngineHelper.RegisterCustomDrawingEngine(
+                    typeof(DevExpress.CrossPlatform.Printing.DrawingEngine.PangoCrossPlatformEngine));
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            DevExpress.XtraReports.Configuration.Settings.Default.UserDesignerOptions.DataBindingMode = DevExpress.XtraReports.UI.DataBindingMode.Expressions;
+            app.UseDevExpressControls();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -93,31 +93,23 @@ namespace HRMS_WEB
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
 
-            app.UseSession();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules")),
+
+                RequestPath = "/node_modules"
+
+            });
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.UseSignalR(route => {
-                route.MapHub<ChatHub>("/Home/Index"); 
-            });
-
-            app.Use(async (context, next) =>
-            {
-                var hubContext = context.RequestServices
-                                        .GetRequiredService<IHubContext<UserHub>>();
-                //...
-
-                if (next != null)
-                {
-                    await next.Invoke();
-                }
-            });
 
             app.UseEndpoints(endpoints =>
             {

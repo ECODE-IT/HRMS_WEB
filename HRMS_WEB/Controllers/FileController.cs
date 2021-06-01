@@ -42,7 +42,7 @@ namespace HRMS_WEB.Controllers
                 var folderpath = Path.Combine(hostingEnvironment.WebRootPath, "windows_applogs");
                 foreach (String filename in Directory.EnumerateFiles(folderpath, "*", SearchOption.TopDirectoryOnly))
                 {
-                    var file = filename.Substring(filename.LastIndexOf("\\") + 1);
+                    var file = filename.Substring(filename.LastIndexOf("/") + 1);
                     String timestampstring = file.Substring(file.LastIndexOf("_") + 1, (file.Length - 1) - (file.LastIndexOf("_") + 1) - 3);
                     int timestamp = int.Parse(timestampstring);
                     DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
