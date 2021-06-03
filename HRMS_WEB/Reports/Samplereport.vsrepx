@@ -1,17 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="20.2.6.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v20.2, Version=20.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Samplereport" PageWidth="850" PageHeight="1100" Version="20.2" Font="Arial, 9.75pt">
+<XtraReportsLayoutSerializer SerializerVersion="20.2.6.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v20.2, Version=20.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Samplereport" Margins="100, 99, 100, 100" PaperKind="A4" PageWidth="827" PageHeight="1169" Version="20.2" Font="Arial, 9.75pt">
   <Extensions>
     <Item1 Ref="1" Key="VSReportExtInfo" Value=".vsrepx" />
   </Extensions>
   <Bands>
     <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin">
       <Controls>
-        <Item1 Ref="3" ControlType="XRLabel" Name="label1" Multiline="true" Text="Hello World !" TextAlignment="MiddleCenter" SizeF="650,80" LocationFloat="0,10" Font="Arial, 48pt" Padding="2,2,0,0,96">
+        <Item1 Ref="3" ControlType="XRLabel" Name="label1" Multiline="true" Text="Dynamic Reporting" TextAlignment="MiddleCenter" SizeF="627,80" LocationFloat="0,10" Font="Arial, 48pt" Padding="2,2,0,0,100">
           <StylePriority Ref="4" UseFont="false" UseTextAlignment="false" />
         </Item1>
       </Controls>
     </Item1>
     <Item2 Ref="5" ControlType="BottomMarginBand" Name="BottomMargin" />
-    <Item3 Ref="6" ControlType="DetailBand" Name="Detail" />
+    <Item3 Ref="6" ControlType="DetailBand" Name="Detail" HeightF="25">
+      <Controls>
+        <Item1 Ref="7" ControlType="XRTable" Name="table1" TextAlignment="MiddleCenter" SizeF="627,25" LocationFloat="0,0" Padding="2,2,0,0,96" Borders="Left, Right, Bottom">
+          <Rows>
+            <Item1 Ref="8" ControlType="XRTableRow" Name="tableRow1" Weight="1">
+              <Cells>
+                <Item1 Ref="9" ControlType="XRTableCell" Name="tableCell1" Weight="0.71666664123535151" Multiline="true" Text="[ID]" />
+                <Item2 Ref="10" ControlType="XRTableCell" Name="tableCell2" Weight="3.1666667938232429" Multiline="true" Text="[UserId]" />
+                <Item3 Ref="11" ControlType="XRTableCell" Name="tableCell3" Weight="2.616666564941406" TextFormatString="{0:MMMM d, yyyy}" Multiline="true" Text="[LogDateTime]" />
+              </Cells>
+            </Item1>
+          </Rows>
+          <StylePriority Ref="12" UseBorders="false" UseTextAlignment="false" />
+        </Item1>
+      </Controls>
+    </Item3>
   </Bands>
 </XtraReportsLayoutSerializer>

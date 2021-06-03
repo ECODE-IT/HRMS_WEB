@@ -2,8 +2,11 @@
 using DevExpress.XtraReports.UI;
 using HRMS_WEB.Reports;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,12 +15,18 @@ namespace HRMS_WEB.Controllers
 {
     public class ReporterController : Controller
     {
-        public IActionResult Viewer()
+        private readonly IConfiguration configuration;
+
+        public ReporterController(IConfiguration configuration)
         {
-            ViewBag.report = new Samplereport();
-            return View();
+            this.configuration = configuration;
         }
 
+        public IActionResult Viewer(String sql)
+        {
+            ViewBag.report = CreateReport(sql);
+            return View();
+        }
 
         public ActionResult Export(string format = "pdf")
         {
@@ -71,5 +80,53 @@ namespace HRMS_WEB.Controllers
                 return File(ms.ToArray(), contentType);
             }
         }
+
+        public DataSet getDataset(String sql)
+        {
+            using (var conn = new MySqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                try
+                {
+                    // open the database connection
+                    conn.Open();
+
+                    // mysql command
+                    var command = new MySqlCommand(sql, conn);
+
+                    // database reader
+                    var reader = command.ExecuteReader();
+
+                    // load data and store
+                    var dataTable = new DataTable();
+                    dataTable.Load(reader);
+
+                    DataSet dataSet1 = new DataSet();
+                    dataSet1.DataSetName = "nwindDataSet1";
+
+                    dataSet1.Tables.Add(dataTable);
+
+                    return dataSet1;
+
+                }
+                catch (Exception ex)
+                {
+                    return new DataSet();
+                }
+            }
+        }
+
+        XtraReport CreateReport(String sql)
+        {
+            // Create a dataset.           
+            DataSet ds = getDataset(sql);
+            // Define a report
+            Samplereport report = new Samplereport()
+            {
+                DataSource = ds,
+                DataMember = ds.Tables[0].TableName,
+            };
+            return report;
+        }
+
     }
 }
