@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportRoot ReportName="Sample Data report" FileName="Samplereport">
+
+  <!--add parameters with the @ prefix-->
+	<Query hasParams="true">
+		select * from DutyLogs limit @limit
+	</Query>
+
+  <!--binding name must be unique-->
+  <!--type is date or datetime-->
+  <!--<EParameter type="date" bindingName="first">Start Date</EParameter>-->
+	<EParameter type="number" bindingName="limit">Limit</EParameter>
+	
+
+</ReportRoot>
