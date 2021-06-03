@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using DevExpress.XtraReports.UI;
 
 namespace HRMS_WEB.Reports
@@ -8,6 +9,7 @@ namespace HRMS_WEB.Reports
         public Samplereport()
         {
             InitializeComponent();
+        
         }
     }
 }

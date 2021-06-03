@@ -1,6 +1,8 @@
 ﻿using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
+using HRMS_WEB.Models;
 using HRMS_WEB.Reports;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
@@ -9,22 +11,26 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace HRMS_WEB.Controllers
 {
     public class ReporterController : Controller
     {
-        private readonly IConfiguration configuration;
 
-        public ReporterController(IConfiguration configuration)
+        private readonly IConfiguration configuration;
+        private readonly IHostingEnvironment hostingEnvironment;
+
+        public ReporterController(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             this.configuration = configuration;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Viewer(String sql)
         {
-            ViewBag.report = CreateReport(sql);
             return View();
         }
 
@@ -81,7 +87,7 @@ namespace HRMS_WEB.Controllers
             }
         }
 
-        public DataSet getDataset(String sql)
+        public DataSet getDataset(String sql, string sreportname = "Dynamic report")
         {
             using (var conn = new MySqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
@@ -101,7 +107,7 @@ namespace HRMS_WEB.Controllers
                     dataTable.Load(reader);
 
                     DataSet dataSet1 = new DataSet();
-                    dataSet1.DataSetName = "nwindDataSet1";
+                    dataSet1.DataSetName = sreportname;
 
                     dataSet1.Tables.Add(dataTable);
 
@@ -115,17 +121,86 @@ namespace HRMS_WEB.Controllers
             }
         }
 
-        XtraReport CreateReport(String sql)
+        public IActionResult GenerateReport(String xmlname)
         {
-            // Create a dataset.           
-            DataSet ds = getDataset(sql);
-            // Define a report
-            Samplereport report = new Samplereport()
+            var reportpath = Path.Combine(hostingEnvironment.ContentRootPath, "Reports");
+            var folderpath = Path.Combine(reportpath, xmlname);
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ReportRoot));
+
+            using (StreamReader stream = new StreamReader(folderpath))
             {
-                DataSource = ds,
-                DataMember = ds.Tables[0].TableName,
-            };
-            return report;
+                ReportRoot input = (ReportRoot)xmlSerializer.Deserialize(stream);
+
+                IEnumerable<string> itemlist = input.EParameters.Select(p => p.bindingName + ":" + p.type + ":" + p.name);
+                bool hasparams = bool.Parse(input.Query.hasParams);
+                String query = input.Query.value;
+                String reportname = input.ReportName;
+                String filename = input.FileName;
+
+                ViewBag.formItems = itemlist;
+                ViewBag.hasparams = hasparams;
+                ViewBag.query = query;
+                ViewBag.reportname = reportname;
+                ViewBag.filename = filename;
+                stream.Close();
+
+            }
+
+            return View();
+
+        }
+
+        public IActionResult ReturnReport(String args, String sql, bool hasparams, String filename, String reportname)
+        {
+
+            try
+
+            {
+                if (hasparams && args != null)
+                {
+                    List<String> parameters = new List<string>();
+                    if (args.Contains(","))
+                    {
+                        parameters = args.Split(",").ToList();
+                    }
+                    else
+                    {
+                        parameters.Add(args);
+                    }
+
+                    Dictionary<string, string> paramDic = new Dictionary<string, string>();
+
+                    foreach (string complexpara in parameters)
+                    {
+                        if (!paramDic.ContainsKey(complexpara.Split("*")[2]))
+                        {
+                            paramDic.Add(complexpara.Split("*")[2], complexpara.Split("*")[0]);
+                        }
+                    }
+
+                    foreach (string key in paramDic.Keys)
+                    {
+                        sql = sql.Replace("@" + key, paramDic[key]);
+                    }
+
+                }
+
+                Type t = Type.GetType($"HRMS_WEB.Reports.{filename}");
+                ConstructorInfo constructorInfo = t.GetConstructors()[0];
+                constructorInfo.Invoke(new object[] {  });
+                XtraReport report = (XtraReport)Activator.CreateInstance(t);
+                DataSet ds = getDataset(sql, sreportname: reportname);
+                report.DataSource = ds;
+                report.DataMember = ds.Tables[0].TableName;
+                ViewBag.report = report;
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return View("/Views/Reporter/Viewer.cshtml");
         }
 
     }

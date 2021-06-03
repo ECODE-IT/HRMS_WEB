@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Reports\ReportDesign.ecodex" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Reports\Samplereport.vsrepx" />
   </ItemGroup>
 
