@@ -12,6 +12,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -27,6 +28,28 @@ namespace HRMS_WEB.Controllers
         {
             this.configuration = configuration;
             this.hostingEnvironment = hostingEnvironment;
+        }
+
+        public IActionResult AvailableReports()
+        {
+            var pathfactor = "\\";
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                pathfactor = "/";
+            }
+                var folderpath = Path.Combine(hostingEnvironment.ContentRootPath, "Reports");
+            var reportnamelist = new List<string>();
+            foreach (String file in Directory.EnumerateFiles(folderpath, "*", SearchOption.TopDirectoryOnly))
+            {
+
+                var filename = file.Substring(file.LastIndexOf(pathfactor) + 1);
+
+                if (filename.Contains("ecodex"))
+                {
+                    reportnamelist.Add(filename.Replace(".ecodex", ""));
+                }
+            }
+            ViewBag.reportnamelist = reportnamelist;
+            return View();
         }
 
         public IActionResult Viewer(String sql)
@@ -127,7 +150,6 @@ namespace HRMS_WEB.Controllers
             var folderpath = Path.Combine(reportpath, xmlname);
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(ReportRoot));
-
             using (StreamReader stream = new StreamReader(folderpath))
             {
                 ReportRoot input = (ReportRoot)xmlSerializer.Deserialize(stream);
@@ -192,7 +214,10 @@ namespace HRMS_WEB.Controllers
                 XtraReport report = (XtraReport)Activator.CreateInstance(t);
                 DataSet ds = getDataset(sql, sreportname: reportname);
                 report.DataSource = ds;
-                report.DataMember = ds.Tables[0].TableName;
+                if (ds.Tables != null && ds.Tables.Count > 0)
+                {
+                    report.DataMember = ds.Tables[0].TableName;
+                }
                 ViewBag.report = report;
 
             }

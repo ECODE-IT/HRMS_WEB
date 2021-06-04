@@ -6,7 +6,7 @@
   <Bands>
     <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin">
       <Controls>
-        <Item1 Ref="3" ControlType="XRLabel" Name="label1" Multiline="true" Text="label1" SizeF="100,23" LocationFloat="255,30.1666641" Padding="2,2,0,0,96" />
+        <Item1 Ref="3" ControlType="XRLabel" Name="label1" Multiline="true" Text="label1" SizeF="100,23" LocationFloat="255,30.1666641" Padding="2,2,0,0,100" />
       </Controls>
     </Item1>
     <Item2 Ref="4" ControlType="BottomMarginBand" Name="BottomMargin" />
@@ -18,7 +18,11 @@
               <Cells>
                 <Item1 Ref="8" ControlType="XRTableCell" Name="tableCell1" Weight="1" Multiline="true" Text="[UserID]" />
                 <Item2 Ref="9" ControlType="XRTableCell" Name="tableCell2" Weight="1" Multiline="true" Text="[ID]" />
-                <Item3 Ref="10" ControlType="XRTableCell" Name="tableCell3" Weight="1" Multiline="true" Text="[LogDateTime]" />
+                <Item3 Ref="10" ControlType="XRTableCell" Name="tableCell3" Weight="1" TextFormatString="{0:yyyy-MM-dd}" Multiline="true" Text="[LogDateTime]">
+                  <ExpressionBindings>
+                    <Item1 Ref="11" EventName="BeforePrint" PropertyName="Text" Expression="[LogDateTime]" />
+                  </ExpressionBindings>
+                </Item3>
               </Cells>
             </Item1>
           </Rows>
