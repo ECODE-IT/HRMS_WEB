@@ -48,7 +48,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                     MonthWorkedHoursProgress = getMonthWorkingHours(dutylogs, dlg.FirstOrDefault().User.Id) * 100 / sysconfig.MonthlyTargetHours,
                     DailyIdleHours = getDailyIdleHours(dutylogs, dlg.FirstOrDefault().User.Id, selectedDate),
                     MonthIdleHours = getMonthlyIdleHours(dutylogs, dlg.FirstOrDefault().User.Id)
-                }).OrderByDescending(s => s.MonthWorkedHoursProgress);
+                }).OrderByDescending(s => (s.MonthWorkedHoursProgress - s.MonthIdleHours));
         }
 
         // get monthly working hours
