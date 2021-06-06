@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportRoot ReportName="Month Draughtment Summary" FileName="MonthDraughtmentWorkHourReport">
+
+  <!--add parameters with the @ prefix-->
+  <Query hasParams="true">
+  <![CDATA[
+    select u.Name as Username, dl.IsDutyOn  as isOn, dl.LogDateTime as Time from
+    dutylogs as dl
+    inner join aspnetusers as u
+    on dl.UserId = u.Id
+    where dl.LogDate > '@first' and dl.LogDate < '@second'
+    order by dl.UserId]]>
+	
+  </Query>
+
+  <!--binding name must be unique-->
+  <!--type is date or datetime-->
+  <EParameter type="date" bindingName="first">Start Date</EParameter>
+  <EParameter type="date" bindingName="second">End Date</EParameter>
+  <!--<EParameter type="number" bindingName="limit">Limit</EParameter>-->
+
+
+</ReportRoot>

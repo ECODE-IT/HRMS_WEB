@@ -10,7 +10,7 @@
       </Controls>
     </Item1>
     <Item2 Ref="4" ControlType="BottomMarginBand" Name="BottomMargin" />
-    <Item3 Ref="5" ControlType="DetailBand" Name="Detail">
+    <Item3 Ref="5" ControlType="DetailBand" Name="Detail" HeightF="27.5">
       <Controls>
         <Item1 Ref="6" ControlType="XRTable" Name="table1" SizeF="650,25" LocationFloat="0,0" Padding="2,2,0,0,96">
           <Rows>

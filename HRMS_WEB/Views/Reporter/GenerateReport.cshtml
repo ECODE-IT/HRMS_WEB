@@ -58,7 +58,7 @@
         });
         const htmlcontent = @Html.Raw(Json.Serialize(ViewBag.formItems));
         const hasparams = @Html.Raw(Json.Serialize(ViewBag.hasparams));
-        const query = @Html.Raw(Json.Serialize(ViewBag.query));
+        @*const query = @Html.Raw(Json.Serialize(ViewBag.query));*@
         const filename = @Html.Raw(Json.Serialize(ViewBag.filename));
         const reportname = @Html.Raw(Json.Serialize(ViewBag.reportname));
 
@@ -81,7 +81,7 @@
                     parameters.push($("#" + item.split(":")[0]).val().toString() + "*" + item.split(":")[1] + "*" + item.split(":")[0]);
                 })
             }
-            window.location.href = '/Reporter/ReturnReport?args=' + parameters.toString() + "&hasparams=" + hasparams + "&sql=" + query + "&filename=" + filename + "&reportname=" + reportname;
+            window.location.href = '/Reporter/ReturnReport?args=' + parameters.toString() + "&hasparams=" + hasparams + "&sql=" + "" + "&filename=" + filename + "&reportname=" + reportname;
         })
 
     })

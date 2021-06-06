@@ -23,6 +23,7 @@ namespace HRMS_WEB.Controllers
 
         private readonly IConfiguration configuration;
         private readonly IHostingEnvironment hostingEnvironment;
+        private static String query;
 
         public ReporterController(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
@@ -156,13 +157,12 @@ namespace HRMS_WEB.Controllers
 
                 IEnumerable<string> itemlist = input.EParameters.Select(p => p.bindingName + ":" + p.type + ":" + p.name);
                 bool hasparams = bool.Parse(input.Query.hasParams);
-                String query = input.Query.value;
+                query = input.Query.value;
                 String reportname = input.ReportName;
                 String filename = input.FileName;
 
                 ViewBag.formItems = itemlist;
                 ViewBag.hasparams = hasparams;
-                ViewBag.query = query;
                 ViewBag.reportname = reportname;
                 ViewBag.filename = filename;
                 stream.Close();
@@ -175,7 +175,7 @@ namespace HRMS_WEB.Controllers
 
         public IActionResult ReturnReport(String args, String sql, bool hasparams, String filename, String reportname)
         {
-
+            sql = query;
             try
 
             {

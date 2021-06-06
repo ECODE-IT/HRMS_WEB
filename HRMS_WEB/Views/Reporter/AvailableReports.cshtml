@@ -1,7 +1,21 @@
 ﻿@{
     ViewData["Title"] = "Report List";
 }
+<style>
 
+    /* [2] Transition property for smooth transformation of images */
+    .img-hover-zoom {
+        transition: .5s ease;
+        cursor: pointer;
+    }
+
+        /* [3] Finally, transforming the image when container gets hovered */
+        .img-hover-zoom:hover {
+            transform: scale(1.1);
+            elevation: above;
+            margin-left: 80px;
+        }
+</style>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -25,16 +39,20 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-6">
                     @foreach (string name in ViewBag.reportnamelist)
                     {
-                        <div class="col-sm-6">
-                            <div class="callout callout-success" data-id="@name">
-                                <h5>@name</h5>
-                            </div>
+
+                        <div class="callout callout-danger img-hover-zoom" data-id="@name">
+                            <h5>@name</h5>
                         </div>
+
                     }
+                </div>
+                <div class="col-sm-4"></div>
             </div>
-        </div>
+            </div>
     </section>
     <!-- /.content -->
 </div>

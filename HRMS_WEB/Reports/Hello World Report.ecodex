@@ -3,6 +3,9 @@
 
   <!--add parameters with the @ prefix-->
 	<Query hasParams="false">
+     <![CDATA[
+      <>jfasjdfijaifdiaj
+     ]]>
 	</Query>
 
   <!--binding name must be unique-->

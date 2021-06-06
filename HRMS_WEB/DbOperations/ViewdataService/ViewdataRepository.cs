@@ -131,7 +131,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         public async Task<List<IGrouping<String, DutyLog>>> GetUserRegistariesForDate(DateTime date)
         {
             var result =  await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, date.Date)).ToListAsync();
-            return result.GroupBy(dl => dl.UserId).ToList(); 
+            return result.OrderBy(dl => dl.LogDateTime).GroupBy(dl => dl.UserId).ToList(); 
         }
 
         public async Task insertTempData(double temp, double humidity, double temp2, double humidity2)

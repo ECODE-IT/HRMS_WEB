@@ -19,16 +19,20 @@
   <ItemGroup>
     <None Remove="Reports\Hello World Report.ecodex" />
     <None Remove="Reports\HelloWorldReport.vsrepx" />
+    <None Remove="Reports\MonthDraughtmentWorkHourReport.ecodex" />
+    <None Remove="Reports\MonthDraughtmentWorkHourReport.vsrepx" />
     <None Remove="Reports\Samplereport.vsrepx" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Reports\Hello World Report.ecodex" />
+    <Content Include="Reports\MonthDraughtmentWorkHourReport.ecodex" />
     <Content Include="Reports\ReportDesign.ecodex" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Reports\HelloWorldReport.vsrepx" />
+    <EmbeddedResource Include="Reports\MonthDraughtmentWorkHourReport.vsrepx" />
     <EmbeddedResource Include="Reports\Samplereport.vsrepx" />
   </ItemGroup>
 
@@ -67,6 +71,12 @@
     </Compile>
     <Compile Update="Reports\HelloWorldReport.Designer.cs">
       <DependentUpon>HelloWorldReport.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\MonthDraughtmentWorkHourReport.cs">
+      <DependentUpon>MonthDraughtmentWorkHourReport.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\MonthDraughtmentWorkHourReport.Designer.cs">
+      <DependentUpon>MonthDraughtmentWorkHourReport.vsrepx</DependentUpon>
     </Compile>
     <Compile Update="Reports\Samplereport.cs">
       <DependentUpon>Samplereport.vsrepx</DependentUpon>
