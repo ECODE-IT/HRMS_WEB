@@ -168,13 +168,20 @@
                                             <p>User roles</p>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a asp-action="GetSystemConfigurations" asp-controller="SystemConfigurations" class="nav-link">
+                                            <i class="fas fa-tools nav-icon"></i>
+                                            <p>System configurations</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-action="Kill" asp-controller="Administration" class="nav-link">
+                                            <i class="far fa-stop-circle nav-icon"></i>
+                                            <p>Kill System</p>
+                                        </a>
+                                    </li>
                                 }
-                                <li class="nav-item">
-                                    <a asp-action="GetSystemConfigurations" asp-controller="SystemConfigurations" class="nav-link">
-                                        <i class="fas fa-tools nav-icon"></i>
-                                        <p>System configurations</p>
-                                    </a>
-                                </li>
+
                             </ul>
                             </li>
 

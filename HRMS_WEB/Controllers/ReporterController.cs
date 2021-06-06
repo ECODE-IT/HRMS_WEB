@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -145,17 +146,89 @@ namespace HRMS_WEB.Controllers
             }
         }
 
+        public DataTable getDropDownData(String sql)
+        {
+            using (var conn = new MySqlConnection(configuration.GetConnectionString("DefaultConnection")))
+            {
+                try
+                {
+                    // open the database connection
+                    conn.Open();
+
+                    // mysql command
+                    var command = new MySqlCommand(sql, conn);
+
+                    // database reader
+                    var reader = command.ExecuteReader();
+
+                    // load data and store
+                    var dataTable = new DataTable();
+                    dataTable.Load(reader);
+
+                    return dataTable;
+
+                }
+                catch (Exception ex)
+                {
+                    return new DataTable();
+                }
+            }
+        }
+
+         private object GetRows(DataTable dt)
+        {
+            var rows = new List<object>();
+            var columns = dt.Columns.Cast<DataColumn>().ToList();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                var dataRow = new List<object>();
+                for (int colIndex = 0; colIndex < columns.Count; colIndex++)
+                {
+                    var col = columns[colIndex];
+
+                    if (row[col] == null || row[col] == DBNull.Value)
+                        dataRow.Add(new { value = "" });
+                    else if (col.DataType == typeof(decimal))
+                    {
+                        dataRow.Add(new { value = (decimal)row[col] });
+                    }
+                    else if (col.DataType == typeof(int))
+                        dataRow.Add(new { value = (int)row[col] });
+                    else
+                        dataRow.Add(new { value = row[col].ToString() });
+                }
+
+                rows.Add(new { cells = dataRow });
+            }
+
+            return rows;
+        }
+
         public IActionResult GenerateReport(String xmlname)
         {
             var reportpath = Path.Combine(hostingEnvironment.ContentRootPath, "Reports");
             var folderpath = Path.Combine(reportpath, xmlname);
+            var dropdownlist = new List<object>();
 
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(ReportRoot));
             using (StreamReader stream = new StreamReader(folderpath))
             {
                 ReportRoot input = (ReportRoot)xmlSerializer.Deserialize(stream);
 
-                IEnumerable<string> itemlist = input.EParameters.Select(p => p.bindingName + ":" + p.type + ":" + p.name);
+                IEnumerable<string> itemlist = input.EParameters.Where(ep => !ep.type.ToLower().Equals("entity")).Select(p => p.bindingName + ":" + p.type + ":" + p.name);
+
+                IEnumerable<EParameter> dropDownParams = input.EParameters.Where(ep => ep.type.ToLower().Equals("entity"));
+
+                foreach(EParameter epara in dropDownParams)
+                {
+                    if(epara.query != null && !epara.query.Equals(""))
+                    {
+                        dropdownlist.Add(new { bindingname = epara.bindingName, lablename = epara.name ,data = GetRows(getDropDownData(epara.query)) });
+                    }
+                }
+
+
                 bool hasparams = bool.Parse(input.Query.hasParams);
                 query = input.Query.value;
                 String reportname = input.ReportName;
@@ -168,6 +241,8 @@ namespace HRMS_WEB.Controllers
                 stream.Close();
 
             }
+
+            ViewBag.dropdownRows = JsonConvert.SerializeObject(dropdownlist);
 
             return View();
 
@@ -226,6 +301,28 @@ namespace HRMS_WEB.Controllers
 
             }
             return View("/Views/Reporter/Viewer.cshtml");
+        }
+
+        public IActionResult ReportDesigner(String xmlname)
+        {
+            var reportpath = Path.Combine(hostingEnvironment.ContentRootPath, "Reports");
+            var folderpath = Path.Combine(reportpath, xmlname);
+            ReportRoot input = null;
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ReportRoot));
+            using (StreamReader stream = new StreamReader(folderpath))
+            {
+                input = (ReportRoot)xmlSerializer.Deserialize(stream);
+                stream.Close();
+
+            }
+
+            Type t = Type.GetType($"HRMS_WEB.Reports.{input.FileName}");
+            ConstructorInfo constructorInfo = t.GetConstructors()[0];
+            constructorInfo.Invoke(new object[] { });
+            XtraReport report = (XtraReport)Activator.CreateInstance(t);
+            ViewBag.report = report;
+            return View();
         }
 
     }

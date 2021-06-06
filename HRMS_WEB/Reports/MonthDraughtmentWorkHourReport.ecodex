@@ -8,7 +8,7 @@
     dutylogs as dl
     inner join aspnetusers as u
     on dl.UserId = u.Id
-    where dl.LogDate > '@first' and dl.LogDate < '@second'
+    where dl.LogDate > '@first' and dl.LogDate < '@second' and (u.Id = '@third' or u.Id = '@forth')
     order by dl.UserId]]>
 	
   </Query>
@@ -17,7 +17,8 @@
   <!--type is date or datetime-->
   <EParameter type="date" bindingName="first">Start Date</EParameter>
   <EParameter type="date" bindingName="second">End Date</EParameter>
-  <!--<EParameter type="number" bindingName="limit">Limit</EParameter>-->
+  <EParameter type="Entity" bindingName="third" query="select ID, Name from AspNetUsers;">First User</EParameter>
+  <EParameter type="Entity" bindingName="forth" query="select ID, Name from AspNetUsers;">Second User</EParameter>
 
 
 </ReportRoot>

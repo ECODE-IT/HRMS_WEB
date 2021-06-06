@@ -44,7 +44,7 @@
                     @foreach (string name in ViewBag.reportnamelist)
                     {
 
-                        <div class="callout callout-danger img-hover-zoom" data-id="@name">
+                        <div class="callout callout-danger img-hover-zoom" data-toggle="modal" data-target="#modal-default" data-id="@name">
                             <h5>@name</h5>
                         </div>
 
@@ -52,15 +52,57 @@
                 </div>
                 <div class="col-sm-4"></div>
             </div>
-            </div>
+        </div>
     </section>
     <!-- /.content -->
 </div>
 
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><b>Open With</b></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>You can Design or View Your Reports</p>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                    <div class="col-sm-10 text-right">
+                        <button type="button" class="btn btn-success designer">Designer</button>
+                        <button type="button" class="btn btn-danger viewer">Viewer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <script>
     $(function () {
+        var name = ""
+
+
         $('.callout').click(function () {
-            window.open("/Reporter/GenerateReport?xmlname=" + $(this).data("id") + '.ecodex', '_blank');
+            name = $(this).data("id");
+        })
+
+        $('.viewer').click(function () {
+            debugger;
+            window.open("/Reporter/GenerateReport?xmlname=" + name  + '.ecodex', '_blank');
+        })
+        $('.designer').click(function () {
+            window.open("/Reporter/ReportDesigner?xmlname=" + name + '.ecodex', '_blank');
         })
     })
 </script>

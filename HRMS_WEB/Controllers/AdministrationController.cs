@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using HRMS_WEB.Models;
 using HRMS_WEB.Viewmodels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace HRMS_WEB.Controllers
 {
@@ -16,16 +20,39 @@ namespace HRMS_WEB.Controllers
     {
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IHostApplicationLifetime appLifetime;
 
-        public AdministrationController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        public AdministrationController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IHostApplicationLifetime appLifetime)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
+            this.appLifetime = appLifetime;
         }
 
         public IActionResult CreateRole()
         {
             return View();
+        }
+
+        public void Kill()
+        {
+            appLifetime.StopApplication();
+            //if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            //{
+            //    runCron();
+            //}
+        }
+
+        private String runCron()
+        {
+            ProcessStartInfo ps = new ProcessStartInfo();
+            ps.FileName = "/root/pub/start.sh";
+            ps.UseShellExecute = false;
+            ps.RedirectStandardOutput = true;
+
+            Process process = Process.Start(ps);
+            process.WaitForExit();
+            return "Success";
         }
 
         [HttpPost]

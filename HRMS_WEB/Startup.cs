@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using HRMS_WEB.Hubs;
 using DevExpress.AspNetCore;
+using DevExpress.XtraReports.Web.Extensions;
+using HRMS_WEB.Services;
 
 namespace HRMS_WEB
 {
@@ -72,7 +74,8 @@ namespace HRMS_WEB
             services.AddScoped<ISubLevelRepository, SubLevelRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEmailSender, EmailSender>();
-       
+            services.AddScoped<ReportStorageWebExtension, ReportStorageWebExtension1>();
+
             //if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             //{
             //    DevExpress.Printing.CrossPlatform.CustomEngineHelper.RegisterCustomDrawingEngine(

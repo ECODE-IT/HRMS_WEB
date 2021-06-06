@@ -34,5 +34,7 @@ namespace HRMS_WEB.Models
         public String name { get; set; }
         [XmlAttribute]
         public String bindingName { get; set; }
+        [XmlAttribute]
+        public String query { get; set; }
     }
 }

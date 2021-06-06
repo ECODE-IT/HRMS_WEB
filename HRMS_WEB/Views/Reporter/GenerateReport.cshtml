@@ -29,8 +29,10 @@
                     <div class="card card-info">
                         <div class="card-body">
                             <form method="post">
-                                <div class="row" id="htmlcontent">
+                                <div class="row" >
+                                    <div class="col-sm-7" id="htmlcontent">
 
+                                    </div>
                                 </div>
                             </form>
                             <button class="btn btn-primary btn-block" id="submitbtn">Submit</button>
@@ -56,23 +58,35 @@
         $('.select2').select2({
             theme: 'bootstrap4'
         });
+
         const htmlcontent = @Html.Raw(Json.Serialize(ViewBag.formItems));
         const hasparams = @Html.Raw(Json.Serialize(ViewBag.hasparams));
-        @*const query = @Html.Raw(Json.Serialize(ViewBag.query));*@
         const filename = @Html.Raw(Json.Serialize(ViewBag.filename));
         const reportname = @Html.Raw(Json.Serialize(ViewBag.reportname));
+        const dropDownJson = $.parseJSON(@Html.Raw(Json.Serialize(ViewBag.dropdownRows)));
 
-        debugger;
         htmlcontent.forEach(item => {
             $('#htmlcontent').append(
-                "<div class=\"col - sm - 6\">" +
                 "<div class=\"form-group\">" +
                 "<label class=\"control-label\">" + item.split(":")[2] + "</label>" +
                 "<input class=\"form-control\" asp-for=\"" + item.split(":")[0] + "\" type=\"" + item.split(":")[1]  +"\" id=\"" + item.split(":")[0] +"\"/>" +
-                "</div>" +
-                "</div>"
+                "</div>" 
             );
         });
+        debugger;
+        dropDownJson.forEach(dropdown => {
+            var options = "";
+            dropdown.data.forEach(optionitem => {
+                options += "<option value=\"" + optionitem.cells[0]["value"]  + "\">" + optionitem.cells[1]["value"] + "</option>"
+            })
+            $('#htmlcontent').append(
+                "<div class=\"form-group\">" +
+                "<label class=\"control-label\">" + dropdown.lablename + "</label>" +
+                "<select class=\"form-control select2\" id=\"" + dropdown.bindingname + "\">" + options + "</select>" +
+                "</div>" 
+            );
+
+        })
 
         $('#submitbtn').click(function () {
             var parameters = [];
@@ -81,6 +95,15 @@
                     parameters.push($("#" + item.split(":")[0]).val().toString() + "*" + item.split(":")[1] + "*" + item.split(":")[0]);
                 })
             }
+            dropDownJson.forEach(dropdown => {
+                    // get the select item
+                $.each($("#" + dropdown.bindingname + " option:selected"), function () {
+                    parameters.push($(this).val() + "*entity*" + dropdown.bindingname);
+                 });
+            })
+
+            var par = parameters;
+            debugger;
             window.location.href = '/Reporter/ReturnReport?args=' + parameters.toString() + "&hasparams=" + hasparams + "&sql=" + "" + "&filename=" + filename + "&reportname=" + reportname;
         })
 
