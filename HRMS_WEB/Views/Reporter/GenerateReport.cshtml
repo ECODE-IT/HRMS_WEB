@@ -29,7 +29,7 @@
                     <div class="card card-info">
                         <div class="card-body">
                             <form method="post">
-                                <div class="row" >
+                                <div class="row">
                                     <div class="col-sm-7" id="htmlcontent">
 
                                     </div>
@@ -53,12 +53,15 @@
 <link rel="stylesheet" href="~/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 <!-- Page specific script -->
 <script>
+    $('.select2').select2({
+        theme: 'bootstrap4'
+    });
+
+</script>
+<script>
     $(function () {
 
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-
+      
         const htmlcontent = @Html.Raw(Json.Serialize(ViewBag.formItems));
         const hasparams = @Html.Raw(Json.Serialize(ViewBag.hasparams));
         const filename = @Html.Raw(Json.Serialize(ViewBag.filename));
@@ -70,7 +73,7 @@
                 "<div class=\"form-group\">" +
                 "<label class=\"control-label\">" + item.split(":")[2] + "</label>" +
                 "<input class=\"form-control\" asp-for=\"" + item.split(":")[0] + "\" type=\"" + item.split(":")[1]  +"\" id=\"" + item.split(":")[0] +"\"/>" +
-                "</div>" 
+                "</div>"
             );
         });
         debugger;
@@ -83,10 +86,16 @@
                 "<div class=\"form-group\">" +
                 "<label class=\"control-label\">" + dropdown.lablename + "</label>" +
                 "<select class=\"form-control select2\" id=\"" + dropdown.bindingname + "\">" + options + "</select>" +
-                "</div>" 
+                "</div>"
             );
 
         })
+
+
+
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
 
         $('#submitbtn').click(function () {
             var parameters = [];

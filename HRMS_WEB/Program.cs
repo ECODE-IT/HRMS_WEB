@@ -37,10 +37,15 @@ namespace HRMS_WEB
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+              .ConfigureLogging(logging =>
+              {
+                  logging.ClearProviders();
+                  logging.AddConsole();
+              })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
-                    .UseUrls("http://0.0.0.0:80");
+                    .UseUrls("http://0.0.0.0:5051");
                 });
     }
 }

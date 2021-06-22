@@ -6,7 +6,7 @@
   <Bands>
     <Item1 Ref="2" ControlType="TopMarginBand" Name="TopMargin" HeightF="280">
       <Controls>
-        <Item1 Ref="3" ControlType="XRLabel" Name="label1" Multiline="true" Text="Designed by online " SizeF="650,193.79" LocationFloat="0,12.45" Font="Arial, 45pt" Padding="2,2,0,0,100">
+        <Item1 Ref="3" ControlType="XRLabel" Name="label1" Multiline="true" Text="Designed by " SizeF="650,193.79" LocationFloat="0,12.45" Font="Arial, 45pt" Padding="2,2,0,0,100">
           <StylePriority Ref="4" UseFont="false" />
         </Item1>
       </Controls>

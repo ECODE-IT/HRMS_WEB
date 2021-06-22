@@ -5,6 +5,7 @@ using HRMS_WEB.Reports;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using System;
@@ -24,12 +25,14 @@ namespace HRMS_WEB.Controllers
 
         private readonly IConfiguration configuration;
         private readonly IHostingEnvironment hostingEnvironment;
+        private readonly ILogger logger;
         private static String query;
 
-        public ReporterController(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public ReporterController(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger<ReporterController> logger)
         {
             this.configuration = configuration;
             this.hostingEnvironment = hostingEnvironment;
+            this.logger = logger;
         }
 
         public IActionResult AvailableReports()
@@ -38,6 +41,7 @@ namespace HRMS_WEB.Controllers
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                 pathfactor = "/";
             }
+
                 var folderpath = Path.Combine(hostingEnvironment.ContentRootPath, "Reports");
             var reportnamelist = new List<string>();
             foreach (String file in Directory.EnumerateFiles(folderpath, "*", SearchOption.TopDirectoryOnly))
@@ -282,11 +286,10 @@ namespace HRMS_WEB.Controllers
                     }
 
                 }
-
-                Type t = Type.GetType($"HRMS_WEB.Reports.{filename}");
-                ConstructorInfo constructorInfo = t.GetConstructors()[0];
-                constructorInfo.Invoke(new object[] {  });
-                XtraReport report = (XtraReport)Activator.CreateInstance(t);
+                var reportpath = Path.Combine(hostingEnvironment.ContentRootPath, "Reports");
+                XtraReport report = new XtraReport();
+                report.LoadLayoutFromXml(Path.Combine(reportpath, filename + ".vsrepx"));
+                logger.LogWarning(sql);
                 DataSet ds = getDataset(sql, sreportname: reportname);
                 report.DataSource = ds;
                 if (ds.Tables != null && ds.Tables.Count > 0)
@@ -317,13 +320,19 @@ namespace HRMS_WEB.Controllers
 
             }
 
-            Type t = Type.GetType($"HRMS_WEB.Reports.{input.FileName}");
-            ConstructorInfo constructorInfo = t.GetConstructors()[0];
-            constructorInfo.Invoke(new object[] { });
-            XtraReport report = (XtraReport)Activator.CreateInstance(t);
+            //Type t = Type.GetType($"HRMS_WEB.Reports.{input.FileName}");
+            //ConstructorInfo constructorInfo = t.GetConstructors()[0];
+            //constructorInfo.Invoke(new object[] { });
+            //XtraReport report = (XtraReport)Activator.CreateInstance(t);
+            XtraReport report = new XtraReport();
+            report.LoadLayoutFromXml(Path.Combine(reportpath, input.FileName + ".vsrepx"));
             ViewBag.report = report;
             return View();
         }
 
+        public IActionResult XmlEditor()
+        {
+            return View();
+        }
     }
 }

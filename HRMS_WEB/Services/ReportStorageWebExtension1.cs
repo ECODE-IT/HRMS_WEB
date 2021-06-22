@@ -38,43 +38,6 @@ namespace HRMS_WEB.Services
             return true;
         }
 
-        //public override byte[] GetData(string url)
-        //{
-        //    // Returns report layout data stored in a Report Storage using the specified URL. 
-        //    // This method is called only for valid URLs after the IsValidUrl method is called.
-        //    try
-        //    {
-        //        if (Directory.EnumerateFiles(ReportDirectory).Select(Path.GetFileNameWithoutExtension).Contains(url))
-        //        {
-        //            return File.ReadAllBytes(Path.Combine(ReportDirectory, url + FileExtension));
-        //        }
-        //        if (ReportsFactory.Reports.ContainsKey(url))
-        //        {
-        //            using (MemoryStream ms = new MemoryStream())
-        //            {
-        //                ReportsFactory.Reports[url]().SaveLayoutToXml(ms);
-        //                return ms.ToArray();
-        //            }
-        //        }
-        //        throw new DevExpress.XtraReports.Web.ClientControls.FaultException(string.Format("Could not find report '{0}'.", url));
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw new DevExpress.XtraReports.Web.ClientControls.FaultException(string.Format("Could not find report '{0}'.", url));
-        //    }
-        //}
-
-        //public override Dictionary<string, string> GetUrls()
-        //{
-        //    // Returns a dictionary of the existing report URLs and display names. 
-        //    // This method is called when running the Report Designer, 
-        //    // before the Open Report and Save Report dialogs are shown and after a new report is saved to a storage.
-
-        //    return Directory.GetFiles(ReportDirectory, "*" + FileExtension)
-        //                             .Select(Path.GetFileNameWithoutExtension)
-        //                             .Concat(ReportsFactory.Reports.Select(x => x.Key))
-        //                             .ToDictionary<string, string>(x => x);
-        //}
 
         public override void SetData(XtraReport report, string url)
         {
@@ -89,7 +52,7 @@ namespace HRMS_WEB.Services
             // The IsValidUrl and CanSetData methods are never called before this method. 
             // You can validate and correct the specified URL directly in the SetNewData method implementation 
             // and return the resulting URL used to save a report in your storage.
-            SetData(report, defaultUrl);
+            report.SaveLayoutToXml(Path.Combine(ReportDirectory, defaultUrl + FileExtension));
             return defaultUrl;
         }
     }
