@@ -150,5 +150,103 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         {
             return await db.HumidityDatas.OrderByDescending(hd => hd.ID).FirstOrDefaultAsync();
         }
+
+        public async Task<UserMonthEndSummaryDTO> GetUserMonthEndSummary(String userid)
+        {
+            try
+            {
+                var sysconfig = await db.SystemSettings.FirstOrDefaultAsync();
+                var nonotalocation = sysconfig.DailyTargetHours;
+                var username = await userManager.FindByIdAsync(userid);
+                var summaryDto = new UserMonthEndSummaryDTO() { Designation = "Draughtmen", Month = DateTime.Now.ToString("MMMM"), Name = username?.Name, Year = DateTime.Now.Year.ToString() };
+
+                var dutyLogs = await db.DutyLogs
+                    .Where(dl => dl.LogDateTime.Month == DateTime.Now.Month && dl.LogDateTime.Year == DateTime.Now.Year && dl.UserId.Equals(userid))
+                    .OrderBy(dl => dl.LogDateTime).ToListAsync();
+
+                var groupedLogs = dutyLogs.GroupBy(dl => dl.LogDate);
+
+                summaryDto.DaySummaries = new List<DaySummaryDTO>();
+
+                var weekdayotsum = 0.0;
+                var weekendotsum = 0.0;
+
+                foreach (var group in groupedLogs)
+                {
+                    var firston = group.Where(dl => dl.IsDutyOn).FirstOrDefault();
+                    var lastoff = group.Where(dl => !dl.IsDutyOn).LastOrDefault();
+
+                    var fistitem = group.FirstOrDefault();
+                    var dailyidlehours = getDailyIdleHours(group.ToList(), userid, fistitem.LogDateTime);
+                    var dailyworkedhours = getTodayWorkingHours(group.ToList(), userid, fistitem.LogDateTime);
+
+                    var isholiday = group.Key.DayOfWeek.Equals(DayOfWeek.Saturday) || group.Key.DayOfWeek.Equals(DayOfWeek.Sunday);
+                    var ottime = 0d;
+                    if (isholiday)
+                    {
+                        if (dailyidlehours > 1)
+                        {
+                            ottime = dailyworkedhours - (dailyidlehours - 1);
+                        } else
+                        {
+                            ottime = dailyworkedhours;
+                        }
+                        if (ottime < 0)
+                        {
+                            ottime = 0d;
+                        }
+
+                        weekendotsum += ottime;
+
+                    }
+                    else
+                    {
+                        if(dailyidlehours > 1)
+                        {
+                            ottime = dailyworkedhours - (dailyidlehours - 1) - nonotalocation;
+                        } 
+                        else
+                        {
+                            ottime = dailyworkedhours  - nonotalocation;
+                        }
+                       
+                        if (ottime < 0)
+                        {
+                            ottime = 0;
+                        }
+                        weekdayotsum += ottime;
+                    }
+
+
+
+
+                    var daysummerydto = new DaySummaryDTO()
+                    {
+                        DateNo = fistitem.LogDateTime.Day,
+                        DayName = group.Key.ToString("dddd").Substring(0, 3),
+                        FirstIn = firston.LogDateTime,
+                        LastOut = lastoff.LogDateTime,
+                        IdleHours = string.Format("{0:0.00} hrs", dailyidlehours),
+                        WorkedHours = string.Format("{0:0.00} hrs", dailyworkedhours),
+                        IsHoliday = isholiday,
+                        OTTimeweekday = isholiday ? "0.00 hrs" : string.Format("{0:0.00} hrs", ottime),
+                        OTTimeweekend = isholiday ? string.Format("{0:0.00}", ottime) + " hrs": "0.00 hrs",
+
+                    };
+
+                    summaryDto.DaySummaries.Add(daysummerydto);
+                }
+
+                summaryDto.OTWeekdaySum = string.Format("{0:0.00} hrs", weekdayotsum);
+                summaryDto.OTWeekendSum = string.Format("{0:0.00} hrs", weekendotsum);
+
+                return summaryDto;
+            }
+            catch (Exception ex)
+            {
+                return new UserMonthEndSummaryDTO();
+            }
+            
+        }
     }
 }

@@ -13,6 +13,8 @@ namespace HRMS_WEB.Models
         public String ReportName { get; set; }
         [XmlAttribute]
         public String FileName { get; set; }
+        [XmlAttribute]
+        public bool IsDynamicEnable { get; set; } = true;
         public Query Query { get; set; }
         [XmlElement("EParameter")]
         public List<EParameter> EParameters { get; set; }

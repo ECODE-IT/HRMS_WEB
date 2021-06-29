@@ -1,8 +1,11 @@
 ﻿using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
+using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.Models;
 using HRMS_WEB.Reports;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -20,29 +23,44 @@ using System.Xml.Serialization;
 
 namespace HRMS_WEB.Controllers
 {
+    [AllowAnonymous]
     public class ReporterController : Controller
     {
 
         private readonly IConfiguration configuration;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly ILogger logger;
+        private readonly IViewdataRepository viewdataRepository;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private static String query;
 
-        public ReporterController(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger<ReporterController> logger)
+        public ReporterController(IConfiguration configuration, IHostingEnvironment hostingEnvironment, ILogger<ReporterController> logger, IViewdataRepository viewdataRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             this.configuration = configuration;
             this.hostingEnvironment = hostingEnvironment;
             this.logger = logger;
+            this.viewdataRepository = viewdataRepository;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
         }
 
-        public IActionResult AvailableReports()
+        public IActionResult AvailableReports(String userid = null)
         {
             var pathfactor = "\\";
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
                 pathfactor = "/";
             }
 
-                var folderpath = Path.Combine(hostingEnvironment.ContentRootPath, "Reports");
+            var isadmin = true;
+
+            if (userid != null)
+            {
+                isadmin = false;
+            }
+
+            var folderpath = Path.Combine(hostingEnvironment.ContentRootPath, "Reports");
             var reportnamelist = new List<string>();
             foreach (String file in Directory.EnumerateFiles(folderpath, "*", SearchOption.TopDirectoryOnly))
             {
@@ -51,8 +69,21 @@ namespace HRMS_WEB.Controllers
 
                 if (filename.Contains("ecodex"))
                 {
-                    reportnamelist.Add(filename.Replace(".ecodex", ""));
+                    if (!isadmin)
+                    {
+                        if (filename.Contains("Month End User Report.ecodex"))
+                        {
+                            reportnamelist.Add(filename.Replace(".ecodex", ""));
+                        }
+
+                    }
+                    else
+                    {
+                        reportnamelist.Add(filename.Replace(".ecodex", ""));
+                    }
                 }
+
+
             }
             ViewBag.reportnamelist = reportnamelist;
             return View();
@@ -179,7 +210,7 @@ namespace HRMS_WEB.Controllers
             }
         }
 
-         private object GetRows(DataTable dt)
+        private object GetRows(DataTable dt)
         {
             var rows = new List<object>();
             var columns = dt.Columns.Cast<DataColumn>().ToList();
@@ -224,11 +255,11 @@ namespace HRMS_WEB.Controllers
 
                 IEnumerable<EParameter> dropDownParams = input.EParameters.Where(ep => ep.type.ToLower().Equals("entity"));
 
-                foreach(EParameter epara in dropDownParams)
+                foreach (EParameter epara in dropDownParams)
                 {
-                    if(epara.query != null && !epara.query.Equals(""))
+                    if (epara.query != null && !epara.query.Equals(""))
                     {
-                        dropdownlist.Add(new { bindingname = epara.bindingName, lablename = epara.name ,data = GetRows(getDropDownData(epara.query)) });
+                        dropdownlist.Add(new { bindingname = epara.bindingName, lablename = epara.name, data = GetRows(getDropDownData(epara.query)) });
                     }
                 }
 
@@ -237,11 +268,13 @@ namespace HRMS_WEB.Controllers
                 query = input.Query.value;
                 String reportname = input.ReportName;
                 String filename = input.FileName;
+                bool IsDynamic = input.IsDynamicEnable;
 
                 ViewBag.formItems = itemlist;
                 ViewBag.hasparams = hasparams;
                 ViewBag.reportname = reportname;
                 ViewBag.filename = filename;
+                ViewBag.IsDynamic = IsDynamic;
                 stream.Close();
 
             }
@@ -252,7 +285,7 @@ namespace HRMS_WEB.Controllers
 
         }
 
-        public IActionResult ReturnReport(String args, String sql, bool hasparams, String filename, String reportname)
+        public IActionResult ReturnReport(String args, String sql, bool hasparams, String filename, String reportname, bool IsDynamic)
         {
             sql = query;
             try
@@ -280,9 +313,29 @@ namespace HRMS_WEB.Controllers
                         }
                     }
 
-                    foreach (string key in paramDic.Keys)
+                    if (IsDynamic)
                     {
-                        sql = sql.Replace("@" + key, paramDic[key]);
+
+                        foreach (string key in paramDic.Keys)
+                        {
+                            sql = sql.Replace("@" + key, paramDic[key]);
+                        }
+                    }
+                    else
+                    {
+
+                        switch (reportname)
+                        {
+                            case "Month End Draughtmen Report":
+                                var obj = viewdataRepository.GetUserMonthEndSummary(paramDic.FirstOrDefault().Value).Result;
+                                MonthEndUserReport xreport = new MonthEndUserReport(obj);
+
+                                ViewBag.report = xreport;
+                                return View("/Views/Reporter/Viewer.cshtml");
+
+                        }
+
+
                     }
 
                 }

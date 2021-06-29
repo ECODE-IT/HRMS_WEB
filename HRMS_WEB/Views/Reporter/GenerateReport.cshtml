@@ -61,12 +61,13 @@
 <script>
     $(function () {
 
-      
+
         const htmlcontent = @Html.Raw(Json.Serialize(ViewBag.formItems));
         const hasparams = @Html.Raw(Json.Serialize(ViewBag.hasparams));
         const filename = @Html.Raw(Json.Serialize(ViewBag.filename));
         const reportname = @Html.Raw(Json.Serialize(ViewBag.reportname));
         const dropDownJson = $.parseJSON(@Html.Raw(Json.Serialize(ViewBag.dropdownRows)));
+        const IsDynamic = @Html.Raw(Json.Serialize(ViewBag.IsDynamic));
 
         htmlcontent.forEach(item => {
             $('#htmlcontent').append(
@@ -113,7 +114,7 @@
 
             var par = parameters;
             debugger;
-            window.location.href = '/Reporter/ReturnReport?args=' + parameters.toString() + "&hasparams=" + hasparams + "&sql=" + "" + "&filename=" + filename + "&reportname=" + reportname;
+            window.location.href = '/Reporter/ReturnReport?args=' + parameters.toString() + "&hasparams=" + hasparams + "&sql=" + "" + "&filename=" + filename + "&reportname=" + reportname + "&IsDynamic" + IsDynamic;
         })
 
     })

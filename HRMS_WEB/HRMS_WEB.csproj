@@ -19,13 +19,16 @@
   <ItemGroup>
     <None Remove="Reports\Hello World Report.ecodex" />
     <None Remove="Reports\HelloWorldReport.vsrepx" />
+    <None Remove="Reports\Month End User Report.ecodex" />
     <None Remove="Reports\MonthDraughtmentWorkHourReport.ecodex" />
     <None Remove="Reports\MonthDraughtmentWorkHourReport.vsrepx" />
+    <None Remove="Reports\MonthEndUserReport.vsrepx" />
     <None Remove="Reports\Samplereport.vsrepx" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Reports\Hello World Report.ecodex" />
+    <Content Include="Reports\Month End User Report.ecodex" />
     <Content Include="Reports\MonthDraughtmentWorkHourReport.ecodex" />
     <Content Include="Reports\ReportDesign.ecodex" />
   </ItemGroup>
@@ -33,6 +36,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Reports\HelloWorldReport.vsrepx" />
     <EmbeddedResource Include="Reports\MonthDraughtmentWorkHourReport.vsrepx" />
+    <EmbeddedResource Include="Reports\MonthEndUserReport.vsrepx" />
     <EmbeddedResource Include="Reports\Samplereport.vsrepx" />
   </ItemGroup>
 
@@ -80,6 +84,12 @@
     </Compile>
     <Compile Update="Reports\MonthDraughtmentWorkHourReport.Designer.cs">
       <DependentUpon>MonthDraughtmentWorkHourReport.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\MonthEndUserReport.cs">
+      <DependentUpon>MonthEndUserReport.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\MonthEndUserReport.Designer.cs">
+      <DependentUpon>MonthEndUserReport.vsrepx</DependentUpon>
     </Compile>
     <Compile Update="Reports\Samplereport.cs">
       <DependentUpon>Samplereport.vsrepx</DependentUpon>
