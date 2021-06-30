@@ -1,10 +1,14 @@
-﻿using HRMS_WEB.DbContext;
+﻿using ExcelDataReader;
+using HRMS_WEB.DbContext;
 using HRMS_WEB.Entities;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -16,10 +20,14 @@ namespace HRMS_WEB.Controllers
     public class SystemConfigurationsController : Controller
     {
         private readonly HRMSDbContext db;
+        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly ILogger<SystemConfigurationsController> logger;
 
-        public SystemConfigurationsController(HRMSDbContext db)
+        public SystemConfigurationsController(HRMSDbContext db, IHostingEnvironment hostingEnvironment, ILogger<SystemConfigurationsController> logger)
         {
             this.db = db;
+            this.hostingEnvironment = hostingEnvironment;
+            this.logger = logger;
         }
 
         public IActionResult GetSystemConfigurations()
@@ -38,6 +46,64 @@ namespace HRMS_WEB.Controllers
             }
             throw new Exception("Empty submission of data from the form");
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateHolidays(SystemSettings systemSettings)
+        {
+            string holidayFileName = null;
+            if(systemSettings.HolidaysFile != null)
+            {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "holidays");
+                //holidayFileName = "holidaysformat" + Path.GetExtension(systemSettings.HolidaysFile.FileName);
+                //string filePath = Path.Combine(uploadsFolder, holidayFileName);
+                //await systemSettings.HolidaysFile.CopyToAsync(new FileStream(filePath, FileMode.Create));
+
+               
+                    IExcelDataReader reader;
+
+                    reader = ExcelDataReader.ExcelReaderFactory.CreateReader(systemSettings.HolidaysFile.OpenReadStream());
+
+                    var conf = new ExcelDataSetConfiguration
+                    {
+                        ConfigureDataTable = _ => new ExcelDataTableConfiguration
+                        {
+                            UseHeaderRow = true
+                        }
+                    };
+
+                    var dataSet = reader.AsDataSet(conf);
+                var tableData = dataSet.Tables[0];
+
+                List<Holiday> holidayList = new List<Holiday>();
+
+
+                for (int i = 0; i< tableData.Rows.Count; i++)
+                {
+                    var holiday = new Holiday() { 
+                        ID = (int)tableData.Rows[i].Field<double>(0),
+                        Date = tableData.Rows[i].Field<DateTime>(1),
+                        Name = tableData.Rows[i].Field<string>(2), 
+                        Remark = tableData.Rows[i].Field<string>(3)
+                    };
+                    holidayList.Add(holiday);
+                }
+                var holidays = db.Holidays.ToList();
+                db.Holidays.RemoveRange(holidays);
+
+                await db.Holidays.AddRangeAsync(holidayList);
+
+                await db.SaveChangesAsync();
+                    
+                }
+                
+            
+            return Redirect("/SystemConfigurations/GetSystemConfigurations");
+
+        }
+
+
 
         public IActionResult BackupDatabase()
         {

@@ -56,5 +56,7 @@ namespace HRMS_WEB.Controllers
 
             return View(model);
         }
+
+
     }
 }

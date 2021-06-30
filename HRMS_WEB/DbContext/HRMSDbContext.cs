@@ -25,5 +25,6 @@ namespace HRMS_WEB.DbContext
         public DbSet<Leave> Leaves { get; set; }
         public DbSet<SystemSettings> SystemSettings { get; set; }
         public DbSet<Humidity> HumidityDatas { get; set; }
+        public DbSet<Holiday> Holidays { get; set; }
     }
 }
