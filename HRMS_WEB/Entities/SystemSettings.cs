@@ -14,5 +14,7 @@ namespace HRMS_WEB.Entities
         public double DailyTargetHours { get; set; }
         [NotMapped]
         public IFormFile HolidaysFile { get; set; }
+        [NotMapped]
+        public IFormFile SalaryFile { get; set; }
     }
 }

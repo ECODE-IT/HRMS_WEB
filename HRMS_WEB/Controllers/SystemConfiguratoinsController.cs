@@ -103,6 +103,63 @@ namespace HRMS_WEB.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateSalary(SystemSettings systemSettings)
+        {
+            
+            if (systemSettings.SalaryFile != null)
+            {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "holidays");
+                //holidayFileName = "holidaysformat" + Path.GetExtension(systemSettings.HolidaysFile.FileName);
+                //string filePath = Path.Combine(uploadsFolder, holidayFileName);
+                //await systemSettings.HolidaysFile.CopyToAsync(new FileStream(filePath, FileMode.Create));
+
+
+                IExcelDataReader reader;
+
+                reader = ExcelDataReader.ExcelReaderFactory.CreateReader(systemSettings.SalaryFile.OpenReadStream());
+
+                var conf = new ExcelDataSetConfiguration
+                {
+                    ConfigureDataTable = _ => new ExcelDataTableConfiguration
+                    {
+                        UseHeaderRow = true
+                    }
+                };
+
+                var dataSet = reader.AsDataSet(conf);
+                var tableData = dataSet.Tables[0];
+
+                List<Salary> SalaryList = new List<Salary>();
+
+
+                for (int i = 0; i < tableData.Rows.Count; i++)
+                {
+                    var salary = new Salary()
+                    {
+                        Username = tableData.Rows[i].Field<string>(0),
+                        Basic = tableData.Rows[i].Field<double>(1),
+                        OTHourRate = tableData.Rows[i].Field<double>(2)
+                    };
+                    SalaryList.Add(salary);
+                }
+                var salaries = db.Salary.ToList();
+                db.Salary.RemoveRange(salaries);
+
+                await db.Salary.AddRangeAsync(SalaryList);
+
+                await db.SaveChangesAsync();
+
+            }
+
+
+            return Redirect("/SystemConfigurations/GetSystemConfigurations");
+
+        }
+
+
+
 
         public IActionResult BackupDatabase()
         {

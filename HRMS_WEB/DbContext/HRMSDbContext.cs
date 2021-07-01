@@ -26,5 +26,6 @@ namespace HRMS_WEB.DbContext
         public DbSet<SystemSettings> SystemSettings { get; set; }
         public DbSet<Humidity> HumidityDatas { get; set; }
         public DbSet<Holiday> Holidays { get; set; }
+        public DbSet<Salary> Salary { get; set; }
     }
 }
