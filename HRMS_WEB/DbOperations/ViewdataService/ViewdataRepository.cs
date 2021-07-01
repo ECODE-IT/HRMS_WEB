@@ -5,6 +5,7 @@ using HRMS_WEB.Models;
 using HRMS_WEB.Viewmodels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,14 @@ namespace HRMS_WEB.DbOperations.ViewdataService
 {
     public class ViewdataRepository : IViewdataRepository
     {
+        private readonly ILogger<ViewdataRepository> logger;
         private readonly HRMSDbContext db;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IWindowsServiceRepository windowsServiceRepository;
 
-        public ViewdataRepository(HRMSDbContext db, UserManager<ApplicationUser> userManager, IWindowsServiceRepository windowsServiceRepository)
+        public ViewdataRepository(ILogger<ViewdataRepository> logger, HRMSDbContext db, UserManager<ApplicationUser> userManager, IWindowsServiceRepository windowsServiceRepository)
         {
+            this.logger = logger;
             this.db = db;
             this.userManager = userManager;
             this.windowsServiceRepository = windowsServiceRepository;
@@ -96,6 +99,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                 {
                     return dutyoffsum - dutyonsum + DateTime.Now.TimeOfDay.TotalHours - ((poweroffsum) / 60.0);
                 }
+                logger.LogError("Selected Date has odd count of duty log for the user : " + userid);
                 throw new Exception("Selected Date has odd count of duty log for the user : " + userid);
             }
 
@@ -166,6 +170,8 @@ namespace HRMS_WEB.DbOperations.ViewdataService
 
                 var groupedLogs = dutyLogs.GroupBy(dl => dl.LogDate);
 
+                var holidaylist = await db.Holidays.ToListAsync();
+
                 summaryDto.DaySummaries = new List<DaySummaryDTO>();
 
                 var weekdayotsum = 0.0;
@@ -180,13 +186,13 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                     var dailyidlehours = getDailyIdleHours(group.ToList(), userid, fistitem.LogDateTime);
                     var dailyworkedhours = getTodayWorkingHours(group.ToList(), userid, fistitem.LogDateTime);
 
-                    var isholiday = group.Key.DayOfWeek.Equals(DayOfWeek.Saturday) || group.Key.DayOfWeek.Equals(DayOfWeek.Sunday);
+                    var isholiday = group.Key.DayOfWeek.Equals(DayOfWeek.Saturday) || group.Key.DayOfWeek.Equals(DayOfWeek.Sunday) || holidaylist.Any(h => h.Date.Equals(group.Key));
                     var ottime = 0d;
                     if (isholiday)
                     {
                         if (dailyidlehours > 1)
                         {
-                            ottime = dailyworkedhours - (dailyidlehours - 1);
+                            ottime = dailyworkedhours - (dailyidlehours - 0.5);
                         } else
                         {
                             ottime = dailyworkedhours;
@@ -203,7 +209,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                     {
                         if(dailyidlehours > 1)
                         {
-                            ottime = dailyworkedhours - (dailyidlehours - 1) - nonotalocation;
+                            ottime = dailyworkedhours - (dailyidlehours - 0.5) - nonotalocation;
                         } 
                         else
                         {
@@ -231,7 +237,6 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                         IsHoliday = isholiday,
                         OTTimeweekday = isholiday ? "0.00 hrs" : string.Format("{0:0.00} hrs", ottime),
                         OTTimeweekend = isholiday ? string.Format("{0:0.00}", ottime) + " hrs": "0.00 hrs",
-
                     };
 
                     summaryDto.DaySummaries.Add(daysummerydto);

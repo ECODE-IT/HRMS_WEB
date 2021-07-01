@@ -27,17 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Reports\Hello World Report.ecodex" />
-    <Content Include="Reports\Month End User Report.ecodex" />
-    <Content Include="Reports\MonthDraughtmentWorkHourReport.ecodex" />
-    <Content Include="Reports\ReportDesign.ecodex" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Reports\HelloWorldReport.vsrepx" />
-    <EmbeddedResource Include="Reports\MonthDraughtmentWorkHourReport.vsrepx" />
     <EmbeddedResource Include="Reports\MonthEndUserReport.vsrepx" />
-    <EmbeddedResource Include="Reports\Samplereport.vsrepx" />
   </ItemGroup>
 
   <ItemGroup>

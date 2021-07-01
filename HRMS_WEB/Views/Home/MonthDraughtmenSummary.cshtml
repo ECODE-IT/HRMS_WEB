@@ -84,7 +84,7 @@
                                         <div class="col">
                                             <div class="progress-group">
                                                 <small><b>Today worked hours</b> (Today Idle Hours : @String.Format("{0:0.00}", item.DailyIdleHours) Hours)</small>
-                                                <span class="float-right">@String.Format("{0:0.00}", item.TodayWorkedHoursProgress * (dailyTarget) / 100) Hours /<b> @dailyTarget Hours</b></span>
+                                                <span class="float-right">@String.Format("{0:0.00}", ((item.TodayWorkedHoursProgress * (dailyTarget) / 100)) - item.DailyIdleHours) Hours /<b> @dailyTarget Hours</b></span>
                                                 <div class="progress progress-xs">
                                                     <div class="progress-bar-striped bg-gradient-maroon" style="width: @item.TodayWorkedHoursProgress%"></div>
                                                 </div>
@@ -93,7 +93,7 @@
                                         <div class="col">
                                             <div class="progress-group">
                                                 <small><b>This month worked hours</b> (Monthly Idle Hours : @String.Format("{0:0.00}", item.MonthIdleHours) Hours)</small>
-                                                <span class="float-right">@String.Format("{0:0.00}", item.MonthWorkedHoursProgress * (monthlyTarget) / 100) Hours / <b>@monthlyTarget Hours</b></span>
+                                                <span class="float-right">@String.Format("{0:0.00}", ((item.MonthWorkedHoursProgress * (monthlyTarget) / 100)) - item.MonthIdleHours)  Hours / <b>@monthlyTarget Hours</b></span>
                                                 <div class="progress progress-xs">
                                                     <div class="progress-bar-striped bg-gradient-maroon" style="width: @item.MonthWorkedHoursProgress%"></div>
                                                 </div>

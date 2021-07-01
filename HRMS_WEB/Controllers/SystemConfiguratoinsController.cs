@@ -82,10 +82,9 @@ namespace HRMS_WEB.Controllers
                 for (int i = 0; i< tableData.Rows.Count; i++)
                 {
                     var holiday = new Holiday() { 
-                        ID = (int)tableData.Rows[i].Field<double>(0),
-                        Date = tableData.Rows[i].Field<DateTime>(1),
-                        Name = tableData.Rows[i].Field<string>(2), 
-                        Remark = tableData.Rows[i].Field<string>(3)
+                        Date = tableData.Rows[i].Field<DateTime>(0),
+                        Name = tableData.Rows[i].Field<string>(1), 
+                        Remark = tableData.Rows[i].Field<string>(2)
                     };
                     holidayList.Add(holiday);
                 }
