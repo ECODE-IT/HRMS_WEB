@@ -24,6 +24,7 @@ using HRMS_WEB.Hubs;
 using DevExpress.AspNetCore;
 using DevExpress.XtraReports.Web.Extensions;
 using HRMS_WEB.Services;
+using HRMS_WEB.DbOperations.SecondaryProjectRepository;
 
 namespace HRMS_WEB
 {
@@ -71,6 +72,7 @@ namespace HRMS_WEB
             services.AddScoped<IViewdataRepository, ViewdataRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<ISecondaryProjectRepository, SecondaryProjectRepository>();
             services.AddScoped<ISubLevelRepository, SubLevelRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEmailSender, EmailSender>();

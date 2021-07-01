@@ -1,0 +1,73 @@
+﻿@model IEnumerable<HRMS_WEB.Entities.SecondaryProject>
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Projects</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 text-right">
+                    <a asp-controller="SecondaryProject" asp-action="CreateProject" class="btn btn-outline-secondary">Create new Upcoming project</a>
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="col">
+            <!-- Default box -->
+            <div class="card card-solid">
+                <div class="card-body">
+                    <div class="row d-flex align-items-stretch">
+                        @if (Model.Any())
+                        {
+                            @foreach (var project in Model)
+                            {
+
+                                <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch card-deck">
+                                    <div class="card bg-light m-2">
+
+                                        <div class="card-body pt-2 pb-0">
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <h2 class="lead"><b>@project.Name</b></h2>
+                                                    <p class="text-muted text-sm"><b>Remark: </b> @project.Remark </p>
+                                                    <p class="text-muted text-sm pb-1 mb-0"><b>Created on: </b> @project.Date </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                }
+
+                        }
+                        else
+                        {
+                            <h3 class="card-title">No sub levels found</h3>}
+
+
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <h3 class="card-title">@Model.Count() Projects</h3>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </section>
+    <!-- /.content -->
+
+    </div>

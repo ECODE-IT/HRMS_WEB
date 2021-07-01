@@ -34,6 +34,7 @@
                         {
                             @foreach (var project in Model)
                             {
+
                                 <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch card-deck">
                                     <div class="card bg-light m-2">
                                         @if (project.Progress == 0)
@@ -78,7 +79,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>} }
+                                </div>} 
+
+                        }
                         else
                         {
                             <h3 class="card-title">No sub levels found</h3>}
