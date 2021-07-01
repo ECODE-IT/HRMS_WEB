@@ -4,12 +4,8 @@
   <!--add parameters with the @ prefix-->
   <Query hasParams="true">
   <![CDATA[
-    select u.Name as Username, dl.IsDutyOn  as isOn, dl.LogDateTime as Time from
-    dutylogs as dl
-    inner join aspnetusers as u
-    on dl.UserId = u.Id
-    where dl.LogDate > '@first' and dl.LogDate < '@second' and (u.Id = '@third' or u.Id = '@forth')
-    order by dl.UserId]]>
+	do not edit here
+  ]]>
 	
   </Query>
 
@@ -18,7 +14,19 @@
   <!--<EParameter type="date" bindingName="first">Start Date</EParameter>
   <EParameter type="date" bindingName="second">End Date</EParameter>-->
   <EParameter type="Entity" bindingName="third" query="select ID, Name from AspNetUsers;">Select User</EParameter>
-  <!--<EParameter type="Entity" bindingName="forth" query="select ID, Name from AspNetUsers;">Second User</EParameter>-->
+  <EParameter type="Entity" bindingName="forth" query="SELECT 1 as id, MONTHNAME(STR_TO_DATE(1, '%m')) as month union
+													   SELECT 2 as id, MONTHNAME(STR_TO_DATE(2, '%m'))as month union
+													   SELECT 3 as id, MONTHNAME(STR_TO_DATE(3, '%m'))as month  union
+													   SELECT  4 as id , MONTHNAME(STR_TO_DATE(4, '%m'))as month union
+													   SELECT  5 as id, MONTHNAME(STR_TO_DATE(5, '%m'))as month  union
+													   SELECT  6 as id, MONTHNAME(STR_TO_DATE(6, '%m')) as month union
+													   SELECT 7 as id, MONTHNAME(STR_TO_DATE(7, '%m'))as month  union
+													   SELECT 8 as id, MONTHNAME(STR_TO_DATE(8, '%m')) as month union
+													   SELECT 9 as id,MONTHNAME(STR_TO_DATE(9, '%m')) as month union
+													   SELECT  10 as id,MONTHNAME(STR_TO_DATE(10, '%m')) as month union
+													   SELECT  11 as id,MONTHNAME(STR_TO_DATE(11, '%m')) as month union
+													   SELECT  12 as id, MONTHNAME(STR_TO_DATE(12, '%m'))as month
+													   ;">Select Month</EParameter>
 
 
 </ReportRoot>

@@ -20,6 +20,6 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         Task insertTempData(double temp, double humidity, double temp2, double humidity2);
         Task<Object> GetHumidities();
         Task<Humidity> getlastHumidityData();
-        Task<UserMonthEndSummaryDTO> GetUserMonthEndSummary(String userid);
+        Task<UserMonthEndSummaryDTO> GetUserMonthEndSummary(String userid, int month);
     }
 }

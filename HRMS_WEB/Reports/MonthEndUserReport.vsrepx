@@ -272,7 +272,7 @@
     </Item1>
     <Item2 Ref="147" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="197">
       <Controls>
-        <Item1 Ref="148" ControlType="XRLabel" Name="label3" Multiline="true" TextAlignment="MiddleLeft" SizeF="131.763733,24.9999962" LocationFloat="645.235962,24.9999962" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,96" Borders="Top, Right, Bottom">
+        <Item1 Ref="148" ControlType="XRLabel" Name="label3" Multiline="true" TextAlignment="MiddleCenter" SizeF="131.763733,24.9999962" LocationFloat="645.235962,24.9999962" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,100" Borders="Right, Bottom">
           <ExpressionBindings>
             <Item1 Ref="149" EventName="BeforePrint" PropertyName="Text" Expression="[OTWeekendEarning]" />
           </ExpressionBindings>
@@ -327,7 +327,7 @@
                 <Item1 Ref="175" ControlType="XRTableCell" Name="tableCell67" Weight="1.9817201508163322" Multiline="true" Text="OVERTIME EARNINGS" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold" Padding="2,5,0,0,100">
                   <StylePriority Ref="176" UseFont="false" UsePadding="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="177" ControlType="XRTableCell" Name="tableCell69" Weight="0.50913987919343806" Multiline="true" TextAlignment="MiddleLeft" Font="Arial, 9.75pt, style=Bold">
+                <Item2 Ref="177" ControlType="XRTableCell" Name="tableCell69" Weight="0.50913987919343806" Multiline="true" TextAlignment="MiddleCenter" Font="Arial, 9.75pt, style=Bold">
                   <ExpressionBindings>
                     <Item1 Ref="178" EventName="BeforePrint" PropertyName="Text" Expression="[OTWeekdayEarning]" />
                   </ExpressionBindings>
@@ -345,7 +345,7 @@
                 <Item1 Ref="183" ControlType="XRTableCell" Name="tableCell65" Weight="1.9817201577357229" Multiline="true" Text="TOTAL OVERTIME EARNINGS" TextAlignment="MiddleRight" Font="Arial, 9.75pt, style=Bold" Padding="2,5,0,0,100">
                   <StylePriority Ref="184" UseFont="false" UsePadding="false" UseTextAlignment="false" />
                 </Item1>
-                <Item2 Ref="185" ControlType="XRTableCell" Name="tableCell66" Weight="1.0182814023624212" Multiline="true" TextAlignment="MiddleLeft" Font="Arial, 9.75pt, style=Bold">
+                <Item2 Ref="185" ControlType="XRTableCell" Name="tableCell66" Weight="1.0182814023624212" Multiline="true" TextAlignment="MiddleCenter" Font="Arial, 9.75pt, style=Bold">
                   <ExpressionBindings>
                     <Item1 Ref="186" EventName="BeforePrint" PropertyName="Text" Expression="[OTAllEarning]" />
                   </ExpressionBindings>

@@ -326,7 +326,7 @@ namespace HRMS_WEB.Controllers
                         switch (reportname)
                         {
                             case "Month End Draughtmen Report":
-                                var obj = viewdataRepository.GetUserMonthEndSummary(paramDic.FirstOrDefault().Value).Result;
+                                var obj = viewdataRepository.GetUserMonthEndSummary(paramDic.FirstOrDefault().Value, int.Parse(paramDic.ElementAt(1).Value)).Result;
                                 MonthEndUserReport xreport = new MonthEndUserReport(obj);
 
                                 ViewBag.report = xreport;

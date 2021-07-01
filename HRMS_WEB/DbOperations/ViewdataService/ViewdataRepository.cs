@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -155,20 +156,21 @@ namespace HRMS_WEB.DbOperations.ViewdataService
             return await db.HumidityDatas.OrderByDescending(hd => hd.ID).FirstOrDefaultAsync();
         }
 
-        public async Task<UserMonthEndSummaryDTO> GetUserMonthEndSummary(String userid)
+        public async Task<UserMonthEndSummaryDTO> GetUserMonthEndSummary(String userid, int month)
         {
             try
             {
                 var username = await userManager.FindByIdAsync(userid);
-                var salary = await db.Salary.FirstOrDefaultAsync(s => s.Username.Equals(username));
+                var salary = await db.Salary.FirstOrDefaultAsync(s => s.Username.Equals(username.UserName));
                 var othourrate = salary.OTHourRate;
                 var sysconfig = await db.SystemSettings.FirstOrDefaultAsync();
                 var nonotalocation = sysconfig.DailyTargetHours;
-                
-                var summaryDto = new UserMonthEndSummaryDTO() { Designation = "Draughtmen", Month = DateTime.Now.ToString("MMMM"), Name = username?.Name, Year = DateTime.Now.Year.ToString() };
+                string monthName = new DateTime(2010, month, 1)
+                    .ToString("MMM", CultureInfo.InvariantCulture);
+                var summaryDto = new UserMonthEndSummaryDTO() { Designation = "Draughtmen", Month = monthName, Name = username?.Name, Year = DateTime.Now.Year.ToString() };
 
                 var dutyLogs = await db.DutyLogs
-                    .Where(dl => dl.LogDateTime.Month == DateTime.Now.Month && dl.LogDateTime.Year == DateTime.Now.Year && dl.UserId.Equals(userid))
+                    .Where(dl => dl.LogDateTime.Month == month && dl.LogDateTime.Year == DateTime.Now.Year && dl.UserId.Equals(userid))
                     .OrderBy(dl => dl.LogDateTime).ToListAsync();
 
                 var groupedLogs = dutyLogs.GroupBy(dl => dl.LogDate);
@@ -248,10 +250,10 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                 summaryDto.OTWeekdaySum = string.Format("{0:0.00} hrs", weekdayotsum);
                 summaryDto.OTWeekendSum = string.Format("{0:0.00} hrs", weekendotsum);
 
-                summaryDto.OTWeekdayEarning = string.Format("Rs. {0:0.00}", weekdayotsum * othourrate);
-                summaryDto.OTWeekendEarning = string.Format("Rs. {0:0.00}", weekendotsum * othourrate);
+                summaryDto.OTWeekdayEarning = string.Format("Rs. {0:n}", weekdayotsum * othourrate);
+                summaryDto.OTWeekendEarning = string.Format("Rs. {0:n}", weekendotsum * othourrate);
 
-                summaryDto.OTAllEarning = string.Format("Rs. {0:0.00}", (weekdayotsum * othourrate) + (weekendotsum * othourrate));
+                summaryDto.OTAllEarning = string.Format("Rs. {0:n}", (weekdayotsum * othourrate) + (weekendotsum * othourrate));
 
                 return summaryDto;
             }

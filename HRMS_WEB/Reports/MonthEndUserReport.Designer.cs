@@ -96,6 +96,7 @@ namespace HRMS_WEB.Reports {
             this.tableCell2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell2");
             this.tableCell3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell3");
             this.tableCell4 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell4");
+            this.label3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label3");
             this.table17 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table17");
             this.table16 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table16");
             this.table15 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table15");
@@ -132,7 +133,6 @@ namespace HRMS_WEB.Reports {
             this.tableCell59 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell59");
             this.tableCell60 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell60");
             this.tableCell61 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell61");
-            this.label3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label3");
 
             // Data Sources
             this.objectDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.ObjectBinding.ObjectDataSource>("objectDataSource1");
@@ -219,6 +219,7 @@ namespace HRMS_WEB.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell2;
         private DevExpress.XtraReports.UI.XRTableCell tableCell3;
         private DevExpress.XtraReports.UI.XRTableCell tableCell4;
+        private DevExpress.XtraReports.UI.XRLabel label3;
         private DevExpress.XtraReports.UI.XRTable table17;
         private DevExpress.XtraReports.UI.XRTable table16;
         private DevExpress.XtraReports.UI.XRTable table15;
@@ -256,6 +257,5 @@ namespace HRMS_WEB.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell60;
         private DevExpress.XtraReports.UI.XRTableCell tableCell61;
         private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource1;
-        private DevExpress.XtraReports.UI.XRLabel label3;
     }
 }
