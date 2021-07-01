@@ -159,9 +159,12 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         {
             try
             {
+                var username = await userManager.FindByIdAsync(userid);
+                var salary = await db.Salary.FirstOrDefaultAsync(s => s.Username.Equals(username));
+                var othourrate = salary.OTHourRate;
                 var sysconfig = await db.SystemSettings.FirstOrDefaultAsync();
                 var nonotalocation = sysconfig.DailyTargetHours;
-                var username = await userManager.FindByIdAsync(userid);
+                
                 var summaryDto = new UserMonthEndSummaryDTO() { Designation = "Draughtmen", Month = DateTime.Now.ToString("MMMM"), Name = username?.Name, Year = DateTime.Now.Year.ToString() };
 
                 var dutyLogs = await db.DutyLogs
@@ -244,6 +247,11 @@ namespace HRMS_WEB.DbOperations.ViewdataService
 
                 summaryDto.OTWeekdaySum = string.Format("{0:0.00} hrs", weekdayotsum);
                 summaryDto.OTWeekendSum = string.Format("{0:0.00} hrs", weekendotsum);
+
+                summaryDto.OTWeekdayEarning = string.Format("Rs. {0:0.00}", weekdayotsum * othourrate);
+                summaryDto.OTWeekendEarning = string.Format("Rs. {0:0.00}", weekendotsum * othourrate);
+
+                summaryDto.OTAllEarning = string.Format("Rs. {0:0.00}", (weekdayotsum * othourrate) + (weekendotsum * othourrate));
 
                 return summaryDto;
             }

@@ -289,7 +289,6 @@ namespace HRMS_WEB.Controllers
         {
             sql = query;
             try
-
             {
                 if (hasparams && args != null)
                 {

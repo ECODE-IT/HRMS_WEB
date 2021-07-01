@@ -113,7 +113,6 @@ namespace HRMS_WEB.Reports {
             this.tableCell73 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell73");
             this.tableRow15 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow15");
             this.tableCell67 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell67");
-            this.tableCell68 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell68");
             this.tableCell69 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell69");
             this.tableRow14 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow14");
             this.tableCell65 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell65");
@@ -133,6 +132,7 @@ namespace HRMS_WEB.Reports {
             this.tableCell59 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell59");
             this.tableCell60 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell60");
             this.tableCell61 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell61");
+            this.label3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label3");
 
             // Data Sources
             this.objectDataSource1 = reportInitializer.GetDataSource<DevExpress.DataAccess.ObjectBinding.ObjectDataSource>("objectDataSource1");
@@ -236,7 +236,6 @@ namespace HRMS_WEB.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell73;
         private DevExpress.XtraReports.UI.XRTableRow tableRow15;
         private DevExpress.XtraReports.UI.XRTableCell tableCell67;
-        private DevExpress.XtraReports.UI.XRTableCell tableCell68;
         private DevExpress.XtraReports.UI.XRTableCell tableCell69;
         private DevExpress.XtraReports.UI.XRTableRow tableRow14;
         private DevExpress.XtraReports.UI.XRTableCell tableCell65;
@@ -257,5 +256,6 @@ namespace HRMS_WEB.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell60;
         private DevExpress.XtraReports.UI.XRTableCell tableCell61;
         private DevExpress.DataAccess.ObjectBinding.ObjectDataSource objectDataSource1;
+        private DevExpress.XtraReports.UI.XRLabel label3;
     }
 }

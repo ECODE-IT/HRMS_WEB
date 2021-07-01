@@ -13,7 +13,10 @@ namespace HRMS_WEB.Models
         public String Designation { get; set; }
         public String Year { get; set; }
         public String OTWeekdaySum { get; set; }
+        public String OTWeekdayEarning { get; set; }
         public String OTWeekendSum { get; set; }
+        public String OTWeekendEarning { get; set; }
+        public String OTAllEarning { get; set; }
         public List<DaySummaryDTO> DaySummaries { get; set; }
 
     }
