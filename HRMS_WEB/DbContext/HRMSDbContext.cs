@@ -28,5 +28,6 @@ namespace HRMS_WEB.DbContext
         public DbSet<Holiday> Holidays { get; set; }
         public DbSet<Salary> Salary { get; set; }
         public DbSet<SecondaryProject> SecondaryProjects { get; set; }
+        public DbSet<SecondaryProjectLog> SecondaryProjectLogs { get; set; }
     }
 }

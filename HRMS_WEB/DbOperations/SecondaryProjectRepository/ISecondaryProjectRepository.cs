@@ -10,5 +10,6 @@ namespace HRMS_WEB.DbOperations.SecondaryProjectRepository
     {
         Task createSecondaryProject(SecondaryProject secondaryProject);
         IEnumerable<SecondaryProject> getAllProjects();
+        Task createsecondaryprojectlog(SecondaryProjectLog log);
     }
 }
