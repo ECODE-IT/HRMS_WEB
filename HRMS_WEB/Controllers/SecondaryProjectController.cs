@@ -36,5 +36,11 @@ namespace HRMS_WEB.Controllers
             return RedirectToAction("index");
         }
 
+        [HttpGet]
+        public object GetSecondaryProjects()
+        {
+            return secondaryProjectRepository.getAllProjects();
+        }
+
     }
 }
