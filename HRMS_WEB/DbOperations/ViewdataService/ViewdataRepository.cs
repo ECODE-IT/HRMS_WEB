@@ -20,6 +20,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         private readonly HRMSDbContext db;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IWindowsServiceRepository windowsServiceRepository;
+        double IdleAlocationdaily = 0.5;
 
         public ViewdataRepository(ILogger<ViewdataRepository> logger, HRMSDbContext db, UserManager<ApplicationUser> userManager, IWindowsServiceRepository windowsServiceRepository)
         {
@@ -46,7 +47,8 @@ namespace HRMS_WEB.DbOperations.ViewdataService
 
             return dutylogs
                 .GroupBy(dl => dl.User.Name)
-                .Select(dlg => new LeaveViewModel { 
+                .Select(dlg => new LeaveViewModel
+                {
                     Username = dlg.Key,
                     TodayWorkedHoursProgress = getTodayWorkingHours(dutylogs, dlg.FirstOrDefault().User.Id, selectedDate) * 100 / sysconfig.DailyTargetHours,
                     MonthWorkedHoursProgress = getMonthWorkingHours(dutylogs, dlg.FirstOrDefault().User.Id) * 100 / sysconfig.MonthlyTargetHours,
@@ -57,7 +59,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
 
         // get monthly working hours
         public double getMonthWorkingHours(List<DutyLog> dutylogs, String userid)
-        { 
+        {
 
             var dutyonlogs = dutylogs.Where(dl => dl.IsDutyOn == true && dl.User.Id.Equals(userid)).ToArray();
             var dutyofflogs = dutylogs.Where(dl => dl.IsDutyOn == false && dl.User.Id.Equals(userid)).ToArray();
@@ -96,7 +98,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
             }
             else
             {
-                if(DateTime.Equals(selectedDate.Date, DateTime.Now.Date))
+                if (DateTime.Equals(selectedDate.Date, DateTime.Now.Date))
                 {
                     return dutyoffsum - dutyonsum + DateTime.Now.TimeOfDay.TotalHours - ((poweroffsum) / 60.0);
                 }
@@ -135,8 +137,8 @@ namespace HRMS_WEB.DbOperations.ViewdataService
 
         public async Task<List<IGrouping<String, DutyLog>>> GetUserRegistariesForDate(DateTime date)
         {
-            var result =  await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, date.Date)).ToListAsync();
-            return result.OrderBy(dl => dl.LogDateTime).GroupBy(dl => dl.UserId).ToList(); 
+            var result = await db.DutyLogs.Where(dl => DateTime.Equals(dl.LogDateTime.Date, date.Date)).ToListAsync();
+            return result.OrderBy(dl => dl.LogDateTime).GroupBy(dl => dl.UserId).ToList();
         }
 
         public async Task insertTempData(double temp, double humidity, double temp2, double humidity2)
@@ -197,8 +199,9 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                     {
                         if (dailyidlehours > 1)
                         {
-                            ottime = dailyworkedhours - (dailyidlehours - 0.5);
-                        } else
+                            ottime = dailyworkedhours - (dailyidlehours - IdleAlocationdaily);
+                        }
+                        else
                         {
                             ottime = dailyworkedhours;
                         }
@@ -212,15 +215,15 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                     }
                     else
                     {
-                        if(dailyidlehours > 1)
+                        if (dailyidlehours > 1)
                         {
-                            ottime = dailyworkedhours - (dailyidlehours - 0.5) - nonotalocation;
-                        } 
+                            ottime = dailyworkedhours - (dailyidlehours - IdleAlocationdaily) - nonotalocation;
+                        }
                         else
                         {
-                            ottime = dailyworkedhours  - nonotalocation;
+                            ottime = dailyworkedhours - nonotalocation;
                         }
-                       
+
                         if (ottime < 0)
                         {
                             ottime = 0;
@@ -241,7 +244,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                         WorkedHours = string.Format("{0:0.00} hrs", dailyworkedhours),
                         IsHoliday = isholiday,
                         OTTimeweekday = isholiday ? "0.00 hrs" : string.Format("{0:0.00} hrs", ottime),
-                        OTTimeweekend = isholiday ? string.Format("{0:0.00}", ottime) + " hrs": "0.00 hrs",
+                        OTTimeweekend = isholiday ? string.Format("{0:0.00}", ottime) + " hrs" : "0.00 hrs",
                     };
 
                     summaryDto.DaySummaries.Add(daysummerydto);
@@ -261,7 +264,100 @@ namespace HRMS_WEB.DbOperations.ViewdataService
             {
                 return new UserMonthEndSummaryDTO();
             }
+
+        }
+
+        public async Task<MonthEndEmployeeDTO> GetMonthEndEmployeeSummary(int month)
+        {
+            string monthName = new DateTime(2010, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
+            var dutylogs = await db.DutyLogs.Include(dl => dl.User).ToListAsync();
+            var dlgroup = dutylogs.GroupBy(dl => dl.UserId);
+            var sysconfig = await db.SystemSettings.FirstOrDefaultAsync();
+            var nonotalocation = sysconfig.DailyTargetHours;
+            var holidaylist = await db.Holidays.ToListAsync();
+
+            var employeeprofilelist = new List<MonthEndEmployeeProfile>();
+            int i = 0;
+            foreach (var group in dlgroup)
+            {
+                i++;
+                var weekendotsum = 0d;
+                var weekdayotsum = 0d;
+                foreach (var dategroup in group.ToList().GroupBy(dl => dl.LogDate))
+                {
+                    var dailyidlehours = getDailyIdleHours(dategroup.ToList(), group.Key, dategroup.Key);
+                    var dailyworkedhours = getTodayWorkingHours(dategroup.ToList(), group.Key, dategroup.Key);
+                    var isholiday = dategroup.Key.DayOfWeek.Equals(DayOfWeek.Saturday) || dategroup.Key.DayOfWeek.Equals(DayOfWeek.Sunday) || holidaylist.Any(h => h.Date.Equals(group.Key));
+                    var ottime = 0d;
+
+                    if (isholiday)
+                    {
+                        if (dailyidlehours > 1)
+                        {
+                            ottime = dailyworkedhours - (dailyidlehours - IdleAlocationdaily);
+                        }
+                        else
+                        {
+                            ottime = dailyworkedhours;
+                        }
+                        if (ottime < 0)
+                        {
+                            ottime = 0d;
+                        }
+
+                        weekendotsum += ottime;
+
+                    }
+                    else
+                    {
+                        if (dailyidlehours > 1)
+                        {
+                            ottime = dailyworkedhours - (dailyidlehours - IdleAlocationdaily) - nonotalocation;
+                        }
+                        else
+                        {
+                            ottime = dailyworkedhours - nonotalocation;
+                        }
+
+                        if (ottime < 0)
+                        {
+                            ottime = 0;
+                        }
+                        weekdayotsum += ottime;
+                    }
+                }
+
+                var monthworkedhours = getMonthWorkingHours(group.ToList(), group.Key);
+                var monthidlehours = getMonthlyIdleHours(group.ToList(), group.Key);
+
+                var empprofile = new MonthEndEmployeeProfile()
+                {
+                    Index = i,
+                    WorkedHours = string.Format("{0:0.00} hrs", monthworkedhours),
+                    IdleHours = string.Format("{0:0.00} hrs", monthidlehours),
+                    Name = group.FirstOrDefault().User.Name,
+                    WorkedDays = group.ToList().Select(dl => dl.LogDate).Distinct().Count(),
+                    OtHours = string.Format("{0:0.00} hrs", weekdayotsum + weekendotsum),
+                    WeekdayOTHours = string.Format("{0:0.00} hrs", weekdayotsum),
+                    HolidayOTHours = string.Format("{0:0.00} hrs", weekendotsum)
+                };
+
+                employeeprofilelist.Add(calculatePerformanceIndex(empprofile,monthworkedhours, monthidlehours ));
+
+
+            }
+
+            return new MonthEndEmployeeDTO() { Month = monthName, monthEndEmployeeDTOs = employeeprofilelist };
             
+
+        }
+
+        private MonthEndEmployeeProfile calculatePerformanceIndex(MonthEndEmployeeProfile dto, double workedhours, double idlehours)
+        {
+            var actualworkedhours = workedhours - idlehours;
+            double workeddays = actualworkedhours / dto.WorkedDays;
+            dto.PerformaceIndex = string.Format("{0:0.00} %", workeddays);
+            return dto;
         }
     }
 }

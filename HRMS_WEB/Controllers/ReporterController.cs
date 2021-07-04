@@ -45,7 +45,7 @@ namespace HRMS_WEB.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult AvailableReports(String userid = null)
+        public IActionResult AvailableReports()
         {
             var pathfactor = "\\";
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -53,12 +53,6 @@ namespace HRMS_WEB.Controllers
                 pathfactor = "/";
             }
 
-            var isadmin = true;
-
-            if (userid != null)
-            {
-                isadmin = false;
-            }
 
             var folderpath = Path.Combine(hostingEnvironment.ContentRootPath, "Reports");
             var reportnamelist = new List<string>();
@@ -69,18 +63,8 @@ namespace HRMS_WEB.Controllers
 
                 if (filename.Contains("ecodex"))
                 {
-                    if (!isadmin)
-                    {
-                        if (filename.Contains("Month End User Report.ecodex"))
-                        {
-                            reportnamelist.Add(filename.Replace(".ecodex", ""));
-                        }
-
-                    }
-                    else
-                    {
                         reportnamelist.Add(filename.Replace(".ecodex", ""));
-                    }
+                    
                 }
 
 
@@ -285,7 +269,7 @@ namespace HRMS_WEB.Controllers
 
         }
 
-        public IActionResult ReturnReport(String args, String sql, bool hasparams, String filename, String reportname, bool IsDynamic)
+        public async Task<IActionResult> ReturnReport(String args, String sql, bool hasparams, String filename, String reportname, bool IsDynamic)
         {
             sql = query;
             try
@@ -328,10 +312,13 @@ namespace HRMS_WEB.Controllers
                             case "Month End Draughtmen Report":
                                 var obj = viewdataRepository.GetUserMonthEndSummary(paramDic.FirstOrDefault().Value, int.Parse(paramDic.ElementAt(1).Value)).Result;
                                 MonthEndUserReport xreport = new MonthEndUserReport(obj);
-
                                 ViewBag.report = xreport;
                                 return View("/Views/Reporter/Viewer.cshtml");
-
+                            case "Month End Employee Report":
+                                var data = await viewdataRepository.GetMonthEndEmployeeSummary(int.Parse((paramDic.FirstOrDefault().Value)));
+                                MonthEndEmployeeReport monthEndEmployeeReport = new MonthEndEmployeeReport(data);
+                                ViewBag.report = monthEndEmployeeReport;
+                                return View("/Views/Reporter/Viewer.cshtml");
                         }
 
 
@@ -353,7 +340,7 @@ namespace HRMS_WEB.Controllers
             }
             catch (Exception ex)
             {
-
+                logger.LogError(ex.Message);
             }
             return View("/Views/Reporter/Viewer.cshtml");
         }

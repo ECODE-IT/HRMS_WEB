@@ -21,5 +21,6 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         Task<Object> GetHumidities();
         Task<Humidity> getlastHumidityData();
         Task<UserMonthEndSummaryDTO> GetUserMonthEndSummary(String userid, int month);
+        Task<MonthEndEmployeeDTO> GetMonthEndEmployeeSummary(int month);
     }
 }

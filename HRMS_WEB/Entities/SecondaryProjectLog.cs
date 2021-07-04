@@ -13,6 +13,7 @@ namespace HRMS_WEB.Entities
         public DateTime LogDate { get; set; }
         public String UserId { get; set; }
         public int SecondaryProjectId { get; set; }
+        public String Remarks { get; set; }
 
         public ApplicationUser User { get; set; }
         public SecondaryProject SecondaryProject { get; set; }

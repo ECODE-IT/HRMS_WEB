@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportRoot ReportName="Month End Employee Report" FileName="MonthEndEmployeeReport" IsDynamicEnable="false">
+
+  <!--add parameters with the @ prefix-->
+  <Query hasParams="true">
+  <![CDATA[
+	do not edit here
+  ]]>
+	
+  </Query>
+
+  <!--binding name must be unique-->
+  <!--type is date or datetime-->
+  <!--<EParameter type="date" bindingName="first">Start Date</EParameter>
+  <EParameter type="date" bindingName="second">End Date</EParameter>-->
+  <EParameter type="Entity" bindingName="forth" query="SELECT 1 as id, MONTHNAME(STR_TO_DATE(1, '%m')) as month union
+													   SELECT 2 as id, MONTHNAME(STR_TO_DATE(2, '%m'))as month union
+													   SELECT 3 as id, MONTHNAME(STR_TO_DATE(3, '%m'))as month  union
+													   SELECT  4 as id , MONTHNAME(STR_TO_DATE(4, '%m'))as month union
+													   SELECT  5 as id, MONTHNAME(STR_TO_DATE(5, '%m'))as month  union
+													   SELECT  6 as id, MONTHNAME(STR_TO_DATE(6, '%m')) as month union
+													   SELECT 7 as id, MONTHNAME(STR_TO_DATE(7, '%m'))as month  union
+													   SELECT 8 as id, MONTHNAME(STR_TO_DATE(8, '%m')) as month union
+													   SELECT 9 as id,MONTHNAME(STR_TO_DATE(9, '%m')) as month union
+													   SELECT  10 as id,MONTHNAME(STR_TO_DATE(10, '%m')) as month union
+													   SELECT  11 as id,MONTHNAME(STR_TO_DATE(11, '%m')) as month union
+													   SELECT  12 as id, MONTHNAME(STR_TO_DATE(12, '%m'))as month
+													   ;">Select Month</EParameter>
+
+
+</ReportRoot>

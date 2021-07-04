@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace HRMS_WEB.DbOperations.SecondaryProjectRepository
 {
-    [ApiController]
-    [Route("api/[controller]/[action]")]
+
     public class SecondaryProjectRepository : ISecondaryProjectRepository
     {
         private readonly HRMSDbContext db;

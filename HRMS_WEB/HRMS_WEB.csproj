@@ -22,11 +22,13 @@
     <None Remove="Reports\Month End User Report.ecodex" />
     <None Remove="Reports\MonthDraughtmentWorkHourReport.ecodex" />
     <None Remove="Reports\MonthDraughtmentWorkHourReport.vsrepx" />
+    <None Remove="Reports\MonthEndEmployeeReport.vsrepx" />
     <None Remove="Reports\MonthEndUserReport.vsrepx" />
     <None Remove="Reports\Samplereport.vsrepx" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Reports\MonthEndEmployeeReport.vsrepx" />
     <EmbeddedResource Include="Reports\MonthEndUserReport.vsrepx" />
   </ItemGroup>
 
@@ -79,6 +81,12 @@
     </Compile>
     <Compile Update="Reports\MonthDraughtmentWorkHourReport.Designer.cs">
       <DependentUpon>MonthDraughtmentWorkHourReport.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\MonthEndEmployeeReport.cs">
+      <DependentUpon>MonthEndEmployeeReport.vsrepx</DependentUpon>
+    </Compile>
+    <Compile Update="Reports\MonthEndEmployeeReport.Designer.cs">
+      <DependentUpon>MonthEndEmployeeReport.vsrepx</DependentUpon>
     </Compile>
     <Compile Update="Reports\MonthEndUserReport.cs">
       <DependentUpon>MonthEndUserReport.vsrepx</DependentUpon>

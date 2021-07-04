@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]/[action]")]
     public class SecondaryProjectController : Controller
     {
         private readonly ISecondaryProjectRepository secondaryProjectRepository;
