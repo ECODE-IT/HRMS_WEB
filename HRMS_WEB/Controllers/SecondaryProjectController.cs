@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRMS_WEB.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]/[action]")]
+    
     public class SecondaryProjectController : Controller
     {
         private readonly ISecondaryProjectRepository secondaryProjectRepository;
@@ -44,21 +43,7 @@ namespace HRMS_WEB.Controllers
             return secondaryProjectRepository.getAllProjects();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SubmitProjectShift(SecondaryProjectLog log)
-        {
-            try
-            {
-                log.LogDate = DateTime.Now.Date;
-                log.LogDateTime = DateTime.Now;
-                await secondaryProjectRepository.createsecondaryprojectlog(log);
-                return Json(new { success = true, message = "added successfully" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
-        }
+        
 
     }
 }

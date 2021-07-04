@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HRMS_WEB.DbContext;
+using HRMS_WEB.DbOperations.SecondaryProjectRepository;
 using HRMS_WEB.DbOperations.ViewdataService;
 using HRMS_WEB.DbOperations.WindowsService;
 using HRMS_WEB.Entities;
@@ -20,14 +21,16 @@ namespace HRMS_WEB.Controllers
     [Route("api/[controller]/[action]")]
     public class WindowsServiceController : Controller
     {
+        private readonly ISecondaryProjectRepository secondaryProjectRepository;
         private readonly IWindowsServiceRepository windowsServiceRepository;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IViewdataRepository viewdataRepository;
         private readonly HRMSDbContext db;
 
-        public WindowsServiceController(IWindowsServiceRepository windowsServiceRepository, IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IViewdataRepository viewdataRepository, HRMSDbContext db)
+        public WindowsServiceController(ISecondaryProjectRepository secondaryProjectRepository,IWindowsServiceRepository windowsServiceRepository, IHostingEnvironment hostingEnvironment, UserManager<ApplicationUser> userManager, IViewdataRepository viewdataRepository, HRMSDbContext db)
         {
+            this.secondaryProjectRepository = secondaryProjectRepository;
             this.windowsServiceRepository = windowsServiceRepository;
             this.hostingEnvironment = hostingEnvironment;
             this.userManager = userManager;
@@ -182,6 +185,22 @@ namespace HRMS_WEB.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "an error occured because of " + ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitProjectShift(SecondaryProjectLog log)
+        {
+            try
+            {
+                log.LogDate = DateTime.Now.Date;
+                log.LogDateTime = DateTime.Now;
+                await secondaryProjectRepository.createsecondaryprojectlog(log);
+                return Json(new { success = true, message = "added successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
             }
         }
     }
