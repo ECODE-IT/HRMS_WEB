@@ -18,6 +18,7 @@ namespace HRMS_WEB.Entities
         public int exceltime { get; set; }
         public int wordtime { get; set; }
         public DateTime LogDate { get; set; }
+        public bool IsWeb { get; set; }
 
         public ApplicationUser User { get; set; }
     }

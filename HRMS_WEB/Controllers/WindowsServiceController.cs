@@ -80,11 +80,11 @@ namespace HRMS_WEB.Controllers
             }
         }
 
-        public IActionResult CreateDutyOnOff(String username, bool isDutyOn, String punchdatetime, int powerOffTime, int idletime, int autocadtime, int exceltime, int wordtime)
+        public IActionResult CreateDutyOnOff(String username, bool isDutyOn, String punchdatetime, int powerOffTime, int idletime, int autocadtime, int exceltime, int wordtime, bool IsWeb)
         {
             try
             {
-                double reslutcode = windowsServiceRepository.createDutyOnOff(username, isDutyOn, punchdatetime, powerOffTime, idletime, autocadtime, exceltime, wordtime).Result;
+                double reslutcode = windowsServiceRepository.createDutyOnOff(username, isDutyOn, punchdatetime, powerOffTime, idletime, autocadtime, exceltime, wordtime, isweb: IsWeb).Result;
 
                 if(reslutcode == 1999)
                 {

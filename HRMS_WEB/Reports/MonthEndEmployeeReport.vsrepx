@@ -1,29 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XtraReportsLayoutSerializer SerializerVersion="20.2.6.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v20.2, Version=20.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="MonthEndEmployeeReport" Margins="17, 14, 152, 100" PaperKind="A4" PageWidth="827" PageHeight="1169" Version="20.2" DataSource="#Ref-0" Font="Arial, 9.75pt">
+<XtraReportsLayoutSerializer SerializerVersion="20.2.6.0" Ref="1" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v20.2, Version=20.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="MonthEndEmployeeReport" Margins="17, 14, 174, 100" PaperKind="A4" PageWidth="827" PageHeight="1169" Version="20.2" DataSource="#Ref-0" Font="Arial, 9.75pt">
   <Extensions>
     <Item1 Ref="2" Key="VSReportExtInfo" Value=".vsrepx" />
   </Extensions>
   <Bands>
-    <Item1 Ref="3" ControlType="TopMarginBand" Name="TopMargin" HeightF="152.5">
+    <Item1 Ref="3" ControlType="TopMarginBand" Name="TopMargin" HeightF="174.166656">
       <Controls>
-        <Item1 Ref="4" ControlType="XRTable" Name="table1" TextAlignment="MiddleCenter" SizeF="794,46.66667" LocationFloat="0,105.833336" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,96" Borders="All">
+        <Item1 Ref="4" ControlType="XRTable" Name="table1" TextAlignment="MiddleCenter" SizeF="794,46.6666641" LocationFloat="0,127.5" Font="Arial, 9.75pt, style=Bold" BackColor="Gainsboro" Padding="2,2,0,0,96" Borders="All" BorderWidth="1.1">
           <Rows>
             <Item1 Ref="5" ControlType="XRTableRow" Name="tableRow1" Weight="1">
               <Cells>
                 <Item1 Ref="6" ControlType="XRTableCell" Name="tableCell2" Weight="0.6050703388933405" Multiline="true" />
-                <Item2 Ref="7" ControlType="XRTableCell" Name="tableCell1" Weight="4.8615989736063749" Multiline="true" Text="Employee" />
-                <Item3 Ref="8" ControlType="XRTableCell" Name="tableCell6" Weight="0.79166656494140608" Multiline="true" Text="Worked Days" />
-                <Item4 Ref="9" ControlType="XRTableCell" Name="tableCell3" Weight="1.1249996948242187" Multiline="true" Text="Worked Hours" />
-                <Item5 Ref="10" ControlType="XRTableCell" Name="tableCell4" Weight="0.80000030517578136" Multiline="true" Text="Idle Hours" />
-                <Item6 Ref="11" ControlType="XRTableCell" Name="tableCell5" Weight="0.86666625976562506" Multiline="true" Text="OT Hours" />
-                <Item7 Ref="12" ControlType="XRTableCell" Name="tableCell7" Weight="1.1399993892863358" CanShrink="true" Multiline="true" Text="Performance&#xD;&#xA; Index" />
+                <Item2 Ref="7" ControlType="XRTableCell" Name="tableCell1" Weight="3.524749225924837" Multiline="true" Text="Employee" />
+                <Item3 Ref="8" ControlType="XRTableCell" Name="tableCell6" Weight="0.973478356219446" Multiline="true" Text="Worked Days" />
+                <Item4 Ref="9" ControlType="XRTableCell" Name="tableCell3" Weight="1.2961168533992684" Multiline="true" Text="Worked Hours" />
+                <Item5 Ref="10" ControlType="XRTableCell" Name="tableCell4" Weight="1.1957077858408325" Multiline="true" Text="Idle Hours" />
+                <Item6 Ref="11" ControlType="XRTableCell" Name="tableCell5" Weight="1.1554256509527188" Multiline="true" Text="OT Hours" />
+                <Item7 Ref="12" ControlType="XRTableCell" Name="tableCell7" Weight="1.4394533152626392" CanShrink="true" Multiline="true" Text="Performance&#xD;&#xA; Index" />
               </Cells>
             </Item1>
           </Rows>
-          <StylePriority Ref="13" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+          <StylePriority Ref="13" UseFont="false" UseBackColor="false" UseBorders="false" UseBorderWidth="false" UseTextAlignment="false" />
         </Item1>
         <Item2 Ref="14" ControlType="XRPictureBox" Name="pictureBox1" ImageUrl="https://media-exp1.licdn.com/dms/image/C4D0BAQEl5ICtqXdeyA/company-logo_200_200/0/1519925139014?e=2159024400&amp;v=beta&amp;t=23_y-49GXu_zB9GuLBjLi6o1Y6KjIi4QeF7qeYinvuU" Sizing="Squeeze" SizeF="89.16667,79.2430649" LocationFloat="60.5000038,10" />
-        <Item3 Ref="15" ControlType="XRLabel" Name="label2" Multiline="true" Text="Month End User Report For Month Of [Month]" TextAlignment="MiddleLeft" SizeF="393.040771,26.90972" LocationFloat="149.666672,62.3333549" Font="Arial, 12pt" Padding="2,2,0,0,100">
+        <Item3 Ref="15" ControlType="XRLabel" Name="label2" Multiline="true" Text="Month End User Report For Month Of [Month]" TextAlignment="MiddleLeft" SizeF="393.040771,26.90972" LocationFloat="149.666672,62.3333549" Font="Arial, 10pt" Padding="2,2,0,0,100">
           <StylePriority Ref="16" UseFont="false" UseTextAlignment="false" />
         </Item3>
         <Item4 Ref="17" ControlType="XRLabel" Name="label1" Multiline="true" Text="Haritha Consultations (Pvt).Ltd" TextAlignment="MiddleLeft" SizeF="595.1871,52.33336" LocationFloat="149.666672,9.999998" Font="Arial, 24pt" Padding="2,2,0,0,100">
@@ -35,47 +35,51 @@
     <Item3 Ref="20" ControlType="DetailBand" Name="Detail" HeightF="0" />
     <Item4 Ref="21" ControlType="DetailReportBand" Name="DetailReport" Level="0" DataMember="monthEndEmployeeDTOs" DataSource="#Ref-0">
       <Bands>
-        <Item1 Ref="22" ControlType="DetailBand" Name="Detail1">
+        <Item1 Ref="22" ControlType="DetailBand" Name="Detail1" HeightF="40.07576">
           <Controls>
-            <Item1 Ref="23" ControlType="XRTable" Name="table2" TextAlignment="MiddleCenter" SizeF="794,28.4090958" LocationFloat="0,0" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,96" Borders="Left, Right, Bottom">
+            <Item1 Ref="23" ControlType="XRTable" Name="table2" TextAlignment="MiddleCenter" SizeF="794,40.07576" LocationFloat="0,0" Font="Arial, 9.75pt, style=Bold" Padding="2,2,0,0,96" Borders="Left, Right, Bottom">
               <Rows>
                 <Item1 Ref="24" ControlType="XRTableRow" Name="tableRow2" Weight="1">
                   <Cells>
-                    <Item1 Ref="25" ControlType="XRTableCell" Name="tableCell8" Weight="0.6050703388933405" Multiline="true" />
-                    <Item2 Ref="26" ControlType="XRTableCell" Name="tableCell9" Weight="4.8615989736063749" Multiline="true" Text="Employee">
+                    <Item1 Ref="25" ControlType="XRTableCell" Name="tableCell8" Weight="0.6050703388933405" Multiline="true">
                       <ExpressionBindings>
-                        <Item1 Ref="27" EventName="BeforePrint" PropertyName="Text" Expression="[Name]" />
+                        <Item1 Ref="26" EventName="BeforePrint" PropertyName="Text" Expression="[Index]" />
+                      </ExpressionBindings>
+                    </Item1>
+                    <Item2 Ref="27" ControlType="XRTableCell" Name="tableCell9" Weight="3.524749225924837" Multiline="true" Text="Employee">
+                      <ExpressionBindings>
+                        <Item1 Ref="28" EventName="BeforePrint" PropertyName="Text" Expression="[Name]" />
                       </ExpressionBindings>
                     </Item2>
-                    <Item3 Ref="28" ControlType="XRTableCell" Name="tableCell10" Weight="0.79166656494140608" Multiline="true" Text="Worked Days">
+                    <Item3 Ref="29" ControlType="XRTableCell" Name="tableCell10" Weight="0.973478356219446" Multiline="true" Text="Worked Days">
                       <ExpressionBindings>
-                        <Item1 Ref="29" EventName="BeforePrint" PropertyName="Text" Expression="[WorkedDays]" />
+                        <Item1 Ref="30" EventName="BeforePrint" PropertyName="Text" Expression="[WorkedDays]" />
                       </ExpressionBindings>
                     </Item3>
-                    <Item4 Ref="30" ControlType="XRTableCell" Name="tableCell11" Weight="1.1249996948242187" Multiline="true" Text="Worked Hours">
+                    <Item4 Ref="31" ControlType="XRTableCell" Name="tableCell11" Weight="1.2961168533992684" Multiline="true" Text="Worked Hours">
                       <ExpressionBindings>
-                        <Item1 Ref="31" EventName="BeforePrint" PropertyName="Text" Expression="[WorkedHours]" />
+                        <Item1 Ref="32" EventName="BeforePrint" PropertyName="Text" Expression="[WorkedHours]" />
                       </ExpressionBindings>
                     </Item4>
-                    <Item5 Ref="32" ControlType="XRTableCell" Name="tableCell12" Weight="0.80000030517578136" Multiline="true" Text="Idle Hours">
+                    <Item5 Ref="33" ControlType="XRTableCell" Name="tableCell12" Weight="1.1957077858408325" Multiline="true" Text="Idle Hours">
                       <ExpressionBindings>
-                        <Item1 Ref="33" EventName="BeforePrint" PropertyName="Text" Expression="[IdleHours]" />
+                        <Item1 Ref="34" EventName="BeforePrint" PropertyName="Text" Expression="[IdleHours]" />
                       </ExpressionBindings>
                     </Item5>
-                    <Item6 Ref="34" ControlType="XRTableCell" Name="tableCell13" Weight="0.86666625976562506" Multiline="true" Text="OT Hours">
+                    <Item6 Ref="35" ControlType="XRTableCell" Name="tableCell13" Weight="1.1554256509527188" Multiline="true" Text="OT Hours">
                       <ExpressionBindings>
-                        <Item1 Ref="35" EventName="BeforePrint" PropertyName="Text" Expression="[OtHours]" />
+                        <Item1 Ref="36" EventName="BeforePrint" PropertyName="Text" Expression="[OtHours]" />
                       </ExpressionBindings>
                     </Item6>
-                    <Item7 Ref="36" ControlType="XRTableCell" Name="tableCell14" Weight="1.1399993892863358" CanShrink="true" Multiline="true" Text="Performance&#xD;&#xA; Index">
+                    <Item7 Ref="37" ControlType="XRTableCell" Name="tableCell14" Weight="1.4394533152626392" CanShrink="true" Multiline="true" Text="Performance&#xD;&#xA; Index">
                       <ExpressionBindings>
-                        <Item1 Ref="37" EventName="BeforePrint" PropertyName="Text" Expression="[PerformaceIndex]" />
+                        <Item1 Ref="38" EventName="BeforePrint" PropertyName="Text" Expression="[PerformaceIndex]" />
                       </ExpressionBindings>
                     </Item7>
                   </Cells>
                 </Item1>
               </Rows>
-              <StylePriority Ref="38" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+              <StylePriority Ref="39" UseFont="false" UseBorders="false" UseTextAlignment="false" />
             </Item1>
           </Controls>
         </Item1>

@@ -23,7 +23,7 @@ namespace HRMS_WEB.DbOperations.WindowsService
             this.signInManager = signInManager;
         }
 
-        public async Task<double> createDutyOnOff(string username, bool isDutyOn, String sdatetime, int powereOffTime, int idletime, int autocadtime, int exceltime, int wordtime)
+        public async Task<double> createDutyOnOff(string username, bool isDutyOn, String sdatetime, int powereOffTime, int idletime, int autocadtime, int exceltime, int wordtime, bool isweb = false)
         {
             int timestamp = int.Parse(sdatetime);
             DateTime datetime = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
@@ -33,7 +33,7 @@ namespace HRMS_WEB.DbOperations.WindowsService
 
             if (user != null)
             {
-                DutyLog dutyLog = new DutyLog { UserId = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime, PowerOffMinutes = powereOffTime, idletime = idletime, autocadtime = autocadtime, exceltime = exceltime, wordtime = wordtime, LogDate = datetime.Date};
+                DutyLog dutyLog = new DutyLog { UserId = user.Id, IsDutyOn = isDutyOn, LogDateTime = datetime, PowerOffMinutes = powereOffTime, idletime = idletime, autocadtime = autocadtime, exceltime = exceltime, wordtime = wordtime, LogDate = datetime.Date, IsWeb = isweb};
 
                 if (!isDutyOn)
                 {

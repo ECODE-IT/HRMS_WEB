@@ -269,8 +269,9 @@ namespace HRMS_WEB.DbOperations.ViewdataService
 
         public async Task<MonthEndEmployeeDTO> GetMonthEndEmployeeSummary(int month)
         {
-            string monthName = new DateTime(2010, month, 1).ToString("MMM", CultureInfo.InvariantCulture);
-            var dutylogs = await db.DutyLogs.Include(dl => dl.User).ToListAsync();
+            int year = DateTime.Now.Year;
+            string monthName = new DateTime(year, month, 1).ToString("MMMM yyyy", CultureInfo.InvariantCulture);
+            var dutylogs = await db.DutyLogs.Include(dl => dl.User).Where(dl => dl.LogDateTime.Month == month).ToListAsync();
             var dlgroup = dutylogs.GroupBy(dl => dl.UserId);
             var sysconfig = await db.SystemSettings.FirstOrDefaultAsync();
             var nonotalocation = sysconfig.DailyTargetHours;
@@ -356,7 +357,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
         {
             var actualworkedhours = workedhours - idlehours;
             double workeddays = actualworkedhours / dto.WorkedDays;
-            dto.PerformaceIndex = string.Format("{0:0.00} %", workeddays);
+            dto.PerformaceIndex = string.Format("{0:0.00} Hrs/Day", workeddays);
             return dto;
         }
     }

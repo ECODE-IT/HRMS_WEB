@@ -96,7 +96,6 @@ namespace HRMS_WEB.Reports {
             this.tableCell2 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell2");
             this.tableCell3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell3");
             this.tableCell4 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell4");
-            this.label3 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRLabel>("label3");
             this.table17 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table17");
             this.table16 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table16");
             this.table15 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTable>("table15");
@@ -114,6 +113,7 @@ namespace HRMS_WEB.Reports {
             this.tableCell73 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell73");
             this.tableRow15 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow15");
             this.tableCell67 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell67");
+            this.tableCell68 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell68");
             this.tableCell69 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell69");
             this.tableRow14 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableRow>("tableRow14");
             this.tableCell65 = reportInitializer.GetControl<DevExpress.XtraReports.UI.XRTableCell>("tableCell65");
@@ -219,7 +219,6 @@ namespace HRMS_WEB.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell2;
         private DevExpress.XtraReports.UI.XRTableCell tableCell3;
         private DevExpress.XtraReports.UI.XRTableCell tableCell4;
-        private DevExpress.XtraReports.UI.XRLabel label3;
         private DevExpress.XtraReports.UI.XRTable table17;
         private DevExpress.XtraReports.UI.XRTable table16;
         private DevExpress.XtraReports.UI.XRTable table15;
@@ -237,6 +236,7 @@ namespace HRMS_WEB.Reports {
         private DevExpress.XtraReports.UI.XRTableCell tableCell73;
         private DevExpress.XtraReports.UI.XRTableRow tableRow15;
         private DevExpress.XtraReports.UI.XRTableCell tableCell67;
+        private DevExpress.XtraReports.UI.XRTableCell tableCell68;
         private DevExpress.XtraReports.UI.XRTableCell tableCell69;
         private DevExpress.XtraReports.UI.XRTableRow tableRow14;
         private DevExpress.XtraReports.UI.XRTableCell tableCell65;
