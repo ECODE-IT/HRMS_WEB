@@ -101,18 +101,21 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-controller="User" asp-action="Engineers" class="nav-link">
-                                        <i class="fas fa-hard-hat nav-icon"></i>
-                                        <p>Engineers</p>
-                                    </a>
-                                </li>
+                                @if (User.IsInRole("Admin") || User.IsInRole("Supervisor"))
+                                {
+                                    <li class="nav-item">
+                                        <a asp-controller="User" asp-action="Engineers" class="nav-link">
+                                            <i class="fas fa-hard-hat nav-icon"></i>
+                                            <p>Engineers</p>
+                                        </a>
+                                    </li>
                                 <li class="nav-item">
                                     <a asp-controller="User" asp-action="Draughtmen" class="nav-link">
                                         <i class="fas fa-briefcase nav-icon"></i>
                                         <p>Draughtmen</p>
                                     </a>
                                 </li>
+                                }
                             </ul>
                         </li>
                         <li class="nav-item has-treeview">
@@ -124,18 +127,21 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                @*<li class="nav-item">
-                                    <a asp-controller="Project" asp-action="ProjectCriteria" class="nav-link">
-                                        <i class="fas fa-project-diagram nav-icon"></i>
-                                        <p>Projects</p>
-                                    </a>
-                                </li>*@
-                                <li class="nav-item">
-                                    <a asp-controller="SecondaryProject" asp-action="Index" class="nav-link">
-                                        <i class="fas fa-project-diagram nav-icon"></i>
-                                        <p>Projects</p>
-                                    </a>
-                                </li>
+                                @if (User.IsInRole("Admin") || User.IsInRole("Supervisor"))
+                                { 
+
+                                    @*<li class="nav-item">
+                <a asp-controller="Project" asp-action="ProjectCriteria" class="nav-link">
+                    <i class="fas fa-project-diagram nav-icon"></i>
+                    <p>Projects</p>
+                </a>
+            </li>*@
+                                    <li class="nav-item">
+                                        <a asp-controller="SecondaryProject" asp-action="Index" class="nav-link">
+                                            <i class="fas fa-project-diagram nav-icon"></i>
+                                            <p>Projects</p>
+                                        </a>
+                                    </li>
                                 <li class="nav-item">
                                     <a asp-controller="User" asp-action="CreateSpecialTask" class="nav-link">
                                         <i class="fas fa-bell nav-icon"></i>
@@ -148,6 +154,7 @@
                                         <p>Leaves</p>
                                     </a>
                                 </li>
+                                }
                             </ul>
                         </li>
                         <li class="nav-item has-treeview">
@@ -158,7 +165,7 @@
                                     <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
-                            
+
                             <ul class="nav nav-treeview">
                                 @if (User.IsInRole("Admin"))
                                 {
@@ -189,72 +196,75 @@
                                 }
 
                             </ul>
-                            </li>
+                        </li>
 
-                            <li class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-chart-line"></i>
-                                    <p>
-                                        iTrack
-                                        <i class="fas fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-chart-line"></i>
+                                <p>
+                                    iTrack
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                @if (User.IsInRole("Admin"))
+                                {
                                     <li class="nav-item">
                                         <a asp-action="Index" asp-controller="Screenshot" class="nav-link">
                                             <i class="fas fa-camera-retro nav-icon"></i>
                                             <p>User snapshots</p>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a asp-action="Index" asp-controller="Duty" class="nav-link">
-                                            <i class="fas fa-briefcase nav-icon"></i>
-                                            <p>Duty logs</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="Index" asp-controller="File" class="nav-link">
-                                            <i class="fas fa-file-csv nav-icon"></i>
-                                            <p>User Logs</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon fas fa-chart-bar"></i>
-                                    <p>
-                                        Reports
-                                        <i class="fas fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a asp-action="ActiveMembers" asp-controller="Duty" class="nav-link">
-                                            <i class="far fa-file-alt nav-icon"></i>
-                                            <p>Daily log report</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="ActivityChart" asp-controller="Duty" class="nav-link">
-                                            <i class="fas fa-chart-pie nav-icon"></i>
-                                            <p>User activity report</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="MonthDraughtmenSummary" asp-controller="Home" class="nav-link">
-                                            <i class="far fa-file-alt nav-icon"></i>
-                                            <p>Working hours report</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="AvailableReports" asp-controller="Reporter" class="nav-link">
-                                            <i class="far fa-file-alt nav-icon"></i>
-                                            <p>Dynamic Reporting</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                                <li class="nav-item">
+                                    <a asp-action="Index" asp-controller="Duty" class="nav-link">
+                                        <i class="fas fa-briefcase nav-icon"></i>
+                                        <p>Duty logs</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-action="Index" asp-controller="File" class="nav-link">
+                                        <i class="fas fa-file-csv nav-icon"></i>
+                                        <p>User Logs</p>
+                                    </a>
+                                </li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-chart-bar"></i>
+                                <p>
+                                    Reports
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="ActiveMembers" asp-controller="Duty" class="nav-link">
+                                        <i class="far fa-file-alt nav-icon"></i>
+                                        <p>Daily log report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-action="ActivityChart" asp-controller="Duty" class="nav-link">
+                                        <i class="fas fa-chart-pie nav-icon"></i>
+                                        <p>User activity report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-action="MonthDraughtmenSummary" asp-controller="Home" class="nav-link">
+                                        <i class="far fa-file-alt nav-icon"></i>
+                                        <p>Working hours report</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-action="AvailableReports" asp-controller="Reporter" class="nav-link">
+                                        <i class="far fa-file-alt nav-icon"></i>
+                                        <p>Dynamic Reporting</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         }
                     </ul>
                 </nav>

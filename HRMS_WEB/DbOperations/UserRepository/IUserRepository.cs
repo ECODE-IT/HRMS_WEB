@@ -22,5 +22,6 @@ namespace HRMS_WEB.DbOperations.UserRepository
         Task<IEnumerable<DraughtmenViewModel>> getDraughtmenDetailsWithProjectProgress();
         Task approveLeave(int id, ApplicationUser user);
         Task declineLeave(int id, ApplicationUser user);
+        Task<bool> isdutyon(String username);
     }
 }

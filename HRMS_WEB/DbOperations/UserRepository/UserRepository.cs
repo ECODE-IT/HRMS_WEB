@@ -157,5 +157,12 @@ namespace HRMS_WEB.DbOperations.UserRepository
             var i = await db.SaveChangesAsync();
             return i;
         }
+
+        public async Task<bool> isdutyon(string username)
+        {
+            var user = await userManager.FindByNameAsync(username);
+            return db.DutyLogs.Where(dl => dl.UserId == user.Id).OrderBy(dl => dl.LogDateTime).ToList().LastOrDefault().IsDutyOn;
+
+        }
     }
 }

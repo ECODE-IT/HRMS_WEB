@@ -20,28 +20,39 @@ using System.IO;
 using DevExpress.XtraReports.UI;
 using HRMS_WEB.Reports;
 using DevExpress.XtraPrinting;
+using HRMS_WEB.DbOperations.UserRepository;
 
 namespace HRMS_WEB.Controllers
 {
-    [Authorize(Roles = "Admin, Supervisor")]
+    [Authorize(Roles = "Admin, Supervisor, Draughtman")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IViewdataRepository viewdataRepository;
         private readonly HRMSDbContext db;
+        private readonly IUserRepository userRepository;
 
-        public HomeController(ILogger<HomeController> logger, IViewdataRepository viewdataRepository, HRMSDbContext db)
+        public HomeController(ILogger<HomeController> logger, IViewdataRepository viewdataRepository, HRMSDbContext db, IUserRepository userRepository)
         {
             _logger = logger;
             this.viewdataRepository = viewdataRepository;
             this.db = db;
+            this.userRepository = userRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewBag.isdutyon = await userRepository.isdutyon(HttpContext.User.Identity.Name);
 
             return View();
         }
+
+        public async Task<bool> IsDutyOn()
+        {
+            return await userRepository.isdutyon(HttpContext.User.Identity.Name);
+
+        }
+
 
         public IActionResult Privacy()
         {
@@ -99,6 +110,11 @@ namespace HRMS_WEB.Controllers
         public async Task<Humidity> GetLastHumidityEntry()
         {
             return await viewdataRepository.getlastHumidityData();
+        }
+
+        public IActionResult Success()
+        {
+            return View();
         }
 
     }
