@@ -12,5 +12,6 @@ namespace HRMS_WEB.Viewmodels
         public double MonthWorkedHoursProgress { get; set; }
         public double MonthIdleHours { get; set; }
         public double DailyIdleHours { get; set; }
+        public bool IsWeb { get; set; }
     }
 }
