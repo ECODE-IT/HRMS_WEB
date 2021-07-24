@@ -197,7 +197,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                     var ottime = 0d;
                     if (isholiday)
                     {
-                        if (dailyidlehours > 1)
+                        if (dailyidlehours > IdleAlocationdaily)
                         {
                             ottime = dailyworkedhours - (dailyidlehours - IdleAlocationdaily);
                         }
@@ -215,7 +215,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                     }
                     else
                     {
-                        if (dailyidlehours > 1)
+                        if (dailyidlehours > IdleAlocationdaily)
                         {
                             ottime = dailyworkedhours - (dailyidlehours - IdleAlocationdaily) - nonotalocation;
                         }

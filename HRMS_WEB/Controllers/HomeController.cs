@@ -50,7 +50,6 @@ namespace HRMS_WEB.Controllers
         public async Task<bool> IsDutyOn()
         {
             return await userRepository.isdutyon(HttpContext.User.Identity.Name);
-
         }
 
 

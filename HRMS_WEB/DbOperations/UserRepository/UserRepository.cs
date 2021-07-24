@@ -161,7 +161,13 @@ namespace HRMS_WEB.DbOperations.UserRepository
         public async Task<bool> isdutyon(string username)
         {
             var user = await userManager.FindByNameAsync(username);
-            return db.DutyLogs.Where(dl => dl.UserId == user.Id).OrderBy(dl => dl.LogDateTime).ToList().LastOrDefault().IsDutyOn;
+            var dutys = db.DutyLogs.Where(dl => dl.UserId == user.Id && dl.LogDate == DateTime.Now.Date).OrderBy(dl => dl.LogDateTime).ToList();
+            if (dutys == null || dutys.Count == 0)
+            {
+                return false;
+            }
+
+            return dutys.LastOrDefault().IsDutyOn;
 
         }
     }
