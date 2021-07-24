@@ -53,8 +53,15 @@ namespace HRMS_WEB.DbOperations.ViewdataService
                     TodayWorkedHoursProgress = getTodayWorkingHours(dutylogs, dlg.FirstOrDefault().User.Id, selectedDate) * 100 / sysconfig.DailyTargetHours,
                     MonthWorkedHoursProgress = getMonthWorkingHours(dutylogs, dlg.FirstOrDefault().User.Id) * 100 / sysconfig.MonthlyTargetHours,
                     DailyIdleHours = getDailyIdleHours(dutylogs, dlg.FirstOrDefault().User.Id, selectedDate),
-                    MonthIdleHours = getMonthlyIdleHours(dutylogs, dlg.FirstOrDefault().User.Id)
+                    MonthIdleHours = getMonthlyIdleHours(dutylogs, dlg.FirstOrDefault().User.Id),
+                    IsWeb = getIsWeb(dutylogs, dlg.FirstOrDefault().User.Id)
                 }).OrderByDescending(s => (s.MonthWorkedHoursProgress - s.MonthIdleHours));
+        }
+
+        //get whether user uses web or other app
+        public bool getIsWeb(List<DutyLog> dutylogs, String userid)
+        {
+            return dutylogs.Find(dl => dl.UserId.Equals(userid)).IsWeb;
         }
 
         // get monthly working hours
@@ -107,6 +114,7 @@ namespace HRMS_WEB.DbOperations.ViewdataService
             }
 
         }
+
 
         public double getMonthlyIdleHours(List<DutyLog> dutylogs, String userid)
         {

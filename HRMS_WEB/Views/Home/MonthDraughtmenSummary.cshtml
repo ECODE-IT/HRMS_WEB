@@ -63,25 +63,39 @@
                             @{
                                 var dailyTarget = ViewBag.dailyTarget;
                                 var monthlyTarget = ViewBag.monthlyTarget;
-                            int index = 0;
+                                int index = 0;
+                                string[] RankColor = {"", "#FFCC00", "#A9A9A9", "#cd7f32" };
                             }
                             @foreach (var item in Model.LeaveViewModels)
                             {
-                            index++;
+                                index++;
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Username)
-                                        @if(index == 1) {
-                                        <span class="badge" style=" background: #FFCC00; margin: 2px; padding: 5px">Rank 1</span>
-                                        } else if ( index == 2) {
-                                        <span class="badge" style=" background: #A9A9A9; margin: 2px; padding: 5px">Rank 2</span>
+                                        @*@Html.DisplayFor(modelItem => item.Username)
+                                        @if (index == 1) {
+                                        <span class="badge" style=" background: @RankColor[index]; margin: 2px; padding: 5px">Rank 1</span>
+                                        } else if (index == 2) {
+                                        <span class="badge" style=" background: @RankColor[index]; margin: 2px; padding: 5px">Rank 2</span>
                                         } else if (index == 3) {
-                                        <span class="badge " style=" background: #cd7f32; margin: 2px; padding: 5px">Rank 3</span>
-                                        }
+                                        <span class="badge " style=" background: @RankColor[index]; margin: 2px; padding: 5px">Rank 3</span>
+                                        }*@
 
-                                    </td>
-                                    <td>
-                                        <div class="col">
+                                        @Html.DisplayFor(modelItem => item.Username)
+                                        @if(index <= 3){
+                                        <span class="badge" style=" background: @RankColor[index]; margin: 2px; padding: 5px">Rank @index</span>
+                                            @if (item.IsWeb){
+                                            <span class="badge badge-light" style="margin: 2px; padding: 5px">From Web</span>
+                                            }
+                                        }
+                                        
+                                    
+
+
+</td>
+
+<td>
+
+<div class="col">
                                             <div class="progress-group">
                                                 <small><b>Today worked hours</b> (Today Idle Hours : @String.Format("{0:0.00}", item.DailyIdleHours) Hours)</small>
                                                 <span class="float-right">@String.Format("{0:0.00}", ((item.TodayWorkedHoursProgress * (dailyTarget) / 100)) - item.DailyIdleHours) Hours /<b> @dailyTarget Hours</b></span>
