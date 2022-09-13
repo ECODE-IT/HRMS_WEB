@@ -1,0 +1,42 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-18.04
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: setup .net core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 3.1.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore
+    
+    - name: Publish
+      run: dotnet publish --no-build
+  
+  deploy:
+    
+    needs: build
+    runs-on: ubuntu-18.04
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITAL_OCEAN_TOKEN_SECRET }}
+    - name: connect to droplet 
+      run: doctl compute ssh --ssh-private-ip 10.104.0.2 mkdir /root/wsd
